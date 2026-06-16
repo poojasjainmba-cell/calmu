@@ -116,6 +116,12 @@ HUBSPOT_SYNC_ACTIVITIES = "true"
 
 Leave `HUBSPOT_SYNC_ACTIVITIES` unset for Streamlit Cloud's first sync. The app will use HubSpot contact summary activity fields, which keeps the initial refresh fast enough for hosted deployment.
 
+Streamlit Cloud refreshes the most recent 25,000 contacts by default so the first hosted sync can complete. To sync every HubSpot contact, add this secret and refresh again:
+
+```toml
+HUBSPOT_MAX_CONTACTS = "0"
+```
+
 Runtime HubSpot cache files under `data/` are intentionally ignored by Git. Run `python field_profiler.py` and `python sync.py` locally or from the deployment environment after adding the token.
 
 ## 9. Dashboard Pages

@@ -264,6 +264,11 @@ def show_header(
         st.warning("Cached HubSpot data is older than 24 hours.")
     if not metadata.get("has_cache"):
         st.error("No cached dashboard data found. Run `python sync.py` after setting HUBSPOT_ACCESS_TOKEN.")
+    if status.get("contact_limit"):
+        st.info(
+            f"Current cache is limited to the most recent {int(status['contact_limit']):,} contacts. "
+            "Set HUBSPOT_MAX_CONTACTS=0 and refresh to sync all contacts."
+        )
     mapped_deal_revenue = (mapping.get("deal") or {}).get("revenue")
     mapped_program_tuition = (mapping.get("contact") or {}).get("program_total_tuition")
     has_program_tuition_values = (

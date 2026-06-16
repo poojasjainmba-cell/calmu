@@ -112,6 +112,7 @@ ACTIVITY_PROPERTIES = {
 }
 
 TRUTHY_ENV_VALUES = {"1", "true", "yes", "on"}
+DEFAULT_MAX_CONTACTS = 25000
 VENDOR_SOURCE_PROPERTIES = [
     "source",
     "source_group",
@@ -211,6 +212,17 @@ def _sync_detailed_activities_enabled() -> bool:
     return os.getenv("HUBSPOT_SYNC_ACTIVITIES", "").strip().lower() in TRUTHY_ENV_VALUES
 
 
+def _max_records_from_env(name: str, default: int | None = None) -> int | None:
+    raw = os.getenv(name, "")
+    if not raw.strip():
+        return default
+    try:
+        value = int(raw)
+    except ValueError:
+        return default
+    return value if value > 0 else None
+
+
 def sync_hubspot() -> dict[str, pd.DataFrame]:
     ensure_directories()
     if not token_is_set():
@@ -230,11 +242,33 @@ def sync_hubspot() -> dict[str, pd.DataFrame]:
     )
 
     client = HubSpotClient()
-    print("Fetching contacts...", flush=True)
-    contacts = client.fetch_objects("contacts", contact_properties, progress_label="contacts")
+    max_contacts = _max_records_from_env("HUBSPOT_MAX_CONTACTS", DEFAULT_MAX_CONTACTS)
+    max_deals = _max_records_from_env("HUBSPOT_MAX_DEALS", None)
+    if max_contacts:
+        print(f"Fetching most recent contacts, limited to {max_contacts:,}. Set HUBSPOT_MAX_CONTACTS=0 for all contacts.", flush=True)
+        contacts = client.search_objects(
+            "contacts",
+            contact_properties,
+            max_records=max_contacts,
+            progress_label="contacts",
+            sorts=[{"propertyName": "createdate", "direction": "DESCENDING"}],
+        )
+    else:
+        print("Fetching all contacts...", flush=True)
+        contacts = client.fetch_objects("contacts", contact_properties, progress_label="contacts")
     print(f"Fetched contacts: {len(contacts):,}", flush=True)
-    print("Fetching deals...", flush=True)
-    deals = client.fetch_objects("deals", deal_properties, progress_label="deals")
+    if max_deals:
+        print(f"Fetching most recent deals, limited to {max_deals:,}.", flush=True)
+        deals = client.search_objects(
+            "deals",
+            deal_properties,
+            max_records=max_deals,
+            progress_label="deals",
+            sorts=[{"propertyName": "createdate", "direction": "DESCENDING"}],
+        )
+    else:
+        print("Fetching all deals...", flush=True)
+        deals = client.fetch_objects("deals", deal_properties, progress_label="deals")
     print(f"Fetched deals: {len(deals):,}", flush=True)
     print("Fetching owners...", flush=True)
     owners = client.fetch_owners(progress_label="owners")
@@ -284,6 +318,8 @@ def sync_hubspot() -> dict[str, pd.DataFrame]:
             "associations": int(len(associations)),
             "activities": int(len(activities)),
             "activity_history_available": bool(not activities.empty),
+            "contact_limit": int(max_contacts) if max_contacts else None,
+            "deal_limit": int(max_deals) if max_deals else None,
         },
     )
     return processed

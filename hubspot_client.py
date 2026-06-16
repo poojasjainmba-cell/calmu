@@ -151,6 +151,7 @@ class HubSpotClient:
         limit: int = 200,
         max_records: int | None = None,
         progress_label: str | None = None,
+        sorts: list[dict[str, str]] | None = None,
     ) -> pd.DataFrame:
         props = self._dedupe_properties(properties)
         rows: list[dict[str, Any]] = []
@@ -160,6 +161,8 @@ class HubSpotClient:
             body: dict[str, Any] = {"limit": min(limit, 200)}
             if props:
                 body["properties"] = props
+            if sorts:
+                body["sorts"] = sorts
             if after:
                 body["after"] = after
 
