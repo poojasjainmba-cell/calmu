@@ -112,7 +112,8 @@ ACTIVITY_PROPERTIES = {
 }
 
 TRUTHY_ENV_VALUES = {"1", "true", "yes", "on"}
-DEFAULT_MAX_CONTACTS = 25000
+DEFAULT_MAX_CONTACTS = 10000
+HUBSPOT_SEARCH_RESULT_LIMIT = 10000
 VENDOR_SOURCE_PROPERTIES = [
     "source",
     "source_group",
@@ -245,6 +246,13 @@ def sync_hubspot() -> dict[str, pd.DataFrame]:
     max_contacts = _max_records_from_env("HUBSPOT_MAX_CONTACTS", DEFAULT_MAX_CONTACTS)
     max_deals = _max_records_from_env("HUBSPOT_MAX_DEALS", None)
     if max_contacts:
+        if max_contacts > HUBSPOT_SEARCH_RESULT_LIMIT:
+            print(
+                f"HubSpot search supports up to {HUBSPOT_SEARCH_RESULT_LIMIT:,} recent contacts per hosted sync. "
+                f"Using {HUBSPOT_SEARCH_RESULT_LIMIT:,}. Set HUBSPOT_MAX_CONTACTS=0 for an all-contact sync.",
+                flush=True,
+            )
+            max_contacts = HUBSPOT_SEARCH_RESULT_LIMIT
         print(f"Fetching most recent contacts, limited to {max_contacts:,}. Set HUBSPOT_MAX_CONTACTS=0 for all contacts.", flush=True)
         contacts = client.search_objects(
             "contacts",

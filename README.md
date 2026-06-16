@@ -116,7 +116,7 @@ HUBSPOT_SYNC_ACTIVITIES = "true"
 
 Leave `HUBSPOT_SYNC_ACTIVITIES` unset for Streamlit Cloud's first sync. The app will use HubSpot contact summary activity fields, which keeps the initial refresh fast enough for hosted deployment.
 
-Streamlit Cloud refreshes the most recent 25,000 contacts by default so the first hosted sync can complete. To sync every HubSpot contact, add this secret and refresh again:
+Streamlit Cloud refreshes the most recent 10,000 contacts by default so the first hosted sync can complete within HubSpot hosted-search limits. To sync every HubSpot contact, add this secret and refresh again:
 
 ```toml
 HUBSPOT_MAX_CONTACTS = "0"
