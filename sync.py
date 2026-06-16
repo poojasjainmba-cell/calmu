@@ -113,6 +113,7 @@ ACTIVITY_PROPERTIES = {
 
 TRUTHY_ENV_VALUES = {"1", "true", "yes", "on"}
 DEFAULT_MAX_CONTACTS = 10000
+DEFAULT_MAX_DEALS = 10000
 HUBSPOT_SEARCH_RESULT_LIMIT = 10000
 VENDOR_SOURCE_PROPERTIES = [
     "source",
@@ -244,7 +245,7 @@ def sync_hubspot() -> dict[str, pd.DataFrame]:
 
     client = HubSpotClient()
     max_contacts = _max_records_from_env("HUBSPOT_MAX_CONTACTS", DEFAULT_MAX_CONTACTS)
-    max_deals = _max_records_from_env("HUBSPOT_MAX_DEALS", None)
+    max_deals = _max_records_from_env("HUBSPOT_MAX_DEALS", DEFAULT_MAX_DEALS)
     if max_contacts:
         if max_contacts > HUBSPOT_SEARCH_RESULT_LIMIT:
             print(
@@ -266,6 +267,13 @@ def sync_hubspot() -> dict[str, pd.DataFrame]:
         contacts = client.fetch_objects("contacts", contact_properties, progress_label="contacts")
     print(f"Fetched contacts: {len(contacts):,}", flush=True)
     if max_deals:
+        if max_deals > HUBSPOT_SEARCH_RESULT_LIMIT:
+            print(
+                f"HubSpot search supports up to {HUBSPOT_SEARCH_RESULT_LIMIT:,} recent deals per hosted sync. "
+                f"Using {HUBSPOT_SEARCH_RESULT_LIMIT:,}. Set HUBSPOT_MAX_DEALS=0 for an all-deal sync.",
+                flush=True,
+            )
+            max_deals = HUBSPOT_SEARCH_RESULT_LIMIT
         print(f"Fetching most recent deals, limited to {max_deals:,}.", flush=True)
         deals = client.search_objects(
             "deals",
