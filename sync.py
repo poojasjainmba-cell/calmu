@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from datetime import datetime, timezone
 from typing import Any
 
@@ -109,6 +110,8 @@ ACTIVITY_PROPERTIES = {
         "hubspot_owner_id",
     ],
 }
+
+TRUTHY_ENV_VALUES = {"1", "true", "yes", "on"}
 VENDOR_SOURCE_PROPERTIES = [
     "source",
     "source_group",
@@ -204,6 +207,10 @@ def _fetch_optional_activities(client: HubSpotClient) -> pd.DataFrame:
     return pd.concat(frames, ignore_index=True, sort=False)
 
 
+def _sync_detailed_activities_enabled() -> bool:
+    return os.getenv("HUBSPOT_SYNC_ACTIVITIES", "").strip().lower() in TRUTHY_ENV_VALUES
+
+
 def sync_hubspot() -> dict[str, pd.DataFrame]:
     ensure_directories()
     if not token_is_set():
@@ -232,7 +239,14 @@ def sync_hubspot() -> dict[str, pd.DataFrame]:
     print("Fetching owners...", flush=True)
     owners = client.fetch_owners(progress_label="owners")
     print(f"Fetched owners: {len(owners):,}", flush=True)
-    activities = _fetch_optional_activities(client)
+    if _sync_detailed_activities_enabled():
+        activities = _fetch_optional_activities(client)
+    else:
+        activities = pd.DataFrame()
+        print(
+            "Skipping detailed activity history by default. Set HUBSPOT_SYNC_ACTIVITIES=true to enable it.",
+            flush=True,
+        )
     if activities.empty:
         print("Detailed activity history is unavailable; dashboard will use contact summary activity fields.", flush=True)
     else:

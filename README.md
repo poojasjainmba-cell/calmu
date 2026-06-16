@@ -108,6 +108,14 @@ Add this secret in the hosting platform's secrets manager, not in Git:
 HUBSPOT_ACCESS_TOKEN = "your_hubspot_private_app_token"
 ```
 
+Optional detailed activity history can be enabled with:
+
+```toml
+HUBSPOT_SYNC_ACTIVITIES = "true"
+```
+
+Leave `HUBSPOT_SYNC_ACTIVITIES` unset for Streamlit Cloud's first sync. The app will use HubSpot contact summary activity fields, which keeps the initial refresh fast enough for hosted deployment.
+
 Runtime HubSpot cache files under `data/` are intentionally ignored by Git. Run `python field_profiler.py` and `python sync.py` locally or from the deployment environment after adding the token.
 
 ## 9. Dashboard Pages
@@ -167,7 +175,7 @@ The sync creates these processed tables under `data/processed`:
 - `salesman_revenue_fact`
 - `activity_events`
 
-Detailed activity history is used when the token can read calls, emails, meetings, notes, and tasks. If a HubSpot activity permission is missing, the dashboard falls back to summary activity fields and shows a friendly note.
+Detailed activity history is optional and controlled by `HUBSPOT_SYNC_ACTIVITIES=true`. If it is disabled or the token cannot read calls, emails, meetings, notes, and tasks, the dashboard falls back to summary activity fields and shows a friendly note.
 
 ## 13. Vendor Cost Data
 

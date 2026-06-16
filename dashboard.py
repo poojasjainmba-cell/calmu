@@ -206,14 +206,28 @@ def revenue_group_table(fact: pd.DataFrame, group_column: str) -> pd.DataFrame:
 
 
 def run_sync() -> tuple[bool, str]:
-    result = subprocess.run(
-        [sys.executable, "sync.py"],
-        cwd=APP_DIR,
-        capture_output=True,
-        text=True,
-        timeout=900,
-        check=False,
-    )
+    try:
+        result = subprocess.run(
+            [sys.executable, "sync.py"],
+            cwd=APP_DIR,
+            capture_output=True,
+            text=True,
+            timeout=900,
+            check=False,
+        )
+    except subprocess.TimeoutExpired as exc:
+        partial_output = "\n".join(
+            part.decode("utf-8", errors="replace") if isinstance(part, bytes) else str(part or "")
+            for part in (exc.stdout, exc.stderr)
+            if part
+        ).strip()
+        message = (
+            "HubSpot refresh timed out before the dashboard cache finished building. "
+            "Detailed activity history is skipped by default; if this still happens, retry once or run sync.py locally."
+        )
+        if partial_output:
+            message = f"{message}\n\nLast sync output:\n{partial_output[-4000:]}"
+        return False, message
     message = "\n".join(part for part in [result.stdout.strip(), result.stderr.strip()] if part)
     return result.returncode == 0, message
 
