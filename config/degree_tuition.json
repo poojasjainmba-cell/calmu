@@ -1,0 +1,43 @@
+{
+  "Certificate": {
+    "tuition_per_credit": 585,
+    "credits_required": 18,
+    "estimated_total_tuition": 10530,
+    "estimated_annual_tuition": 10530,
+    "duration_years": 0.5,
+    "duration_months": 6
+  },
+  "Associate": {
+    "tuition_per_credit": 585,
+    "credits_required": 60,
+    "estimated_total_tuition": 35100,
+    "estimated_annual_tuition": 14040,
+    "duration_years": 2,
+    "duration_months": 24
+  },
+  "Bachelor": {
+    "tuition_per_credit": 585,
+    "credits_required": 120,
+    "estimated_total_tuition": 70200,
+    "estimated_annual_tuition": 14040,
+    "duration_years": 4,
+    "duration_months": 48
+  },
+  "Master": {
+    "tuition_per_credit": 841,
+    "credits_required": 39,
+    "estimated_total_tuition": 32799,
+    "estimated_annual_tuition": 15138,
+    "duration_years": 2,
+    "duration_months": 24
+  },
+  "Doctoral": {
+    "tuition_per_credit": 884,
+    "credits_required": 61,
+    "estimated_total_tuition": 53924,
+    "estimated_annual_tuition": 10608,
+    "duration_years": 4,
+    "duration_months": 48,
+    "note": "confirm actual expected duration with CalMU policy"
+  }
+}

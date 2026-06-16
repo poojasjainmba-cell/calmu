@@ -1,0 +1,496 @@
+{
+  "metrics": {
+    "Action Load Score": {
+      "aliases": ["action_load", "Action load"],
+      "category": "Sales",
+      "definition": "A score showing how much urgent follow-up work a salesman has."
+    },
+    "Actual Revenue": {
+      "aliases": ["actual_revenue", "revenue", "revenue_attributed", "Actual enrolled revenue", "actual_enrolled_revenue"],
+      "category": "Revenue",
+      "definition": "Revenue from HubSpot deal amount, if populated."
+    },
+    "Annualized Revenue": {
+      "aliases": ["annualized_program_revenue", "Potential annualized", "potential_annualized_program_revenue"],
+      "category": "Revenue",
+      "definition": "The estimated tuition value spread across the normal length of the program. This helps compare short and long programs fairly."
+    },
+    "Average Days To Close": {
+      "aliases": ["average_days_to_close", "median_days_to_close", "Avg days to close", "Avg paid days to close", "average_paid_days_to_close", "days_to_close"],
+      "category": "Speed",
+      "definition": "The average number of days from lead or deal creation to close for records with close dates."
+    },
+    "Average Days To Enroll": {
+      "aliases": ["average_days_to_enroll", "Days to enrollment", "days_from_lead_creation_to_enrollment", "Deal to enrollment", "days_from_deal_creation_to_enrollment"],
+      "category": "Speed",
+      "definition": "The average number of days it takes for a lead or deal to become enrolled or closed won."
+    },
+    "Average Estimated Revenue Per Enrolled Student": {
+      "aliases": ["average_estimated_revenue_per_enrolled_student"],
+      "category": "Revenue",
+      "definition": "Estimated enrolled tuition divided by the number of enrolled students for the row."
+    },
+    "Average Estimated Revenue Per Lead": {
+      "aliases": ["average_estimated_revenue_per_lead"],
+      "category": "Revenue",
+      "definition": "Estimated tuition opportunity divided by the number of leads for the row."
+    },
+    "Average Response Time": {
+      "aliases": ["average_response_time", "time_to_first_engagement", "Days to first contact", "days_from_lead_creation_to_first_contact"],
+      "category": "Speed",
+      "definition": "The average time from lead creation to first known engagement or response."
+    },
+    "Average Sales Touches Before Enrollment": {
+      "aliases": ["average_sales_touches_before_enrollment", "Sales touches", "number_of_sales_touches", "num_notes"],
+      "category": "Activity",
+      "definition": "The average number of logged sales activities before a student enrolled."
+    },
+    "Close Rate": {
+      "aliases": ["close_rate", "Paid close rate", "paid_close_rate"],
+      "category": "Conversion",
+      "definition": "Won countable deals divided by leads."
+    },
+    "Cohort": {
+      "aliases": ["cohort", "cohort_month", "start_term", "Selected cohort"],
+      "category": "Academic",
+      "definition": "A group of students/leads grouped by start term, intake, enrollment term, or created month if no official cohort field exists."
+    },
+    "Cohort Source": {
+      "aliases": ["cohort_source", "cohort source"],
+      "category": "Academic",
+      "definition": "The field used to assign the cohort: official cohort first, then start term, enrollment date, or contact created month."
+    },
+    "Cohort Start Date": {
+      "aliases": ["cohort_start_date"],
+      "category": "Academic",
+      "definition": "The parsed or inferred start date used to sort cohorts chronologically."
+    },
+    "Cold Lead": {
+      "aliases": ["cold_leads", "Cold leads"],
+      "category": "Lead Temperature",
+      "definition": "A lead with weak or old signals, but not dead."
+    },
+    "Contacted Leads": {
+      "aliases": ["contacted_leads", "Contacted", "number_of_calls", "number_of_emails", "number_of_meetings", "Calls", "Emails", "Meetings"],
+      "category": "Activity",
+      "definition": "Leads with at least one known call, email, meeting, note, task, or summary activity signal."
+    },
+    "Cost Per Lead": {
+      "aliases": ["cost_per_lead"],
+      "category": "Paid Marketing",
+      "definition": "Vendor spend divided by paid leads when spend data is available."
+    },
+    "Cohort Top Value": {
+      "aliases": ["cohort_top_vendor", "cohort_top_program", "cohort_top_salesman", "top vendor", "top program", "top salesman", "most common source", "most common vendor", "most common program", "most common salesman path"],
+      "category": "Academic",
+      "definition": "The most common vendor, program, source, or salesman for the cohort based on lead count."
+    },
+    "Dead Lead": {
+      "aliases": ["dead_leads", "Dead leads", "dead_reason"],
+      "category": "Lead Temperature",
+      "definition": "A lead that is likely not worth normal follow-up because it is lost, disqualified, not interested, junk, duplicate, very old, or has no activity."
+    },
+    "Data Quality Issue": {
+      "aliases": ["records_missing_owner", "Records Missing Owner", "records_missing_source", "Records Missing Source", "records_missing_contact_created_date", "Records Missing Contact Created Date", "records_missing_close_date", "Records Missing Close Date", "records_missing_revenue", "Records Missing Revenue", "won_records_missing_program_revenue", "Won Records Missing Program Revenue", "contacts_without_deals", "Contacts Without Deals", "deals_without_contacts", "Deals Without Contacts"],
+      "category": "Data Quality",
+      "definition": "A count of records that are missing fields or associations needed for reliable dashboard reporting."
+    },
+    "Deal Owner Fallback": {
+      "aliases": ["deal_owner_fallback_used", "fallback_to_deal_owner", "Deal Owner fallback"],
+      "category": "Attribution",
+      "definition": "Deal Owner is used only when Contact Owner is missing."
+    },
+    "Deals Created": {
+      "aliases": ["deals_created", "deal_id", "Application / deal created"],
+      "category": "Pipeline",
+      "definition": "The number of unique HubSpot deals associated with the lead group."
+    },
+    "Estimated Enrolled Revenue": {
+      "aliases": ["estimated_enrolled_revenue", "enrolled_revenue", "Estimated tuition"],
+      "category": "Revenue",
+      "definition": "Estimated tuition value of students who enrolled or closed won."
+    },
+    "Estimated ROI": {
+      "aliases": ["estimated_roi"],
+      "category": "Paid Marketing",
+      "definition": "Estimated enrolled or actual revenue minus vendor spend, divided by vendor spend. It is only meaningful when spend is provided."
+    },
+    "Field Mapping": {
+      "aliases": ["Field mapping", "dashboard_field", "hubspot_field", "object_type"],
+      "category": "Data Quality",
+      "definition": "The HubSpot property currently mapped to a dashboard field."
+    },
+    "Total Program Revenue": {
+      "aliases": ["estimated_total_tuition", "program_total_tuition", "total_program_revenue", "Total estimated program revenue", "Potential program revenue", "potential_program_revenue"],
+      "category": "Revenue",
+      "definition": "The full estimated tuition value of the degree or certificate."
+    },
+    "Enrollment Rate": {
+      "aliases": ["enrollment_rate", "cohort_enrollment_rate", "enrollment rate"],
+      "category": "Conversion",
+      "definition": "Enrolled students divided by leads."
+    },
+    "Enrolled Students": {
+      "aliases": ["enrolled_students", "enrolled", "Won deals", "won_deals", "is_won", "has_won_deal", "Enrolled / closed won"],
+      "category": "Conversion",
+      "definition": "Students or deals marked enrolled, closed won, active, accepted, or otherwise counted as won."
+    },
+    "Hot Lead": {
+      "aliases": ["hot_leads", "Hot leads", "lead_temperature", "current_lead_temperature"],
+      "category": "Lead Temperature",
+      "definition": "A lead that is likely to need immediate attention because it has a high score from recent creation, paid source, open deal, recent activity, or qualified status."
+    },
+    "Hot Lead Potential Revenue": {
+      "aliases": ["hot_lead_potential_revenue"],
+      "category": "Revenue",
+      "definition": "Open pipeline potential revenue attached to leads classified as Hot."
+    },
+    "Lead Age Days": {
+      "aliases": ["lead_age_days", "average age"],
+      "category": "Speed",
+      "definition": "The number of days since the lead was created."
+    },
+    "Lead Status Summary": {
+      "aliases": ["pipeline_status", "status", "stage/status"],
+      "category": "Pipeline",
+      "definition": "A meaningful status assembled from enrollment, final lead, lead, lifecycle, deal stage, and lead temperature fields."
+    },
+    "Last Refresh": {
+      "aliases": ["Last refresh", "HubSpot status"],
+      "category": "Operations",
+      "definition": "The most recent dashboard data sync status and timestamp."
+    },
+    "Leakage Score": {
+      "aliases": ["leakage_score"],
+      "category": "Paid Marketing",
+      "definition": "A 0 to 100 score estimating how much paid lead value is leaking due to uncontacted or dead leads."
+    },
+    "Monthly Program Revenue": {
+      "aliases": ["monthly_program_revenue"],
+      "category": "Revenue",
+      "definition": "The estimated program revenue divided by the expected number of months in the program."
+    },
+    "No Activity": {
+      "aliases": ["No activity 7 days", "No activity 14 days", "No activity 30 days", "leads_no_activity_7_days", "leads_no_activity_14_days", "leads_no_activity_30_days", "days_since_last_activity", "Days since last activity"],
+      "category": "Activity",
+      "definition": "Leads with no recent logged activity or no known activity after the stated number of days."
+    },
+    "No Next Activity": {
+      "aliases": ["no next activity", "next_activity_date"],
+      "category": "Activity",
+      "definition": "Open leads that do not have a future follow-up or next activity date."
+    },
+    "Old Open Lead": {
+      "aliases": ["old open leads", "inactive owner with open leads", "missing status", "invalid status"],
+      "category": "Pipeline",
+      "definition": "Open pipeline cleanup items that need owner, status, activity, or close-out review."
+    },
+    "Open Leads": {
+      "aliases": ["open_leads", "has_open_deal", "OPEN_DEAL"],
+      "category": "Pipeline",
+      "definition": "Leads or opportunities that are still open and not won, lost, or dead."
+    },
+    "Open Pipeline Potential Revenue": {
+      "aliases": ["open_pipeline_potential_revenue", "Open pipeline potential", "open_potential_revenue"],
+      "category": "Revenue",
+      "definition": "Estimated total tuition for open non-won, non-lost leads and deals."
+    },
+    "Organic Leads": {
+      "aliases": ["organic_leads", "Organic leads"],
+      "category": "Source",
+      "definition": "Leads that are not classified as paid based on available source and campaign fields."
+    },
+    "Paid Lead": {
+      "aliases": ["paid_leads", "Paid leads", "paid_lead_flag", "paid_leads_assigned", "cohort_paid_leads", "paid %", "cohort_paid_share"],
+      "category": "Paid Marketing",
+      "definition": "A lead whose populated HubSpot source fields match configured paid-source terms."
+    },
+    "Paid Lead Leakage": {
+      "aliases": ["paid_lead_leakage", "Paid no activity", "paid_leads_with_no_activity", "Paid 30+ no open deal", "paid_leads_older_30_days_no_open_deal"],
+      "category": "Paid Marketing",
+      "definition": "Paid leads that are being wasted because they have no owner, no activity, no next activity, stale follow-up, or no progress."
+    },
+    "Paid Lead Potential Revenue": {
+      "aliases": ["paid_lead_potential_revenue"],
+      "category": "Revenue",
+      "definition": "Open pipeline potential revenue attached to paid leads."
+    },
+    "Potential Revenue": {
+      "aliases": ["potential_revenue", "Potential revenue"],
+      "category": "Revenue",
+      "definition": "Estimated tuition value of open leads or opportunities based on the student's program or degree level."
+    },
+    "Program Duration": {
+      "aliases": ["program_duration_years", "program_duration_months", "duration_years", "duration_months"],
+      "category": "Revenue",
+      "definition": "The normal time expected to complete the program, used to annualize and phase tuition revenue."
+    },
+    "Revenue Confidence": {
+      "aliases": ["revenue_confidence", "revenue_confidence_mix"],
+      "category": "Revenue",
+      "definition": "High when a program or degree is known, Medium when inferred from program text, and Low when unknown."
+    },
+    "Revenue Per Lead": {
+      "aliases": ["revenue_per_lead", "Revenue per paid lead", "revenue_per_paid_lead", "revenue per lead"],
+      "category": "Revenue",
+      "definition": "Total estimated program revenue divided by lead count."
+    },
+    "Revenue Realization Note": {
+      "aliases": ["revenue_realization_note"],
+      "category": "Revenue",
+      "definition": "A note explaining how total tuition is spread across the program duration."
+    },
+    "Revenue Timing": {
+      "aliases": ["revenue_timing", "revenue timing", "revenue_realization", "program revenue timing"],
+      "category": "Revenue",
+      "definition": "A way to avoid treating a 4-year bachelor's program the same as a 6-month certificate when looking at near-term sales performance."
+    },
+    "Reviveable Dead Lead": {
+      "aliases": ["reviveable_flag", "Reviveable Dead Leads"],
+      "category": "Lead Temperature",
+      "definition": "A dead or inactive lead that may still be worth one more attempt because it came from paid marketing, has a program interest, has contact information, or showed prior engagement."
+    },
+    "Sales Efficiency": {
+      "aliases": ["Sales efficiency", "average_estimated_revenue_per_lead", "average_estimated_revenue_per_enrolled_student"],
+      "category": "Sales",
+      "definition": "How much revenue or potential revenue is generated per lead, per paid lead, or per sales touch."
+    },
+    "6-Month Revenue": {
+      "aliases": ["six_month_revenue", "Six Month Revenue", "Next 6 months", "potential_six_month_revenue"],
+      "category": "Revenue",
+      "definition": "The portion of estimated tuition expected over the next 6 months, capped at the total program value."
+    },
+    "Stale Lead": {
+      "aliases": ["stale leads", "leads stuck 7+ days", "leads stuck 14+ days", "leads stuck 30+ days"],
+      "category": "Activity",
+      "definition": "An open lead that has not had recent activity and may need follow-up or cleanup."
+    },
+    "Total Leads": {
+      "aliases": ["total_leads", "total_leads_assigned", "leads", "Lead created", "cohort_size"],
+      "category": "Volume",
+      "definition": "The number of unique HubSpot contacts in the current filters."
+    },
+    "12-Month Revenue": {
+      "aliases": ["twelve_month_revenue", "Twelve Month Revenue", "12-month revenue", "Next 12 months", "potential_twelve_month_revenue"],
+      "category": "Revenue",
+      "definition": "The portion of estimated tuition expected over the next 12 months, capped at the total program value."
+    },
+    "24-Month Revenue": {
+      "aliases": ["twenty_four_month_revenue", "Twenty Four Month Revenue", "Next 24 months", "potential_twenty_four_month_revenue"],
+      "category": "Revenue",
+      "definition": "The portion of estimated tuition expected over the next 24 months, capped at the total program value."
+    },
+    "Unclear Revenue Attribution": {
+      "aliases": ["unclear_revenue_attribution"],
+      "category": "Attribution",
+      "definition": "Deals where revenue attribution is ambiguous because contact/deal ownership or associations are incomplete."
+    },
+    "Uncontacted Leads": {
+      "aliases": ["uncontacted_leads", "never_contacted"],
+      "category": "Activity",
+      "definition": "Leads without a known call, email, meeting, note, task, or summary activity signal."
+    },
+    "Vendor": {
+      "aliases": ["vendor", "paid_vendor", "paid vendor"],
+      "category": "Paid Marketing",
+      "definition": "The paid lead provider or marketing source, such as Atra, Google, Meta, or KlientBoost."
+    },
+    "Vendor Confidence": {
+      "aliases": ["vendor_confidence", "vendor_source_field"],
+      "category": "Paid Marketing",
+      "definition": "How confidently the dashboard identified the vendor and which HubSpot field supplied the vendor signal."
+    },
+    "Warm Lead": {
+      "aliases": ["warm_leads", "Warm leads"],
+      "category": "Lead Temperature",
+      "definition": "A lead that has some positive signals but is not urgent yet."
+    }
+  },
+  "sections": {
+    "Archive / Remove Leads": {
+      "action": "Confirm the reason, then remove, archive, or suppress from normal sales follow-up.",
+      "what": "Records that appear invalid, duplicate, disqualified, or no longer useful for normal outreach.",
+      "why": "Keeping these in active lists makes performance look worse and distracts sales teams."
+    },
+    "Calculated Metrics": {
+      "action": "Use the recommendation to decide whether to call, email, schedule, or close out the lead.",
+      "what": "Single-student timing, touch, and temperature metrics.",
+      "why": "They show how quickly and deeply the student has been worked."
+    },
+    "Cleanup Needed": {
+      "action": "Assign owners, set next activities, fix missing statuses, and close out stale records.",
+      "what": "Records with missing status, invalid status, old open age, inactive owner, or no next activity.",
+      "why": "Pipeline hygiene keeps reports accurate and makes follow-up lists trustworthy."
+    },
+    "Cohort Analysis": {
+      "action": "Compare cohorts for revenue, conversion, and degree mix; investigate unusual drops or spikes.",
+      "what": "Lead and revenue performance grouped by cohort or created month when no official cohort exists.",
+      "why": "Cohorts show whether recent intakes are improving or weakening over time."
+    },
+    "Cohort Characteristics": {
+      "action": "Use the mix tables to understand which channels, programs, owners, and lead temperatures shaped the selected cohort.",
+      "what": "A selected cohort's source, vendor, campaign, program, degree, salesman, temperature, and paid/organic mix.",
+      "why": "The same enrollment rate can come from very different lead quality and channel mixes."
+    },
+    "Cohort Comparison": {
+      "action": "Compare cohorts side by side and investigate cohorts with low enrollment, high leakage, high dead rate, or slow enrollment.",
+      "what": "Enrollment rate, revenue per lead, days to enroll, touches to enroll, paid leakage, and dead rate by cohort.",
+      "why": "Side-by-side comparison shows whether newer cohorts are getting better or worse."
+    },
+    "Cohort Summary Table": {
+      "action": "Sort by enrollment rate, revenue, response time, or top source to identify strong and weak cohorts.",
+      "what": "One row per cohort with size, paid share, enrollment, revenue, speed, touches, top vendor, top program, and top salesman.",
+      "why": "It summarizes both cohort outcomes and the effort required to produce those outcomes."
+    },
+    "Cohort by Degree Level": {
+      "action": "Use annualized and 12-month revenue when comparing short and long programs.",
+      "what": "Cohort performance split by degree level.",
+      "why": "Degree mix can explain changes in total tuition value."
+    },
+    "Data Quality and Field Mapping": {
+      "action": "Fix missing owners, missing sources, weak field mappings, and attribution gaps before using KPIs for decisions.",
+      "what": "The health of the HubSpot fields feeding the dashboard.",
+      "why": "Bad or missing source fields can make revenue, vendor, and owner performance misleading."
+    },
+    "Daily Action Center": {
+      "action": "Work the highest-priority rows first, then log activity, set next activity, or close out bad records.",
+      "what": "A daily operating queue of hot leads, paid lead leakage, stale open deals, and reviveable dead leads.",
+      "why": "It turns the dashboard into a practical follow-up list instead of only a reporting view."
+    },
+    "Definitions": {
+      "action": "Use this page as the glossary when reviewing scorecards or exported tables.",
+      "what": "Plain-English definitions for calculated metrics, statuses, and revenue fields.",
+      "why": "Shared definitions prevent dashboard users from interpreting the same number differently."
+    },
+    "Deal Owner Fallback Records": {
+      "action": "Fill Contact Owner where possible so salesman performance remains consistent.",
+      "what": "Records where Deal Owner was used because Contact Owner was missing.",
+      "why": "Contact Owner is the primary salesman field, so fallback records need review."
+    },
+    "Degree Revenue": {
+      "action": "Use annualized and 12-month revenue when comparing short certificates with longer degree programs.",
+      "what": "Revenue grouped by degree level and program using total, 6/12/24-month, and annualized tuition estimates.",
+      "why": "Total tuition alone can overstate longer programs when comparing near-term sales performance."
+    },
+    "Enrollment Path": {
+      "action": "Compare each milestone count to find where leads stop moving, then inspect the stuck status or owner.",
+      "what": "A simple path from lead created to contacted, application or deal, enrolled or closed won, and closed lost or dead.",
+      "why": "It shows progression without assuming a perfect ordered HubSpot funnel."
+    },
+    "Executive Overview": {
+      "action": "Use this page to spot the biggest trend or risk, then drill into owner, vendor, pipeline, or cohort pages.",
+      "what": "The top-level health of leads, revenue, conversion, and source mix.",
+      "why": "It gives a fast read on whether sales performance is improving and where to investigate."
+    },
+    "Fields Being Used": {
+      "action": "Review the mapped HubSpot fields and refresh data after any HubSpot property changes.",
+      "what": "The HubSpot properties currently mapped into dashboard fields.",
+      "why": "It explains exactly which source fields power each metric."
+    },
+    "Fields Removed": {
+      "action": "Check removed fields when expected data is missing from a chart.",
+      "what": "Fields ignored because they were missing, empty, or not reliable enough.",
+      "why": "This prevents charts from using sparse or misleading data."
+    },
+    "Hot vs Dead Leads": {
+      "action": "Work hot leads first, review reviveable dead leads, and archive records that should not be active.",
+      "what": "Lead temperature distribution and inactivity risk.",
+      "why": "It separates urgent follow-up from cleanup work."
+    },
+    "Journey Events": {
+      "action": "Look for gaps between creation, first contact, deal creation, enrollment, and last activity.",
+      "what": "A timeline of contact, activity, deal, application, and enrollment events.",
+      "why": "The sequence shows where a student's journey accelerated or stalled."
+    },
+    "Journey Stage Revenue": {
+      "action": "Use stuck high-value stages as follow-up priorities.",
+      "what": "Revenue grouped by lifecycle and deal stage.",
+      "why": "It shows where tuition value sits in the student journey."
+    },
+    "Lead Drilldown": {
+      "action": "Download this table when you need row-level follow-up lists or audit details.",
+      "what": "The contact/deal-level records behind the scorecards.",
+      "why": "It lets managers move from summary metrics to the exact leads behind them."
+    },
+    "Lead Status Summary": {
+      "action": "Prioritize high-value statuses with many stale, hot, or paid leads.",
+      "what": "Lead counts, paid mix, temperature, enrollment, and revenue by meaningful status.",
+      "why": "It answers where the pipeline stands right now."
+    },
+    "Low Population Fields": {
+      "action": "Avoid making decisions from fields with very low fill rates unless you first improve data capture.",
+      "what": "Mapped or discovered fields with sparse data.",
+      "why": "Sparse fields can make charts incomplete or biased."
+    },
+    "Missing Fields": {
+      "action": "Add, map, or populate these HubSpot fields if the related dashboard feature matters.",
+      "what": "Expected fields that are missing or unusable.",
+      "why": "Missing fields explain hidden charts and fallback behavior."
+    },
+    "Paid Leads Performance": {
+      "action": "Investigate vendors or campaigns with high spend, low contact rates, leakage, or weak revenue per lead.",
+      "what": "Performance of paid marketing leads, campaigns, vendors, revenue, and leakage.",
+      "why": "Paid leads cost money, so weak follow-up or low conversion has direct budget impact."
+    },
+    "Paid Leads With No Activity": {
+      "action": "Assign ownership and schedule immediate follow-up or suppress the record.",
+      "what": "Paid leads with stale or missing activity.",
+      "why": "These are paid opportunities at risk of being wasted."
+    },
+    "Pipeline Health": {
+      "action": "Use the bottleneck and cleanup tables to decide what to work, update, or close today.",
+      "what": "A clear operating view of statuses, stuck leads, enrollment movement, and cleanup needs.",
+      "why": "It replaces ambiguous funnel charts with questions the sales team can act on."
+    },
+    "Revenue by Degree Level": {
+      "action": "Compare total, annualized, and 12-month revenue before ranking programs.",
+      "what": "Estimated tuition and realized revenue grouped by degree level.",
+      "why": "Longer programs naturally have larger total tuition, so time-phased revenue is needed for fair comparison."
+    },
+    "Reviveable Dead Leads": {
+      "action": "Try one more targeted follow-up for promising records, then archive if there is no response.",
+      "what": "Dead or inactive leads that still have signs of value.",
+      "why": "Some paid or program-specific leads may still be worth a final attempt."
+    },
+    "Salesmen / Contact Owner Performance": {
+      "action": "Use action load and paid leakage for coaching; use annualized and 12-month revenue for fair revenue comparison.",
+      "what": "Contact Owner performance across action load, leads, revenue, leakage, and conversion.",
+      "why": "It shows who needs help, who has valuable pipeline, and where paid leads are leaking."
+    },
+    "Stage Bottlenecks": {
+      "action": "Review stages with many records stuck 14 or 30 days and assign a next step.",
+      "what": "Statuses where open leads have been inactive for 7, 14, or 30+ days.",
+      "why": "Bottlenecks show where leads are not moving forward."
+    },
+    "Student Journey": {
+      "action": "Search a student before a call or review and use the timeline to choose the next action.",
+      "what": "A searchable profile and timeline for one student.",
+      "why": "It explains the full path from lead creation to activity, deal, enrollment, or loss."
+    },
+    "Student Profile": {
+      "action": "Confirm owner, source, program, revenue, and status before interpreting the timeline.",
+      "what": "The key identity, source, academic, status, and revenue fields for the selected student.",
+      "why": "A clean profile prevents follow-up based on the wrong owner, program, or source."
+    },
+    "Tuition Configuration": {
+      "action": "Edit config/degree_tuition.json when CalMU tuition or duration assumptions change.",
+      "what": "The editable tuition and duration assumptions used for estimated revenue.",
+      "why": "Revenue estimates should be traceable and updateable without scraping the website on every load."
+    },
+    "Unclear Revenue Attribution": {
+      "action": "Review associations and owners before using these records in performance decisions.",
+      "what": "Deals whose revenue could not be attributed cleanly.",
+      "why": "Ambiguous attribution can distort owner or source rankings."
+    },
+    "Vendor Performance": {
+      "action": "Search vendors such as Atra, compare leakage and revenue per lead, and add spend data for ROI.",
+      "what": "Paid lead outcomes by normalized vendor, source group, and campaign.",
+      "why": "It shows which vendors create enrolled students and which vendors create wasted follow-up."
+    },
+    "What It Took To Enroll": {
+      "action": "Use these medians and common paths to identify the outreach pattern most associated with enrollment.",
+      "what": "Median response time, touches, enrollment time, and the most common source, vendor, program, owner, and statuses for enrolled students.",
+      "why": "It shows the practical activity pattern behind enrolled students, not just the final count."
+    }
+  }
+}

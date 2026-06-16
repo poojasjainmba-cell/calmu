@@ -1,0 +1,52 @@
+{
+  "vendor_aliases": {
+    "Atra": [
+      "atra",
+      "atra analytics"
+    ],
+    "KlientBoost": [
+      "klient boost",
+      "klientboost"
+    ],
+    "Google": [
+      "google",
+      "google ads",
+      "adwords"
+    ],
+    "Meta": [
+      "facebook",
+      "meta",
+      "instagram"
+    ],
+    "LinkedIn": [
+      "linkedin"
+    ],
+    "Microsoft/Bing": [
+      "bing",
+      "microsoft ads"
+    ]
+  },
+  "vendor_field_terms": [
+    "vendor",
+    "partner",
+    "agency",
+    "referral",
+    "source",
+    "campaign"
+  ],
+  "preferred_source_fields": [
+    "source",
+    "source_group",
+    "utm_source",
+    "utm_medium",
+    "utm_campaign",
+    "campaigns",
+    "hs_analytics_source",
+    "hs_analytics_source_data_1",
+    "hs_analytics_source_data_2",
+    "hs_latest_source",
+    "hs_latest_source_data_1",
+    "hs_latest_source_data_2",
+    "paid_lead_list"
+  ]
+}

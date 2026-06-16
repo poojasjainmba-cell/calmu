@@ -1,0 +1,62 @@
+{
+  "paid_terms": [
+    "paid",
+    "cpc",
+    "ppc",
+    "google ads",
+    "adwords",
+    "facebook",
+    "instagram",
+    "meta",
+    "linkedin",
+    "bing",
+    "microsoft ads",
+    "tiktok",
+    "display",
+    "paid search",
+    "paid social",
+    "atra",
+    "klient boost",
+    "klientboost"
+  ],
+  "paid_search_terms": [
+    "paid search",
+    "google ads",
+    "adwords",
+    "cpc",
+    "ppc",
+    "bing",
+    "microsoft ads"
+  ],
+  "paid_social_terms": [
+    "paid social",
+    "facebook",
+    "instagram",
+    "meta",
+    "linkedin",
+    "tiktok"
+  ],
+  "vendor_aliases": {
+    "Atra": [
+      "atra"
+    ],
+    "Google Ads": [
+      "google ads",
+      "adwords"
+    ],
+    "Meta": [
+      "facebook",
+      "instagram",
+      "meta"
+    ],
+    "LinkedIn": [
+      "linkedin"
+    ],
+    "Bing": [
+      "bing"
+    ],
+    "TikTok": [
+      "tiktok"
+    ]
+  }
+}
