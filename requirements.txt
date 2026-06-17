@@ -5,3 +5,5 @@ python-dotenv
 plotly
 pyarrow
 pytest
+openpyxl
+beautifulsoup4

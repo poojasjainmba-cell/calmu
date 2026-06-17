@@ -1,0 +1,29 @@
+{
+  "privacy": "Names, emails, phone numbers, raw Record IDs, notes, UDR/contact-owner labels, and source/list labels are excluded or pseudonymized.",
+  "paid_rows": 1297,
+  "udr_rows": 25193,
+  "enrollment_rows": 107,
+  "tracker_revenue": 3970278.0,
+  "budget_allocation_rows": 29,
+  "workbook_term": "Summer 2",
+  "email_context": {
+    "subject": "Summer 2 Enrollment Update \u2013 Week 6 June 8-12",
+    "sent_at": "Sun, 14 Jun 2026 00:00:08 +0000",
+    "image_count": 7,
+    "data_lines": [],
+    "notes": [
+      "Embedded image OCR was skipped because PIL/pytesseract is not available.",
+      "No usable weekly summary metrics were found in the parsed email text."
+    ]
+  },
+  "load_notes": [
+    "Sanitized public baseline generated from local private uploaded files.",
+    "Paid leads workbook sheets inspected: PLS, PLC, OLS, OLC, Paid Leads",
+    "UDR conversions workbook sheets inspected: L2C, L2A, VLC, VLA, UDR leads conversions",
+    "Embedded image OCR was skipped because PIL/pytesseract is not available.",
+    "No usable weekly summary metrics were found in the parsed email text.",
+    "Enrollment tracker sheets inspected: Enrollments, 2026Roundup",
+    "Budget workbook sheets inspected: Sheet1",
+    "Budget workbook is treated as planned enrollment/UDR allocation because no media spend ledger fields were present."
+  ]
+}

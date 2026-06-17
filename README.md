@@ -1,245 +1,139 @@
-# CalMU HubSpot Sales Performance Dashboard
+# CalMU Enrollment Performance Dashboard
 
-This project is a live Streamlit dashboard for HubSpot sales performance. It connects to HubSpot through the API, profiles available fields, builds a safe field mapping, caches raw and processed data locally, and shows sales, paid lead, revenue, lead temperature, attribution, and data quality reporting.
+Production-ready Streamlit dashboard for California Miramar University enrollment, lead, UDR, source, and budget performance.
 
-The app does not use manual CSV uploads.
+The app is read-only. It never edits HubSpot records, sends emails, deletes source data, overwrites historical snapshots, or hardcodes HubSpot tokens.
 
-## 1. What This App Does
+## Included App
 
-- Pulls contacts, deals, owners, and contact-to-deal associations from HubSpot.
-- Profiles HubSpot contact and deal fields before using them.
-- Maps dashboard fields only to populated HubSpot fields.
-- Uses Contact Owner as the primary salesman field.
-- Uses Deal Owner only when Contact Owner is missing.
-- Counts each deal's revenue once, even when a deal has multiple contacts.
-- Estimates full program tuition when a populated contact tuition field is available, then spreads that value over the normal degree duration.
-- Uses editable CalMU published tuition defaults from `config/degree_tuition.json` for potential revenue and fallback estimates.
-- Classifies paid leads and source groups.
-- Scores leads as Hot, Warm, Cold, or Dead.
-- Shows missing fields and data quality warnings instead of crashing.
-- Uses local cached data when HubSpot refresh fails.
+- Main Streamlit app: `app.py`
+- Uploaded baseline files: `user_files/`
+- Sanitized deployable baseline files: `public_data/baseline/`
+- Dashboard modules: `modules/`
+- Streamlit config: `.streamlit/config.toml`
+- Secrets example: `.streamlit/secrets.toml.example`
 
-## 2. Create a HubSpot Private App Token
+The prior `dashboard.py` app remains in the repo for continuity, but the deployment target for this build is `app.py`.
 
-In HubSpot, create a private app and copy its access token.
-
-Typical steps:
-
-1. Go to HubSpot settings.
-2. Open Integrations, then Private Apps.
-3. Create a private app.
-4. Add read scopes for contacts, deals, owners, CRM properties, and associations.
-5. Copy the private app access token.
-
-Suggested scopes include contact read, deal read, owner read, and CRM schema/property read access. HubSpot scope names can vary by account and HubSpot UI version, so use the closest matching read-only scopes available in your portal.
-
-## 3. Set `HUBSPOT_ACCESS_TOKEN`
-
-Create a local `.env` file:
+## Local Setup
 
 ```bash
-cp .env.example .env
-```
-
-Edit `.env`:
-
-```bash
-HUBSPOT_ACCESS_TOKEN=your_token_here
-```
-
-You can also set it in your shell:
-
-```bash
-export HUBSPOT_ACCESS_TOKEN=your_token_here
-```
-
-Never commit `.env`. The token is never hardcoded or printed by this app.
-
-## 4. Install Requirements
-
-```bash
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
+streamlit run app.py
 ```
 
-## 5. Run the Field Profiler
+For local HubSpot access, create either `.env` or `.streamlit/secrets.toml`:
 
 ```bash
-python field_profiler.py
+HUBSPOT_ACCESS_TOKEN=your_read_only_private_app_token
 ```
 
-This creates:
+## Uploaded Files
 
-- `data/audit/hubspot_field_inventory.csv`
-- `data/audit/dashboard_field_mapping.json`
-- `data/audit/dashboard_removed_fields.csv`
+Place these files in `user_files/`:
 
-## 6. Run the First Sync
+- `01-2026Budget.xlsx`
+- `01-PaidleadsJune11-1-.xlsx`
+- `02-Summer-2-Enrollment-Update-Week-6-June-8-12-1-.eml`
+- `03-Summer2tracker-1-.xlsx`
+- `04-UDRConversionsJune11-1-.xlsx`
+
+The dashboard loads all workbook sheets, recalculates raw lead/enrollment metrics where possible, and uses pivot sheets only as reconciliation references.
+
+`user_files/` is intentionally ignored by Git because the source files can contain names, emails, phone numbers, and other private fields. For GitHub and Streamlit Cloud, use the sanitized `public_data/baseline/` files instead. They preserve dashboard-level calculations but remove or pseudonymize private labels.
+
+To rebuild the sanitized baseline locally after source files change:
 
 ```bash
-python sync.py
+python3 scripts/build_public_baseline.py
 ```
 
-If the field mapping does not exist, `sync.py` runs the field profiler first.
+## HubSpot Setup
 
-Raw cache is saved to `data/raw`. Processed dashboard tables are saved to `data/processed`.
-
-## 7. Run the Dashboard
-
-```bash
-streamlit run dashboard.py
-```
-
-The dashboard reads cached processed data. Use the Refresh HubSpot Data button to pull fresh HubSpot data.
-
-## 8. Deploy From GitHub
-
-This app can be deployed from GitHub to a Streamlit-compatible host such as Streamlit Community Cloud.
-
-Recommended Streamlit Cloud settings:
-
-- Repository: `poojasjainmba-cell/calmu`
-- Branch: `main`
-- Main file path: `dashboard.py`
-- Python dependencies: `requirements.txt`
-
-Add this secret in the hosting platform's secrets manager, not in Git:
+Create a HubSpot private app token and add it as:
 
 ```toml
-HUBSPOT_ACCESS_TOKEN = "your_hubspot_private_app_token"
+HUBSPOT_ACCESS_TOKEN = "your_read_only_private_app_token"
 ```
 
-Optional detailed activity history can be enabled with:
+Required scopes:
+
+- `crm.objects.contacts.read`
+- `crm.schemas.contacts.read`
+- `crm.lists.read` only if list membership is later added
+
+The app fetches contact schemas before fetching contacts. It only uses exact available property internal names and exposes missing configured properties on the Assumptions / Data Notes page.
+
+Optional secret:
 
 ```toml
-HUBSPOT_SYNC_ACTIVITIES = "true"
+HUBSPOT_CONTACT_PROPERTIES = "exact_custom_property_1,exact_custom_property_2"
 ```
 
-Leave `HUBSPOT_SYNC_ACTIVITIES` unset for Streamlit Cloud's first sync. The app will use HubSpot contact summary activity fields, which keeps the initial refresh fast enough for hosted deployment.
+Use this only for confirmed HubSpot fields.
 
-Streamlit Cloud refreshes the most recent 10,000 contacts and 10,000 deals by default so the first hosted sync can complete within HubSpot hosted-search limits. Keep these caps in place for hosted deployments unless you are sure the full sync can finish before Streamlit times out.
+## Streamlit Community Cloud Deployment
 
-For a local full sync, or a hosted app with a small HubSpot portal, you can add these secrets and refresh again:
+1. Push this repository to GitHub.
+2. In Streamlit Community Cloud, create a new app from the repository.
+3. Set the main file path to `app.py`.
+4. Add secrets from `.streamlit/secrets.toml.example`.
+5. Start with `HUBSPOT_MAX_CONTACTS = "1000"` for a fast hosted smoke test, then raise it after the app is stable.
 
-```toml
-HUBSPOT_MAX_CONTACTS = "0"
-HUBSPOT_MAX_DEALS = "0"
-```
+## Dashboard Sections
 
-Runtime HubSpot cache files under `data/` are intentionally ignored by Git. Run `python field_profiler.py` and `python sync.py` locally or from the deployment environment after adding the token.
+- Executive Overview
+- Enrollment Tracker
+- Source Performance
+- UDR Performance
+- Program Mix
+- Budget Performance
+- Lead Status & Lifecycle Funnel
+- Trends
+- QA Checks
+- Assumptions / Data Notes
+- Raw Audit Data
 
-## 9. Dashboard Pages
+## Calculation Notes
 
-- Executive Overview: top-level lead, enrollment, revenue, source, and degree-level performance.
-- Daily Action Center: a practical follow-up queue for hot leads, stale paid leads, old open deals, and reviveable dead leads.
-- Degree Revenue: total, annualized, 6-month, 12-month, and 24-month tuition estimates by degree level and program.
-- Paid Lead Vendor Performance: vendor search, vendor normalization, paid lead leakage, enrollment, revenue, CPL, and ROI where cost data exists.
-- Salesmen / Contact Owner Performance: owner scorecards using Contact Owner first and Deal Owner only as fallback.
-- Student Journey: searchable per-student profile, timeline, activity summary, journey metrics, and recommended next action.
-- Cohort Analysis: cohort summary, characteristics, what it took to enroll, and side-by-side cohort comparison.
-- Pipeline Health: clear status, bottleneck, enrollment path, and cleanup tables replacing the old funnel and stage aging view.
-- Hot vs Dead Leads: temperature mix, stuck lead queues, reviveable dead leads, and archive/remove candidates.
-- Data Quality and Field Mapping: field mapping, removed fields, low-population fields, and attribution gaps.
-- Definitions: glossary of calculated metrics plus the editable tuition configuration.
+- Degree equals Program.
+- Contact Owner is UDR.
+- Enrollment tracker is the source of truth for actual enrollments, revenue, days to enroll, program mix, modality, student type, payment/funding, and enrollment source.
+- HubSpot is the source of truth for live leads, lifecycle stage, lead status, contact owner, create date, last activity date, source/list fields, and CRM funnel metrics when the token is configured.
+- Applicant equals lifecycle stage `Applicant`.
+- CRM Enrolled equals lifecycle stage `Enrolled`.
+- Actual Enrollment equals a tracker row with a nonblank student and matching selected term.
+- Bad Lead equals lifecycle stage `Not a Lead` or lead status `Dead Lead`, `Do Not Contact`, `Duplicate Lead`, or `App Submitted - Unqualified`.
+- Lead-to-contact uses explicit contact flags when present. Otherwise it uses Last Activity Date or progressed lead statuses.
+- Revenue is summed from tracker `Rev` / revenue.
+- The uploaded budget workbook is treated as enrollment goal/allocation data because no confirmed paid-media spend ledger fields are present.
 
-Friendly warnings appear when HubSpot fields are missing or empty. The dashboard is read-only and does not write back to HubSpot.
+## Privacy And Git Hygiene
 
-## 10. Salesmen / Contact Owner Page
+- `.env`, `.streamlit/secrets.toml`, Streamlit credentials, generated exports, and PII export folders are ignored.
+- `user_files/` source workbooks/emails are ignored and must stay private.
+- `public_data/baseline/` is safe for GitHub because names, emails, phone numbers, raw Record IDs, notes, UDR/contact-owner labels, and source/list labels are removed or pseudonymized.
+- Executive pages do not show names, emails, phone numbers, or tracker notes.
+- Raw rows are available only on the clearly separated Raw Audit Data page. Set `RAW_AUDIT_PASSWORD` to require a password.
 
-The Salesmen / Contact Owner page attributes performance using this rule:
-
-1. Use Contact Owner as `salesman_id`.
-2. If Contact Owner is missing, use Deal Owner.
-3. If both are missing, mark `attribution_type` as `missing_owner`.
-
-The page includes lead counts, paid/organic counts, Hot/Warm/Cold/Dead leads, won deals, total estimated program revenue, annualized revenue, 6/12/24-month revenue, close rate, paid close rate, days to close, and revenue per lead.
-
-## 11. Program Duration Revenue
-
-Program duration defaults live in `config/degree_tuition.json`:
-
-- Certificate: 6 months
-- Associate: 24 months
-- Bachelor: 48 months
-- Master: 24 months
-- Doctoral: 48 months, pending CalMU policy confirmation
-
-`total_program_revenue` is the full estimated tuition value for a won/countable student record. When HubSpot has a populated contact tuition field such as `standard_tuition_total`, the dashboard uses that value. If not, it falls back to countable won deal revenue, then to the editable CalMU published tuition config. Annualized and 6/12/24-month revenue spread the full value over the configured program duration.
-
-`potential_program_revenue` uses the published tuition config for matched programs regardless of won/lost deal status. The dashboard does not scrape CalMU on load. To manually update the local config from the CalMU tuition page, run:
-
-```bash
-python refresh_tuition.py
-```
-
-## 12. Processed Tables
-
-The sync creates these processed tables under `data/processed`:
-
-- `contacts_clean`
-- `deals_clean`
-- `lead_deal_fact`
-- `student_journey_fact`
-- `cohort_fact`
-- `vendor_fact`
-- `salesman_revenue_fact`
-- `activity_events`
-
-Detailed activity history is optional and controlled by `HUBSPOT_SYNC_ACTIVITIES=true`. If it is disabled or the token cannot read calls, emails, meetings, notes, and tasks, the dashboard falls back to summary activity fields and shows a friendly note.
-
-## 13. Vendor Cost Data
-
-Vendor cost and spend data is optional. Add rows to `config/vendor_costs.csv` to calculate cost per lead and estimated ROI:
-
-```csv
-vendor,month,spend,notes
-Atra,2026-01,0,replace with actual spend
-```
-
-If cost data is missing, Paid Lead Vendor Performance still shows leads, contacted leads, leakage, enrollment, and revenue metrics.
-
-## 14. Hot vs Dead Lead Calculation
-
-Lead score adds points for:
-
-- New leads
-- Paid leads
-- MQL, SQL, qualified, or opportunity status
-- Open deals
-- Recent activity
-- Scheduled next activity
-- Email or phone availability
-
-Lead score subtracts points for:
-
-- Inactivity
-- Older leads without open deals
-
-Dead overrides include closed lost, disqualified, unqualified, not interested, bad fit, invalid, junk, duplicate, old inactive leads, and older never-contacted leads.
-
-## 15. Troubleshoot Missing Fields
+## Validation
 
 Run:
 
 ```bash
-python field_profiler.py
+pytest
+streamlit run app.py
 ```
 
-Then review:
+Confirmed dashboard checks:
 
-- `data/audit/hubspot_field_inventory.csv`
-- `data/audit/dashboard_field_mapping.json`
-- `data/audit/dashboard_removed_fields.csv`
+- All uploaded files load from `user_files/`.
+- Missing HubSpot token state falls back to static uploaded baseline.
+- Paid lead workbook raw totals reconcile against pivot references.
+- UDR conversion workbook raw totals reconcile against pivot references.
+- Enrollment tracker actual enrollment count comes from `Enrollments`.
+- Budget total comes from the uploaded budget workbook summary/allocation fields.
 
-If a dashboard feature is hidden, the mapped HubSpot field is probably missing or empty. The app does not guess fields without data.
-
-## 16. Refresh HubSpot Data
-
-From the dashboard, click Refresh HubSpot Data.
-
-From the terminal, run:
-
-```bash
-python sync.py
-```
-
-If HubSpot fails, the dashboard keeps using the latest cached processed data when available.
+Known limitation: OCR of embedded email images runs only if local OCR dependencies are available. If OCR is unavailable, the app reports that no practical OCR output was captured and still displays parsed plain text / HTML context.

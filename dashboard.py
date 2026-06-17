@@ -7,6 +7,8 @@ from typing import Any
 
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
+import plotly.io as pio
 import streamlit as st
 
 from config import (
@@ -76,6 +78,269 @@ POTENTIAL_REVENUE_LABELS = {
     "enrolled_revenue": "Enrolled revenue",
     "open_pipeline_potential_revenue": "Open pipeline potential revenue",
 }
+CALMU_COLORS = {
+    "blue": "#2938D5",
+    "lime": "#EDFF81",
+    "navy": "#1E2944",
+    "royal": "#3D59D9",
+    "white": "#FFFFFF",
+    "sky": "#ABCCE3",
+    "red": "#CD1141",
+    "burgundy": "#8F0028",
+    "green": "#1A5347",
+    "sage": "#ABBEB3",
+    "slate": "#657874",
+    "mist": "#C4CDD3",
+}
+CALMU_CHART_SEQUENCE = [
+    CALMU_COLORS["blue"],
+    CALMU_COLORS["green"],
+    CALMU_COLORS["royal"],
+    CALMU_COLORS["red"],
+    CALMU_COLORS["sky"],
+    CALMU_COLORS["sage"],
+    CALMU_COLORS["burgundy"],
+    CALMU_COLORS["slate"],
+    CALMU_COLORS["lime"],
+]
+
+
+def apply_brand_theme() -> None:
+    pio.templates["calmu"] = go.layout.Template(
+        layout=go.Layout(
+            colorway=CALMU_CHART_SEQUENCE,
+            font={"family": "Inter, Proxima Nova, Arial, sans-serif", "color": CALMU_COLORS["navy"]},
+            title={"font": {"family": "Inter, Proxima Nova, Arial, sans-serif", "color": CALMU_COLORS["navy"]}},
+            paper_bgcolor="rgba(255,255,255,0)",
+            plot_bgcolor=CALMU_COLORS["white"],
+            xaxis={
+                "gridcolor": "#E7EEF2",
+                "linecolor": CALMU_COLORS["mist"],
+                "tickfont": {"color": CALMU_COLORS["navy"]},
+                "title": {"font": {"color": CALMU_COLORS["navy"]}},
+            },
+            yaxis={
+                "gridcolor": "#E7EEF2",
+                "linecolor": CALMU_COLORS["mist"],
+                "tickfont": {"color": CALMU_COLORS["navy"]},
+                "title": {"font": {"color": CALMU_COLORS["navy"]}},
+            },
+            legend={"font": {"color": CALMU_COLORS["navy"]}},
+            margin={"l": 32, "r": 24, "t": 54, "b": 40},
+        )
+    )
+    px.defaults.template = "calmu"
+    px.defaults.color_discrete_sequence = CALMU_CHART_SEQUENCE
+    px.defaults.color_continuous_scale = [CALMU_COLORS["sky"], CALMU_COLORS["royal"], CALMU_COLORS["navy"]]
+    st.markdown(
+        f"""
+        <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        :root {{
+            --calmu-blue: {CALMU_COLORS["blue"]};
+            --calmu-lime: {CALMU_COLORS["lime"]};
+            --calmu-navy: {CALMU_COLORS["navy"]};
+            --calmu-royal: {CALMU_COLORS["royal"]};
+            --calmu-sky: {CALMU_COLORS["sky"]};
+            --calmu-green: {CALMU_COLORS["green"]};
+            --calmu-sage: {CALMU_COLORS["sage"]};
+            --calmu-slate: {CALMU_COLORS["slate"]};
+            --calmu-mist: {CALMU_COLORS["mist"]};
+        }}
+
+        html, body, [class*="css"] {{
+            font-family: "Inter", "Proxima Nova", Arial, sans-serif;
+        }}
+
+        .stApp {{
+            background:
+                linear-gradient(180deg, rgba(171, 204, 227, 0.24) 0, rgba(255, 255, 255, 0) 280px),
+                #FFFFFF;
+            color: var(--calmu-navy);
+        }}
+
+        .block-container {{
+            padding-top: 1.6rem;
+            padding-bottom: 3rem;
+            max-width: 1480px;
+        }}
+
+        .calmu-masthead {{
+            background: linear-gradient(135deg, var(--calmu-navy) 0%, var(--calmu-green) 100%);
+            color: #FFFFFF;
+            border-radius: 8px;
+            padding: 24px 28px;
+            margin-bottom: 22px;
+            border-bottom: 6px solid var(--calmu-lime);
+            display: flex;
+            justify-content: space-between;
+            gap: 24px;
+            align-items: flex-end;
+        }}
+
+        .calmu-kicker {{
+            color: var(--calmu-lime);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.16em;
+            line-height: 1.2;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }}
+
+        .calmu-masthead p {{
+            color: rgba(255,255,255,0.82);
+            font-size: 0.98rem;
+            margin: 12px 0 0;
+            max-width: 760px;
+        }}
+
+        .calmu-wordmark {{
+            border: 1px solid rgba(255,255,255,0.36);
+            border-radius: 8px;
+            padding: 12px 14px;
+            min-width: 156px;
+            text-align: right;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }}
+
+        .calmu-wordmark span {{
+            display: block;
+            color: var(--calmu-lime);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            margin-top: 4px;
+        }}
+
+        h1, h2, h3, [data-testid="stMarkdownContainer"] h1,
+        [data-testid="stMarkdownContainer"] h2, [data-testid="stMarkdownContainer"] h3 {{
+            color: var(--calmu-navy);
+            letter-spacing: 0;
+        }}
+
+        .calmu-masthead h1,
+        [data-testid="stMarkdownContainer"] .calmu-masthead h1 {{
+            color: #FFFFFF;
+            font-size: clamp(2rem, 4vw, 3.45rem);
+            line-height: 0.98;
+            font-weight: 800;
+            letter-spacing: 0;
+            margin: 0;
+        }}
+
+        [data-testid="stSidebar"] {{
+            background: var(--calmu-navy);
+            border-right: 1px solid rgba(255,255,255,0.08);
+        }}
+
+        [data-testid="stSidebar"] * {{
+            color: #FFFFFF;
+        }}
+
+        [data-testid="stSidebar"] h2,
+        [data-testid="stSidebar"] p {{
+            color: rgba(255,255,255,0.88);
+        }}
+
+        [data-testid="stSidebar"] [role="radiogroup"] label,
+        [data-testid="stSidebar"] [data-baseweb="select"] {{
+            background: rgba(255,255,255,0.06);
+            border-radius: 8px;
+        }}
+
+        [data-testid="stMetric"] {{
+            background: #FFFFFF;
+            border: 1px solid #E0E8EE;
+            border-top: 4px solid var(--calmu-blue);
+            border-radius: 8px;
+            padding: 14px 16px 12px;
+            min-height: 118px;
+            box-shadow: 0 12px 30px rgba(30, 41, 68, 0.07);
+        }}
+
+        [data-testid="stMetricLabel"] p {{
+            color: var(--calmu-slate);
+            font-size: 0.76rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }}
+
+        [data-testid="stMetricValue"],
+        [data-testid="stMetricValue"] > div {{
+            color: var(--calmu-navy);
+            font-weight: 800;
+            font-size: clamp(1.55rem, 2.15vw, 2.35rem);
+            line-height: 1.05;
+            white-space: normal;
+            overflow-wrap: anywhere;
+        }}
+
+        .stButton > button,
+        .stDownloadButton > button {{
+            background: var(--calmu-lime);
+            color: var(--calmu-navy);
+            border: 1px solid rgba(30, 41, 68, 0.16);
+            border-radius: 8px;
+            font-weight: 800;
+            letter-spacing: 0;
+        }}
+
+        .stButton > button:hover,
+        .stDownloadButton > button:hover {{
+            background: var(--calmu-navy);
+            color: #FFFFFF;
+            border-color: var(--calmu-navy);
+        }}
+
+        [data-testid="stAlert"] {{
+            border-radius: 8px;
+            border: 1px solid #DDE7ED;
+        }}
+
+        [data-testid="stCaptionContainer"],
+        .stCaptionContainer {{
+            color: var(--calmu-slate);
+        }}
+
+        [data-testid="stDataFrame"],
+        [data-testid="stTable"] {{
+            border: 1px solid #E1E9EF;
+            border-radius: 8px;
+            overflow: hidden;
+        }}
+
+        div[data-testid="stPlotlyChart"] {{
+            background: #FFFFFF;
+            border: 1px solid #E1E9EF;
+            border-radius: 8px;
+            padding: 8px;
+            box-shadow: 0 12px 30px rgba(30, 41, 68, 0.05);
+        }}
+
+        hr {{
+            border-color: #E1E9EF;
+        }}
+
+        @media (max-width: 760px) {{
+            .calmu-masthead {{
+                padding: 20px;
+                display: block;
+            }}
+            .calmu-wordmark {{
+                margin-top: 18px;
+                text-align: left;
+                min-width: 0;
+            }}
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def money(value: Any) -> str:
@@ -237,7 +502,19 @@ def show_header(
     contacts_df: pd.DataFrame,
     fact_df: pd.DataFrame,
 ) -> None:
-    st.title("CalMU HubSpot Sales Performance")
+    st.markdown(
+        """
+        <section class="calmu-masthead">
+          <div>
+            <div class="calmu-kicker">California Miramar University</div>
+            <h1>HubSpot Sales Performance</h1>
+            <p>Read-only admissions and sales intelligence for owners, paid vendors, student journeys, cohorts, pipeline health, and tuition-based revenue timing.</p>
+          </div>
+          <div class="calmu-wordmark">CalMU<span>Since 2005</span></div>
+        </section>
+        """,
+        unsafe_allow_html=True,
+    )
     top = st.columns([1, 1, 1, 1])
     if top[0].button("Refresh HubSpot Data", width="stretch"):
         if not token_is_set():
@@ -252,7 +529,7 @@ def show_header(
                 st.error(message or "HubSpot refresh failed.")
 
     last_refresh = metadata.get("last_refresh_time")
-    metric_card(top[1], "Last refresh", last_refresh.strftime("%Y-%m-%d %H:%M UTC") if last_refresh else "Never")
+    metric_card(top[1], "Last refresh", last_refresh.strftime("%b %d, %H:%M UTC") if last_refresh else "Never")
     status = metadata.get("status") or {}
     metric_card(top[2], "HubSpot status", status.get("status", "No sync yet"))
     mapping = load_json_safe(FIELD_MAPPING_PATH, default={}) or {}
@@ -982,6 +1259,7 @@ def page_quality(contacts: pd.DataFrame, deals: pd.DataFrame, fact: pd.DataFrame
 
 def main() -> None:
     st.set_page_config(page_title="CalMU HubSpot Sales Dashboard", layout="wide")
+    apply_brand_theme()
     tables, metadata = load_cached_data()
     contacts = tables["contacts_clean"]
     deals = tables["deals_clean"]
