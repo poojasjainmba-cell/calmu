@@ -1,42 +1,44 @@
 from __future__ import annotations
 
-from datetime import date, timezone
+import os
+from datetime import date, datetime, timezone
+from pathlib import Path
 from typing import Any
 
 import pandas as pd
-import plotly.express as px
+import plotly.io as pio
 import streamlit as st
 
 from modules.budget_loader import BudgetData, load_budget
-from modules.charts import CALMU_COLORS, bar_chart, configure_plotly_theme, enrollment_progress, line_chart
-from modules.data_loader import UploadedLeadData, load_uploaded_lead_data, redact_pii
-from modules.enrollment_ops import (
-    BENCHMARKS,
-    DISPLAY_LABELS,
-    activity_summary_by_udr,
-    apply_global_filters,
-    canonicalize_udr_columns,
-    canonicalize_udr_goals,
-    display_frame,
-    display_label,
-    enrollment_group,
-    enrollment_metrics,
-    expected_goal_pct,
-    funnel_metrics_by,
-    goals_by_udr,
-    has_activity_fields,
-    no_recent_activity_mask,
-    normalize_enrollments,
-    normalize_leads,
-    qa_summary,
-    safe_divide,
-    total_goal,
-    udr_scorecard,
-    vendor_performance,
+from modules.charts import (
+    CALMU_COLORS,
+    bar_chart,
+    configure_plotly_theme,
+    donut_chart,
+    enrollment_progress,
+    funnel_chart,
+    line_chart,
 )
+from modules.data_loader import UploadedLeadData, load_uploaded_lead_data, redact_pii
 from modules.enrollment_tracker import EnrollmentTrackerData, load_enrollment_tracker
 from modules.hubspot_client import HubSpotFetchResult, fetch_hubspot_contacts, get_access_token
-from modules.metrics import weekly_counts
+from modules.metrics import (
+    compare_pivot_totals,
+    enrollment_by,
+    enrollment_summary,
+    filter_date_range,
+    funnel_counts,
+    lead_performance_by,
+    roundup_value,
+    source_performance,
+    summarize_leads,
+    weekly_counts,
+)
+from modules.qa_checks import run_qa_checks
+
+
+APP_DIR = Path(__file__).resolve().parent
+pio.templates.default = "plotly_white"
 
 
 def apply_brand_theme() -> None:
@@ -44,7 +46,6 @@ def apply_brand_theme() -> None:
     st.markdown(
         f"""
         <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
         :root {{
             --calmu-blue: {CALMU_COLORS["blue"]};
             --calmu-lime: {CALMU_COLORS["lime"]};
@@ -54,9 +55,6 @@ def apply_brand_theme() -> None:
             --calmu-green: {CALMU_COLORS["green"]};
             --calmu-mist: {CALMU_COLORS["mist"]};
             --calmu-slate: {CALMU_COLORS["slate"]};
-        }}
-        html, body, [class*="css"] {{
-            font-family: "Inter", "Proxima Nova", Arial, sans-serif;
         }}
         .stApp {{
             background: linear-gradient(180deg, rgba(171, 204, 227, 0.22), rgba(255,255,255,0) 280px), #FFFFFF;
@@ -82,13 +80,9 @@ def apply_brand_theme() -> None:
             min-height: 112px;
             box-shadow: 0 12px 24px rgba(30, 41, 68, 0.06);
         }}
-        div[data-testid="stMetricValue"], div[data-testid="stMetricValue"] > div {{
+        div[data-testid="stMetricValue"] {{
             color: var(--calmu-navy);
-            font-size: clamp(1.45rem, 2vw, 2.15rem);
             font-weight: 800;
-            line-height: 1.05;
-            white-space: normal;
-            overflow-wrap: anywhere;
         }}
         .calmu-masthead {{
             background: linear-gradient(135deg, var(--calmu-navy), var(--calmu-green));
@@ -96,12 +90,12 @@ def apply_brand_theme() -> None:
             border-radius: 8px;
             color: #FFFFFF;
             padding: 24px 28px;
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }}
         .calmu-masthead h1 {{
             color: #FFFFFF;
-            font-size: clamp(2rem, 4vw, 3.25rem);
-            line-height: 1.02;
+            font-size: 2.35rem;
+            line-height: 1.05;
             margin: 0;
             letter-spacing: 0;
         }}
@@ -116,38 +110,17 @@ def apply_brand_theme() -> None:
         .calmu-masthead p {{
             color: rgba(255,255,255,0.84);
             margin: 10px 0 0;
-            max-width: 920px;
-        }}
-        .filter-panel {{
-            background: #FFFFFF;
-            border: 1px solid #DFE8EE;
-            border-radius: 8px;
-            padding: 14px 16px 6px;
-            margin-bottom: 18px;
-            box-shadow: 0 10px 24px rgba(30, 41, 68, 0.05);
+            max-width: 860px;
         }}
         h1, h2, h3 {{
             color: var(--calmu-navy);
             letter-spacing: 0;
         }}
-        .stButton > button, .stDownloadButton > button {{
-            background: var(--calmu-lime);
-            color: var(--calmu-navy);
-            border: 1px solid rgba(30, 41, 68, 0.16);
-            border-radius: 8px;
-            font-weight: 800;
+        .dataframe tbody tr th {{
+            display: none;
         }}
-        div[data-testid="stPlotlyChart"] {{
-            background: #FFFFFF;
-            border: 1px solid #E1E9EF;
-            border-radius: 8px;
-            padding: 8px;
-            box-shadow: 0 12px 30px rgba(30, 41, 68, 0.05);
-        }}
-        [data-testid="stDataFrame"] {{
-            border: 1px solid #E1E9EF;
-            border-radius: 8px;
-            overflow: hidden;
+        .dataframe thead tr th:first-child {{
+            display: none;
         }}
         </style>
         """,
@@ -166,431 +139,416 @@ def load_live_hubspot(refresh_key: int) -> HubSpotFetchResult:
     return fetch_hubspot_contacts()
 
 
-@st.cache_data(show_spinner=False)
-def normalize_cached(leads: pd.DataFrame, enrollments: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
-    return normalize_leads(leads), normalize_enrollments(enrollments)
-
-
-@st.cache_data(show_spinner=False)
-def cached_metrics(
-    leads: pd.DataFrame,
-    enrollments: pd.DataFrame,
-    goal: float,
-    start: date | None,
-    end: date | None,
-) -> dict[str, float]:
-    return enrollment_metrics(leads, enrollments, goal, start, end)
-
-
-@st.cache_data(show_spinner=False)
-def cached_udr_scorecard(
-    leads: pd.DataFrame,
-    enrollments: pd.DataFrame,
-    goals: dict[str, float],
-    expected_pct: float,
-    no_recent_days: int,
-) -> pd.DataFrame:
-    return udr_scorecard(leads, enrollments, goals, expected_pct, BENCHMARKS, no_recent_days)
-
-
-@st.cache_data(show_spinner=False)
-def cached_vendor_performance(leads: pd.DataFrame, enrollments: pd.DataFrame, no_recent_days: int) -> pd.DataFrame:
-    return vendor_performance(leads, enrollments, no_recent_days)
-
-
 def fmt_int(value: Any) -> str:
+    return f"{int(round(float(value or 0))):,}"
+
+
+def fmt_float(value: Any, digits: int = 1) -> str:
     try:
-        return f"{int(round(float(value or 0))):,}"
+        return f"{float(value):,.{digits}f}"
     except Exception:
-        return "0"
+        return "0.0"
 
 
 def fmt_percent(value: Any) -> str:
     try:
-        return f"{float(value or 0) * 100:.1f}%"
+        return f"{float(value) * 100:.1f}%"
     except Exception:
         return "0.0%"
 
 
-def fmt_number(value: Any, digits: int = 1) -> str:
+def fmt_money(value: Any) -> str:
     try:
-        if pd.isna(value):
-            return "Not Available"
-        return f"{float(value):,.{digits}f}"
+        return f"${float(value):,.0f}"
     except Exception:
-        return "Not Available"
+        return "$0"
 
 
 def metric_grid(items: list[tuple[str, str]], columns: int = 4) -> None:
     for start in range(0, len(items), columns):
         cols = st.columns(columns)
-        for col, (label, value) in zip(cols, items[start : start + columns]):
-            col.metric(label, value)
+        for col, item in zip(cols, items[start : start + columns]):
+            col.metric(item[0], item[1])
 
 
-def _option_values(*frames: pd.DataFrame, column: str) -> list[str]:
+def nonblank_options(*frames: pd.DataFrame, column: str) -> list[str]:
     values: set[str] = set()
     for frame in frames:
         if not frame.empty and column in frame.columns:
-            values.update(value for value in frame[column].dropna().astype(str).str.strip() if value)
+            values.update(
+                frame[column]
+                .dropna()
+                .astype(str)
+                .str.strip()
+                .replace("", pd.NA)
+                .dropna()
+                .tolist()
+            )
     return sorted(values)
 
 
-def _budget_udr_names(*frames: pd.DataFrame) -> list[str]:
-    names: set[str] = set()
-    for frame in frames:
-        if frame.empty:
-            continue
-        for column in ["budget_name", "source", "assigned_udr", "enrollment_udr"]:
-            if column in frame.columns:
-                names.update(value for value in frame[column].dropna().astype(str).str.strip() if value)
-    return sorted(names)
+def filter_values(df: pd.DataFrame, column: str, values: list[str]) -> pd.DataFrame:
+    if df.empty or not values or column not in df.columns:
+        return df
+    return df[df[column].fillna("").astype(str).isin(values)].copy()
 
 
-def _date_bounds(leads: pd.DataFrame, enrollments: pd.DataFrame) -> tuple[date | None, date | None]:
-    dates: list[date] = []
-    for frame, column in [(leads, "create_date"), (enrollments, "enrolled_date")]:
+def build_filters(leads: pd.DataFrame, paid_leads: pd.DataFrame, enrollments: pd.DataFrame) -> dict[str, Any]:
+    st.sidebar.header("Filters")
+    all_dates: list[pd.Timestamp] = []
+    for frame, column in [(leads, "create_date"), (paid_leads, "create_date"), (enrollments, "enrolled_date")]:
         if not frame.empty and column in frame.columns:
-            parsed = pd.to_datetime(frame[column], errors="coerce", utc=True).dropna()
-            dates.extend(parsed.dt.date.tolist())
-    return (min(dates), max(dates)) if dates else (None, None)
-
-
-def build_filter_bar(leads: pd.DataFrame, enrollments: pd.DataFrame) -> dict[str, Any]:
-    st.markdown('<div class="filter-panel">', unsafe_allow_html=True)
-    min_date, max_date = _date_bounds(leads, enrollments)
-    row1 = st.columns([1.2, 1.1, 1, 1, 1])
-    term = row1[0].multiselect("Term", _option_values(enrollments, column="term"))
-    if min_date and max_date:
-        selected_range = row1[1].date_input("Date Range", value=(min_date, max_date), min_value=min_date, max_value=max_date)
+            parsed_dates = pd.to_datetime(frame[column], errors="coerce", utc=True).dropna()
+            all_dates.extend(parsed_dates.dt.date.tolist())
+    if all_dates:
+        min_date = min(all_dates)
+        max_date = max(all_dates)
+        selected_range = st.sidebar.date_input("Date range", value=(min_date, max_date), min_value=min_date, max_value=max_date)
         start_date, end_date = selected_range if isinstance(selected_range, tuple) and len(selected_range) == 2 else (None, None)
-        date_range_default = start_date == min_date and end_date == max_date
     else:
         start_date, end_date = None, None
-        date_range_default = True
-        row1[1].caption("Date Range: Not Available")
-    udr = row1[2].multiselect("UDR", sorted(set(_option_values(leads, column="assigned_udr") + _option_values(enrollments, column="enrollment_udr"))))
-    program = row1[3].multiselect("Program", _option_values(leads, enrollments, column="program"))
-    degree = row1[4].multiselect("Degree", _option_values(leads, enrollments, column="degree"))
 
-    row2 = st.columns([1, 1, 1, 1])
-    vendor = row2[0].multiselect("Vendor", _option_values(leads, enrollments, column="vendor"))
-    modality = row2[1].multiselect("Modality", _option_values(leads, enrollments, column="modality"))
-    student_type = row2[2].multiselect("Student Type", _option_values(leads, enrollments, column="student_type"))
-    lead_type_choice = row2[3].selectbox("Lead Type", ["All", "Paid", "Organic"])
-    no_recent_days = st.number_input("No Recent Activity Threshold (days)", min_value=1, max_value=90, value=7, step=1)
-    st.markdown("</div>", unsafe_allow_html=True)
+    term = st.sidebar.multiselect("Term", nonblank_options(enrollments, column="term_label"))
+    source = st.sidebar.multiselect("Source", nonblank_options(leads, paid_leads, enrollments, column="normalized_source"))
+    lead_type = st.sidebar.multiselect("Paid/organic", ["Paid", "Organic", "Unknown"])
+    udr = st.sidebar.multiselect("UDR / Contact owner", nonblank_options(leads, enrollments, column="contact_owner") + nonblank_options(enrollments, column="udr"))
+    program = st.sidebar.multiselect("Program / Degree", nonblank_options(leads, column="degree") + nonblank_options(enrollments, column="program"))
+    modality = st.sidebar.multiselect("Modality", nonblank_options(enrollments, column="modality"))
+    student_type = st.sidebar.multiselect("Student type", nonblank_options(leads, paid_leads, enrollments, column="student_type"))
+    payment = st.sidebar.multiselect("Payment / funding", nonblank_options(enrollments, column="payment_funding"))
+    campus = st.sidebar.multiselect("Campus location", nonblank_options(leads, paid_leads, column="campus_location"))
+    lead_status = st.sidebar.multiselect("Lead status", nonblank_options(leads, paid_leads, column="lead_status"))
+    lifecycle = st.sidebar.multiselect("Lifecycle stage", nonblank_options(leads, paid_leads, column="lifecycle_stage"))
     return {
-        "term": term,
         "start_date": start_date,
         "end_date": end_date,
-        "date_range_default": date_range_default,
-        "udr": udr,
-        "program": program,
-        "degree": degree,
-        "vendor": vendor,
+        "term": term,
+        "source": source,
+        "lead_type": lead_type,
+        "udr": sorted(set(udr)),
+        "program": sorted(set(program)),
         "modality": modality,
         "student_type": student_type,
-        "lead_type": [] if lead_type_choice == "All" else [lead_type_choice],
-        "no_recent_days": int(no_recent_days),
+        "payment": payment,
+        "campus": campus,
+        "lead_status": lead_status,
+        "lifecycle": lifecycle,
     }
 
 
-def _format_display_values(df: pd.DataFrame) -> pd.DataFrame:
-    out = df.copy()
-    for column in out.columns:
-        if column.endswith("_rate") or column in {"pct_goal"}:
-            out[column] = out[column].map(lambda value: fmt_percent(value) if pd.notna(value) else "Not Available")
-        elif column in {
-            "goal",
-            "actual_enrollments",
-            "leads",
-            "leads_assigned",
-            "applicants",
-            "enrolled",
-            "no_recent_activity_count",
-            "duplicate_count",
-            "do_not_contact_count",
-            "unqualified_count",
-            "lead_status_dead_lead_count",
-        }:
-            out[column] = out[column].map(lambda value: fmt_int(value) if pd.notna(value) else "Not Available")
-        elif column in {"calls", "talk_time", "activities", "avg_talk_time_per_lead", "avg_activities_per_lead", "avg_days_to_enroll"}:
-            out[column] = out[column].map(lambda value: fmt_number(value) if pd.notna(value) else "Not Available")
-    return display_frame(out).replace({pd.NA: "Not Available"})
+def apply_lead_filters(df: pd.DataFrame, filters: dict[str, Any]) -> pd.DataFrame:
+    out = filter_date_range(df, "create_date", filters["start_date"], filters["end_date"])
+    out = filter_values(out, "normalized_source", filters["source"])
+    out = filter_values(out, "lead_type", filters["lead_type"])
+    out = filter_values(out, "contact_owner", filters["udr"])
+    out = filter_values(out, "degree", filters["program"])
+    out = filter_values(out, "student_type", filters["student_type"])
+    out = filter_values(out, "campus_location", filters["campus"])
+    out = filter_values(out, "lead_status", filters["lead_status"])
+    out = filter_values(out, "lifecycle_stage", filters["lifecycle"])
+    return out
 
 
-def show_table(df: pd.DataFrame, height: int = 360) -> None:
-    if df.empty:
-        st.info("Not Available")
-        return
-    st.dataframe(_format_display_values(df), use_container_width=True, hide_index=True, height=height)
+def apply_enrollment_filters(df: pd.DataFrame, filters: dict[str, Any]) -> pd.DataFrame:
+    out = filter_date_range(df, "enrolled_date", filters["start_date"], filters["end_date"])
+    out = filter_values(out, "term_label", filters["term"])
+    out = filter_values(out, "normalized_source", filters["source"])
+    out = filter_values(out, "lead_type", filters["lead_type"])
+    out = filter_values(out, "udr", filters["udr"])
+    out = filter_values(out, "program", filters["program"])
+    out = filter_values(out, "modality", filters["modality"])
+    out = filter_values(out, "student_type", filters["student_type"])
+    out = filter_values(out, "payment_funding", filters["payment"])
+    return out
 
 
-def _add_avg_days(perf: pd.DataFrame, enrollments: pd.DataFrame, column: str) -> pd.DataFrame:
-    if enrollments.empty or "days_to_enroll" not in enrollments.columns or column not in enrollments.columns:
-        return perf
-    avg = (
-        enrollments.groupby(enrollments[column].fillna("").astype(str).replace("", "Not Available"))["days_to_enroll"]
-        .mean()
-        .reset_index(name="avg_days_to_enroll")
-    )
-    return perf.merge(avg, on=column, how="left")
+def first_metric(summary: pd.DataFrame, metric: str) -> float | None:
+    return roundup_value(summary, metric)
 
 
-def _rate_chart(df: pd.DataFrame, x: str, y: str, title: str) -> Any:
-    if df.empty or x not in df.columns or y not in df.columns:
-        return bar_chart(pd.DataFrame(), x, y, title)
-    work = df.copy()
-    work[y] = pd.to_numeric(work[y], errors="coerce").fillna(0)
-    fig = px.bar(work.sort_values(y, ascending=False).head(15), x=x, y=y, title=title)
-    fig.update_yaxes(tickformat=".0%")
-    fig.update_layout(template="plotly_white", height=380, title_font_color=CALMU_COLORS["navy"], margin={"l": 24, "r": 24, "t": 54, "b": 80})
-    return fig
+def required_weekly_pace(enrollments: pd.DataFrame, remaining: float) -> float:
+    if remaining <= 0:
+        return 0.0
+    future_terms = pd.to_datetime(enrollments.get("term"), errors="coerce").dropna()
+    if future_terms.empty:
+        return 0.0
+    target = future_terms.max().date()
+    days = max((target - date.today()).days, 1)
+    return float(remaining) / max(days / 7, 1)
+
+
+def pivot_reconciliation(uploaded: UploadedLeadData) -> pd.DataFrame:
+    frames: list[pd.DataFrame] = []
+    if "PLS" in uploaded.paid_pivots:
+        frames.append(compare_pivot_totals(uploaded.paid_leads, uploaded.paid_pivots["PLS"], "paid_lead_list", "Paid PLS"))
+    if "PLC" in uploaded.paid_pivots:
+        frames.append(compare_pivot_totals(uploaded.paid_leads, uploaded.paid_pivots["PLC"], "paid_lead_list", "Paid PLC"))
+    if "L2C" in uploaded.udr_pivots:
+        frames.append(compare_pivot_totals(uploaded.udr_leads, uploaded.udr_pivots["L2C"], "contact_owner", "UDR L2C"))
+    if "L2A" in uploaded.udr_pivots:
+        frames.append(compare_pivot_totals(uploaded.udr_leads, uploaded.udr_pivots["L2A"], "contact_owner", "UDR L2A"))
+    frames = [frame for frame in frames if not frame.empty]
+    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
 
 
 def page_executive(
     leads: pd.DataFrame,
+    paid_leads: pd.DataFrame,
     enrollments: pd.DataFrame,
-    goal: float,
-    filters: dict[str, Any],
+    budget: BudgetData,
+    tracker: EnrollmentTrackerData,
+    data_mode: str,
 ) -> None:
-    weekly_start = None if filters.get("date_range_default") else filters.get("start_date")
-    weekly_end = None if filters.get("date_range_default") else filters.get("end_date")
-    metrics = cached_metrics(leads, enrollments, goal, weekly_start, weekly_end)
-    st.subheader("Executive Overview")
+    lead_summary = summarize_leads(leads)
+    paid_summary = summarize_leads(paid_leads)
+    goal = first_metric(tracker.roundup_summary, "Budget") or first_metric(budget.summary, "Budget") or 0
+    starts = first_metric(tracker.roundup_summary, "Starts") or first_metric(budget.summary, "Starts") or 0
+    enroll_summary = enrollment_summary(enrollments, goal=goal, starts=starts)
+    remaining = enroll_summary["remaining_enrollments"]
+    pace = required_weekly_pace(enrollments, remaining)
+    total_budget = goal
+    budget_remaining = max(float(total_budget or 0) - enroll_summary["actual_enrollments"], 0)
+
+    st.subheader("Confirmed Data")
     metric_grid(
         [
-            ("Total Enrollments", fmt_int(metrics["total_enrollments"])),
-            ("Enrollment Goal", fmt_int(metrics["enrollment_goal"])),
-            ("% to Goal", fmt_percent(metrics["pct_goal"])),
-            ("Remaining to Goal", fmt_int(metrics["remaining_to_goal"])),
-            ("Weekly Enrollments", fmt_int(metrics["weekly_enrollments"])),
-            ("Leads", fmt_int(metrics["leads"])),
-            ("Applicants", fmt_int(metrics["applicants"])),
-            ("Enrolled", fmt_int(metrics["enrolled"])),
-            ("Lead-to-Applicant %", fmt_percent(metrics["lead_to_applicant_rate"])),
-            ("Applicant-to-Enrolled %", fmt_percent(metrics["applicant_to_enrolled_rate"])),
-            ("Lead-to-Enrolled %", fmt_percent(metrics["lead_to_enrolled_rate"])),
+            ("Total HubSpot leads", fmt_int(lead_summary.total_leads)),
+            ("Paid leads", fmt_int(paid_summary.total_leads or lead_summary.paid_leads)),
+            ("Organic leads", fmt_int(lead_summary.organic_leads or paid_summary.organic_leads)),
+            ("Applicants", fmt_int(lead_summary.applicants)),
+            ("CRM enrolled", fmt_int(lead_summary.crm_enrolled)),
+            ("Actual enrollments", fmt_int(enroll_summary["actual_enrollments"])),
+            ("Enrollment goal", fmt_int(enroll_summary["enrollment_goal"])),
+            ("Starts", fmt_int(enroll_summary["starts"])),
+            ("Projected / actual revenue", fmt_money(enroll_summary["revenue"])),
+            ("Bad leads", fmt_int(lead_summary.bad_leads)),
+            ("Total budget", fmt_int(total_budget)),
+            ("Budget remaining", fmt_int(budget_remaining)),
+        ]
+    )
+
+    st.subheader("Calculated Interpretation")
+    metric_grid(
+        [
+            ("Contacted / progressed leads", fmt_int(lead_summary.contacted_leads)),
+            ("Lead-to-contact %", fmt_percent(lead_summary.lead_to_contact_rate)),
+            ("Lead-to-applicant %", fmt_percent(lead_summary.lead_to_applicant_rate)),
+            ("Lead-to-CRM-enrolled %", fmt_percent(lead_summary.lead_to_crm_enrolled_rate)),
+            ("Percent of goal", fmt_percent(enroll_summary["percent_of_goal"])),
+            ("Remaining enrollments needed", fmt_int(remaining)),
+            ("Weekly pace required", fmt_float(pace, 1)),
+            ("Start %", fmt_percent(enroll_summary["start_rate"])),
+            ("Revenue per enrollment", fmt_money(enroll_summary["revenue_per_enrollment"])),
+            ("Average days to enroll", fmt_float(enroll_summary["average_days_to_enroll"], 1)),
+            ("Bad lead rate", fmt_percent(lead_summary.bad_lead_rate)),
+            ("Cost / budget per lead", fmt_float(total_budget / lead_summary.total_leads if lead_summary.total_leads else 0, 2)),
+            ("Cost / budget per applicant", fmt_float(total_budget / lead_summary.applicants if lead_summary.applicants else 0, 2)),
+            (
+                "Cost / budget per enrollment",
+                fmt_float(total_budget / enroll_summary["actual_enrollments"] if enroll_summary["actual_enrollments"] else 0, 2),
+            ),
+        ]
+    )
+
+    col1, col2 = st.columns([1, 1])
+    with col1:
+        st.plotly_chart(enrollment_progress(enroll_summary["actual_enrollments"], goal), use_container_width=True)
+    with col2:
+        st.plotly_chart(funnel_chart(funnel_counts(leads, enroll_summary["actual_enrollments"])), use_container_width=True)
+
+    st.caption(data_mode)
+
+
+def page_enrollment_tracker(enrollments: pd.DataFrame, tracker: EnrollmentTrackerData) -> None:
+    st.subheader("Enrollment Tracker")
+    summary = enrollment_summary(enrollments, goal=first_metric(tracker.roundup_summary, "Budget"), starts=first_metric(tracker.roundup_summary, "Starts"))
+    metric_grid(
+        [
+            ("Total actual enrollments", fmt_int(summary["actual_enrollments"])),
+            ("Starts", fmt_int(summary["starts"])),
+            ("Start %", fmt_percent(summary["start_rate"])),
+            ("Revenue", fmt_money(summary["revenue"])),
+            ("Revenue per enrollment", fmt_money(summary["revenue_per_enrollment"])),
+            ("Average days to enroll", fmt_float(summary["average_days_to_enroll"], 1)),
         ],
-        columns=4,
+        columns=3,
     )
-
-    progress = enrollment_progress(metrics["total_enrollments"], metrics["enrollment_goal"])
-    progress.update_layout(title="Enrollment Goal Progress")
-    col1, col2 = st.columns(2)
-    col1.plotly_chart(progress, use_container_width=True, key="exec_goal_progress")
-    col2.plotly_chart(bar_chart(enrollment_group(enrollments, "enrollment_udr"), "enrollment_udr", "actual_enrollments", "Enrollments by UDR", horizontal=True), use_container_width=True, key="exec_enrollments_udr")
-
-    col3, col4 = st.columns(2)
-    col3.plotly_chart(bar_chart(enrollment_group(enrollments, "program"), "program", "actual_enrollments", "Enrollments by Program", horizontal=True), use_container_width=True, key="exec_enrollments_program")
-    col4.plotly_chart(bar_chart(enrollment_group(enrollments, "degree"), "degree", "actual_enrollments", "Enrollments by Degree"), use_container_width=True, key="exec_enrollments_degree")
-
-    col5, col6 = st.columns(2)
-    col5.plotly_chart(bar_chart(enrollment_group(enrollments, "modality"), "modality", "actual_enrollments", "Enrollments by Modality"), use_container_width=True, key="exec_enrollments_modality")
-    col6.plotly_chart(bar_chart(enrollment_group(enrollments, "vendor"), "vendor", "actual_enrollments", "Enrollments by Vendor", horizontal=True), use_container_width=True, key="exec_enrollments_vendor")
+    st.plotly_chart(line_chart(weekly_counts(enrollments, "enrolled_date", "enrollments"), "week", "enrollments", "Weekly Enrollment Pace"), use_container_width=True)
+    cols = st.columns(2)
+    with cols[0]:
+        st.plotly_chart(bar_chart(enrollment_by(enrollments, "udr"), "udr", "actual_enrollments", "Enrollments by UDR", horizontal=True), use_container_width=True)
+        st.plotly_chart(donut_chart(enrollment_by(enrollments, "student_type"), "student_type", "actual_enrollments", "Student Type Mix"), use_container_width=True)
+    with cols[1]:
+        st.plotly_chart(bar_chart(enrollment_by(enrollments, "normalized_source"), "normalized_source", "actual_enrollments", "Enrollments by Source", horizontal=True), use_container_width=True)
+        st.plotly_chart(donut_chart(enrollment_by(enrollments, "payment_funding"), "payment_funding", "actual_enrollments", "Payment / Funding Mix"), use_container_width=True)
+    st.dataframe(redact_pii(enrollment_by(enrollments, "program")), use_container_width=True, hide_index=True)
 
 
-def page_udr_performance(
-    leads: pd.DataFrame,
-    enrollments: pd.DataFrame,
-    goals: dict[str, float],
-    expected_pct: float,
-    no_recent_days: int,
-) -> None:
+def page_source_performance(leads: pd.DataFrame, paid_leads: pd.DataFrame, enrollments: pd.DataFrame, budget: BudgetData) -> None:
+    st.subheader("Source Performance")
+    perf = source_performance(leads, enrollments, budget.allocations)
+    paid_perf = lead_performance_by(paid_leads, "normalized_source")
+    tabs = st.tabs(["All Sources", "Paid / Organic Lists"])
+    with tabs[0]:
+        st.plotly_chart(bar_chart(perf, "normalized_source", "leads", "Lead Volume by Source", horizontal=True), use_container_width=True)
+        st.plotly_chart(bar_chart(perf, "normalized_source", "actual_enrollments", "Actual Enrollments by Source", horizontal=True), use_container_width=True)
+        st.dataframe(perf, use_container_width=True, hide_index=True)
+    with tabs[1]:
+        st.plotly_chart(bar_chart(paid_perf, "normalized_source", "leads", "Paid and Organic Lead List Performance", horizontal=True), use_container_width=True)
+        st.dataframe(paid_perf, use_container_width=True, hide_index=True)
+
+
+def page_udr_performance(leads: pd.DataFrame, enrollments: pd.DataFrame) -> None:
     st.subheader("UDR Performance")
-    scorecard = cached_udr_scorecard(leads, enrollments, goals, expected_pct, no_recent_days)
-    st.markdown("#### UDR Performance Scorecard")
-    st.caption(
-        "Includes % Goal, Leads Assigned, Applicants, conversion rates, No Recent Activity %, "
-        "status rates, optional activity fields, and a formula-based Performance Category."
+    perf = lead_performance_by(leads, "contact_owner")
+    enroll_perf = enrollment_by(enrollments, "udr")
+    if not perf.empty and not enroll_perf.empty:
+        perf = perf.merge(enroll_perf.rename(columns={"udr": "contact_owner"}), on="contact_owner", how="outer")
+    st.plotly_chart(bar_chart(perf, "contact_owner", "leads", "UDR Lead Volume", horizontal=True), use_container_width=True)
+    st.plotly_chart(bar_chart(perf, "contact_owner", "l2c", "UDR Lead-to-Contact %", horizontal=True), use_container_width=True)
+    st.dataframe(perf, use_container_width=True, hide_index=True)
+
+
+def page_program_mix(enrollments: pd.DataFrame) -> None:
+    st.subheader("Program Mix")
+    cols = st.columns(2)
+    with cols[0]:
+        st.plotly_chart(bar_chart(enrollment_by(enrollments, "program"), "program", "actual_enrollments", "Program Mix", horizontal=True), use_container_width=True)
+        st.plotly_chart(donut_chart(enrollment_by(enrollments, "modality"), "modality", "actual_enrollments", "Modality Mix"), use_container_width=True)
+    with cols[1]:
+        st.plotly_chart(donut_chart(enrollment_by(enrollments, "new_roll"), "new_roll", "actual_enrollments", "New vs Roll / Repeat"), use_container_width=True)
+        st.plotly_chart(donut_chart(enrollment_by(enrollments, "payment_funding"), "payment_funding", "actual_enrollments", "Payment / Funding Mix"), use_container_width=True)
+
+
+def page_budget_performance(leads: pd.DataFrame, enrollments: pd.DataFrame, budget: BudgetData) -> None:
+    st.subheader("Budget Performance")
+    source_perf = source_performance(leads, enrollments, budget.allocations)
+    total_budget = float(pd.to_numeric(budget.summary.loc[budget.summary["metric"].str.lower().eq("budget"), "numeric_value"], errors="coerce").fillna(0).sum()) if not budget.summary.empty else 0
+    actual = len(enrollments)
+    metric_grid(
+        [
+            ("Total budget", fmt_int(total_budget)),
+            ("Actual enrollments", fmt_int(actual)),
+            ("Budget variance", fmt_percent(actual / total_budget if total_budget else 0)),
+            ("Cost / budget per lead", fmt_float(total_budget / len(leads) if len(leads) else 0, 2)),
+            ("Cost / budget per applicant", fmt_float(total_budget / summarize_leads(leads).applicants if summarize_leads(leads).applicants else 0, 2)),
+            ("Cost / budget per enrollment", fmt_float(total_budget / actual if actual else 0, 2)),
+        ],
+        columns=3,
     )
-    columns = [
-        "udr",
-        "actual_enrollments",
-        "goal",
-        "pct_goal",
-        "leads_assigned",
-        "applicants",
-        "lead_to_applicant_rate",
-        "lead_to_enrolled_rate",
-        "calls",
-        "talk_time",
-        "avg_talk_time_per_lead",
-        "activities",
-        "avg_activities_per_lead",
-        "no_recent_activity_count",
-        "no_recent_activity_rate",
-        "duplicate_count",
-        "duplicate_rate",
-        "do_not_contact_count",
-        "do_not_contact_rate",
-        "unqualified_count",
-        "unqualified_rate",
+    st.plotly_chart(bar_chart(budget.allocations, "budget_name", "planned_budget", "Budget by UDR / Allocation", horizontal=True), use_container_width=True)
+    st.plotly_chart(bar_chart(source_perf, "normalized_source", "cost_per_enrollment", "Cost / Budget per Actual Enrollment by Source", horizontal=True), use_container_width=True)
+    st.dataframe(source_perf, use_container_width=True, hide_index=True)
+
+
+def page_funnel(leads: pd.DataFrame, enrollments: pd.DataFrame) -> None:
+    st.subheader("Lead Status & Lifecycle Funnel")
+    summary = summarize_leads(leads)
+    metric_grid(
+        [
+            ("Total leads", fmt_int(summary.total_leads)),
+            ("Contacted / progressed", fmt_int(summary.contacted_leads)),
+            ("Applicants", fmt_int(summary.applicants)),
+            ("CRM enrolled", fmt_int(summary.crm_enrolled)),
+            ("Bad leads", fmt_int(summary.bad_leads)),
+            ("Uncontacted leads", fmt_int(summary.uncontacted_leads)),
+        ],
+        columns=3,
+    )
+    col1, col2 = st.columns(2)
+    with col1:
+        st.plotly_chart(funnel_chart(funnel_counts(leads, len(enrollments))), use_container_width=True)
+    with col2:
+        lifecycle = lead_performance_by(leads, "lifecycle_stage")
+        st.plotly_chart(bar_chart(lifecycle, "lifecycle_stage", "leads", "Lifecycle Stage Volume", horizontal=True), use_container_width=True)
+    status = lead_performance_by(leads, "lead_status")
+    st.plotly_chart(bar_chart(status, "lead_status", "leads", "Lead Status Volume", horizontal=True), use_container_width=True)
+
+
+def page_trends(leads: pd.DataFrame, enrollments: pd.DataFrame) -> None:
+    st.subheader("Trends")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.plotly_chart(line_chart(weekly_counts(leads, "create_date", "leads"), "week", "leads", "Weekly Lead Trend"), use_container_width=True)
+    with col2:
+        st.plotly_chart(line_chart(weekly_counts(enrollments, "enrolled_date", "enrollments"), "week", "enrollments", "Weekly Enrollment Trend"), use_container_width=True)
+
+
+def page_qa(qa: pd.DataFrame, pivot_diffs: pd.DataFrame) -> None:
+    st.subheader("QA Checks")
+    st.dataframe(qa, use_container_width=True, hide_index=True)
+    if not pivot_diffs.empty:
+        st.subheader("Pivot Reconciliation")
+        st.dataframe(pivot_diffs, use_container_width=True, hide_index=True)
+
+
+def page_notes(uploaded: UploadedLeadData, tracker: EnrollmentTrackerData, budget: BudgetData, hubspot: HubSpotFetchResult, data_mode: str) -> None:
+    st.subheader("Assumptions / Data Notes")
+    notes = [
+        {"area": "Data mode", "note": data_mode},
+        {"area": "HubSpot", "note": "Read-only contact fetch. No record edits, emails, deletes, or writes are implemented."},
+        {"area": "Ownership", "note": "Contact Owner is used as UDR. Deal Owner is not used unless a future deal dataset is added as a fallback."},
+        {"area": "Budget", "note": "The uploaded budget workbook contains enrollment goal/allocation fields, not a confirmed media spend ledger."},
+        {"area": "Privacy", "note": "Executive pages suppress names, emails, phone numbers, and tracker notes."},
+        {"area": "Brand", "note": "Theme uses CalMU guideline colors: #2938D5, #3D59D9, #1E2944, #EDFF81, #ABCCE3, #CD1141, #8F0028, #1A5347, #ABBEB3, #657874, #C4CDD3."},
     ]
-    if "lead_status_dead_lead_count" in scorecard.columns:
-        columns.extend(["lead_status_dead_lead_count", "lead_status_dead_lead_rate"])
-    columns.append("performance_category")
-    show_table(scorecard[[column for column in columns if column in scorecard.columns]], height=430)
+    notes.extend({"area": "Uploaded file", "note": note} for note in uploaded.load_notes)
+    notes.extend({"area": "Enrollment tracker", "note": note} for note in tracker.notes)
+    notes.extend({"area": "Budget workbook", "note": note} for note in budget.notes)
+    st.dataframe(pd.DataFrame(notes), use_container_width=True, hide_index=True)
 
-    if scorecard.empty:
-        return
-    selected_udr = st.selectbox("UDR drilldown", scorecard["udr"].tolist())
-    udr_leads = leads[leads["assigned_udr"].eq(selected_udr)].copy()
-    udr_enrollments = enrollments[enrollments["enrollment_udr"].eq(selected_udr)].copy()
-
-    mix_tabs = st.tabs(["Program Mix", "Degree Mix", "Vendor Mix", "Modality Mix", "Status Breakdown", "Trends"])
-    with mix_tabs[0]:
-        st.plotly_chart(bar_chart(enrollment_group(udr_enrollments, "program"), "program", "actual_enrollments", "Program mix", horizontal=True), use_container_width=True, key="udr_program_mix")
-    with mix_tabs[1]:
-        st.plotly_chart(bar_chart(enrollment_group(udr_enrollments, "degree"), "degree", "actual_enrollments", "Degree mix"), use_container_width=True, key="udr_degree_mix")
-    with mix_tabs[2]:
-        st.plotly_chart(bar_chart(enrollment_group(udr_enrollments, "vendor"), "vendor", "actual_enrollments", "Vendor mix", horizontal=True), use_container_width=True, key="udr_vendor_mix")
-    with mix_tabs[3]:
-        st.plotly_chart(bar_chart(enrollment_group(udr_enrollments, "modality"), "modality", "actual_enrollments", "Modality mix"), use_container_width=True, key="udr_modality_mix")
-    with mix_tabs[4]:
-        left, right = st.columns(2)
-        left.plotly_chart(bar_chart(funnel_metrics_by(udr_leads, pd.DataFrame(), "lead_status"), "lead_status", "leads", "Lead Status breakdown", horizontal=True), use_container_width=True, key="udr_lead_status_breakdown")
-        right.plotly_chart(bar_chart(funnel_metrics_by(udr_leads, pd.DataFrame(), "lifecycle_stage"), "lifecycle_stage", "leads", "Lifecycle Stage breakdown", horizontal=True), use_container_width=True, key="udr_lifecycle_breakdown")
-    with mix_tabs[5]:
-        left, right = st.columns(2)
-        if "activities" in udr_leads.columns and "create_date" in udr_leads.columns:
-            activity = udr_leads.dropna(subset=["create_date"]).copy()
-            activity["week"] = pd.to_datetime(activity["create_date"], errors="coerce", utc=True).dt.tz_convert(None).dt.to_period("W").dt.start_time
-            trend = activity.groupby("week")["activities"].sum().reset_index()
-            left.plotly_chart(line_chart(trend, "week", "activities", "Activity trend"), use_container_width=True, key="udr_activity_trend")
-        else:
-            left.info("Activity trend is Not Available because detailed activity volume fields are missing.")
-        right.plotly_chart(line_chart(weekly_counts(udr_enrollments, "enrolled_date", "enrollments"), "week", "enrollments", "Enrollment trend"), use_container_width=True, key="udr_enrollment_trend")
-
-
-def page_program_degree(leads: pd.DataFrame, enrollments: pd.DataFrame) -> None:
-    st.subheader("Program / Degree")
-    program_perf = _add_avg_days(funnel_metrics_by(leads, enrollments, "program"), enrollments, "program")
-    degree_perf = funnel_metrics_by(leads, enrollments, "degree")
-
-    col1, col2 = st.columns(2)
-    col1.plotly_chart(bar_chart(program_perf, "program", "enrolled", "Enrollments by Program", horizontal=True), use_container_width=True, key="program_enrollments")
-    col2.plotly_chart(bar_chart(degree_perf, "degree", "enrolled", "Enrollments by Degree"), use_container_width=True, key="degree_enrollments")
-
-    col3, col4 = st.columns(2)
-    col3.plotly_chart(bar_chart(program_perf, "program", "applicants", "Applicants by Program", horizontal=True), use_container_width=True, key="program_applicants")
-    col4.plotly_chart(_rate_chart(program_perf, "program", "lead_to_applicant_rate", "Lead-to-Applicant % by Program"), use_container_width=True, key="program_lta")
-
-    col5, col6 = st.columns(2)
-    col5.plotly_chart(_rate_chart(program_perf, "program", "lead_to_enrolled_rate", "Lead-to-Enrolled % by Program"), use_container_width=True, key="program_lte")
-    if "avg_days_to_enroll" in program_perf.columns:
-        col6.plotly_chart(bar_chart(program_perf, "program", "avg_days_to_enroll", "Average Days to Enroll by Program", horizontal=True), use_container_width=True, key="program_avg_days")
+    st.subheader("Weekly Summary Source")
+    email_rows = [
+        {"field": "Subject", "value": uploaded.email_context.subject},
+        {"field": "Sent at", "value": uploaded.email_context.sent_at},
+        {"field": "Embedded images", "value": str(uploaded.email_context.image_count)},
+    ]
+    st.dataframe(pd.DataFrame(email_rows), use_container_width=True, hide_index=True)
+    if uploaded.email_context.data_lines:
+        st.dataframe(pd.DataFrame({"extracted_line": uploaded.email_context.data_lines}), use_container_width=True, hide_index=True)
     else:
-        col6.info("Average Days to Enroll by Program is Not Available.")
+        st.info("No usable weekly summary data was found in parsed email text or practical OCR output.")
 
-    with st.expander("Program scorecard", expanded=False):
-        show_table(program_perf, height=380)
-
-
-def page_vendor(leads: pd.DataFrame, enrollments: pd.DataFrame, no_recent_days: int) -> None:
-    st.subheader("Vendor Performance")
-    perf = cached_vendor_performance(leads, enrollments, no_recent_days)
-    col1, col2 = st.columns(2)
-    col1.plotly_chart(bar_chart(perf, "vendor", "leads", "Leads by Vendor", horizontal=True), use_container_width=True, key="vendor_leads")
-    col2.plotly_chart(bar_chart(perf, "vendor", "applicants", "Applicants by Vendor", horizontal=True), use_container_width=True, key="vendor_applicants")
-
-    col3, col4 = st.columns(2)
-    col3.plotly_chart(bar_chart(perf, "vendor", "enrolled", "Enrollments by Vendor", horizontal=True), use_container_width=True, key="vendor_enrollments")
-    col4.plotly_chart(_rate_chart(perf, "vendor", "lead_to_enrolled_rate", "Lead-to-Enrolled % by Vendor"), use_container_width=True, key="vendor_lte")
-
-    with st.expander("Vendor Performance Scorecard", expanded=True):
-        st.caption(
-            "Uses hard counts and rates only: Leads, Applicants, Enrollments, conversion rates, "
-            "Duplicate %, Do Not Contact %, Unqualified %, and No Recent Activity %."
+    if hubspot.token_present:
+        st.subheader("HubSpot Fields")
+        st.dataframe(
+            pd.DataFrame(
+                {
+                    "used_properties": pd.Series(hubspot.used_properties),
+                    "missing_configured_properties": pd.Series(hubspot.missing_properties[: len(hubspot.used_properties) or None]),
+                }
+            ),
+            use_container_width=True,
+            hide_index=True,
         )
-        show_table(perf, height=430)
 
 
-def page_activity(leads: pd.DataFrame, enrollments: pd.DataFrame, scorecard: pd.DataFrame, no_recent_days: int) -> None:
-    st.subheader("Activity & Follow-Up")
-    if not has_activity_fields(leads):
-        st.info("Activity & Follow-Up is Not Available because activity fields are missing.")
-        return
-    activity = activity_summary_by_udr(leads, no_recent_days)
-    col1, col2 = st.columns(2)
-    if "calls" in activity.columns and activity["calls"].notna().any():
-        col1.plotly_chart(bar_chart(activity, "udr", "calls", "Calls by UDR", horizontal=True), use_container_width=True, key="activity_calls")
-    else:
-        col1.info("Calls by UDR is Not Available.")
-    if "talk_time" in activity.columns and activity["talk_time"].notna().any():
-        col2.plotly_chart(bar_chart(activity, "udr", "talk_time", "Talk Time by UDR", horizontal=True), use_container_width=True, key="activity_talk_time")
-    else:
-        col2.info("Talk Time by UDR is Not Available.")
-
-    col3, col4 = st.columns(2)
-    if "avg_activities_per_lead" in activity.columns and activity["avg_activities_per_lead"].notna().any():
-        col3.plotly_chart(bar_chart(activity, "udr", "avg_activities_per_lead", "Activities per Lead", horizontal=True), use_container_width=True, key="activity_avg_activities")
-    else:
-        col3.info("Activities per Lead is Not Available.")
-    col4.plotly_chart(bar_chart(activity, "udr", "no_recent_activity_count", "No Recent Activity Count", horizontal=True), use_container_width=True, key="activity_no_recent")
-
-    show_table(activity, height=360)
-
-    applicants_no_recent = leads[
-        leads["lifecycle_stage"].str.lower().eq("applicant") & no_recent_activity_mask(leads, no_recent_days)
-    ].copy()
-    with st.expander("Applicants with No Recent Activity", expanded=False):
-        columns = [column for column in ["record_id", "email", "assigned_udr", "program", "vendor", "last_activity_date", "lead_status", "lifecycle_stage"] if column in applicants_no_recent.columns]
-        display = redact_pii(applicants_no_recent[columns].head(500)) if columns else pd.DataFrame()
-        st.dataframe(display, use_container_width=True, hide_index=True, height=320)
-
-    with st.expander("Formula-based activity flags", expanded=False):
-        if scorecard.empty:
-            st.info("Not Available")
-        else:
-            flags = scorecard[
-                scorecard["performance_category"].isin(
-                    ["Low Activity", "Low Talk Time", "Low Conversion", "High No-Recent-Activity Rate"]
-                )
-            ].copy()
-            show_table(flags, height=320)
+def raw_access_allowed() -> bool:
+    expected = os.getenv("RAW_AUDIT_PASSWORD", "")
+    try:
+        expected = st.secrets.get("RAW_AUDIT_PASSWORD", expected)
+    except Exception:
+        pass
+    expected = str(expected or "").strip()
+    if expected:
+        entered = st.text_input("Raw audit password", type="password")
+        return entered == expected
+    return st.checkbox("Show protected raw audit data for this local session")
 
 
-def page_data_qa(
-    leads: pd.DataFrame,
-    enrollments: pd.DataFrame,
-    uploaded: UploadedLeadData,
-    last_refresh: str,
-) -> None:
-    st.subheader("Data QA")
-    hubspot_enrolled = int(leads["lifecycle_stage"].str.lower().eq("enrolled").sum()) if "lifecycle_stage" in leads.columns else 0
-    qa = qa_summary(leads, enrollments, hubspot_enrolled, last_refresh)
-    st.markdown("#### Data QA Checks")
-    st.caption(
-        "Checks include Missing UDR, Missing Program, Missing Degree, Missing Vendor, Missing Modality, "
-        "Missing Lead Status, Missing Lifecycle Stage, Missing Last Activity Date, Duplicate emails, "
-        "Duplicate Record IDs, Enrollment tracker count vs HubSpot enrolled count, and Last refresh timestamp."
-    )
-    show_table(qa, height=360)
-
-    with st.expander("Raw data samples", expanded=False):
-        st.caption("Raw samples are limited and PII is redacted where possible.")
-        st.markdown("#### Leads")
-        st.dataframe(redact_pii(leads.head(1000)), use_container_width=True, hide_index=True, height=300)
-        st.markdown("#### Enrollments")
-        st.dataframe(redact_pii(enrollments.head(1000)), use_container_width=True, hide_index=True, height=300)
-        if uploaded.load_notes:
-            st.markdown("#### Load notes")
-            st.dataframe(pd.DataFrame({"note": uploaded.load_notes}), use_container_width=True, hide_index=True, height=180)
-
-
-def render_masthead(data_mode: str) -> None:
-    st.markdown(
-        f"""
-        <div class="calmu-masthead">
-            <div class="calmu-kicker">California Miramar University</div>
-            <h1>Enrollment Performance Dashboard</h1>
-            <p>{data_mode}</p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+def page_raw_audit(uploaded: UploadedLeadData, leads: pd.DataFrame, enrollments: pd.DataFrame) -> None:
+    st.subheader("Raw Audit Data")
+    protected = raw_access_allowed()
+    frames = {
+        "Analysis leads": leads,
+        "Uploaded paid leads": uploaded.paid_leads,
+        "Uploaded UDR leads": uploaded.udr_leads,
+        "Enrollment tracker": enrollments,
+    }
+    for label, frame in frames.items():
+        st.markdown(f"#### {label}")
+        display = frame if protected else redact_pii(frame)
+        st.dataframe(display.head(2000), use_container_width=True, hide_index=True)
 
 
 def main() -> None:
@@ -601,28 +559,14 @@ def main() -> None:
 
     if "hubspot_refresh_key" not in st.session_state:
         st.session_state["hubspot_refresh_key"] = 0
-    if "use_live_hubspot" not in st.session_state:
-        st.session_state["use_live_hubspot"] = False
 
     st.sidebar.title("CalMU")
-    page = st.sidebar.radio(
-        "Page",
-        [
-            "Executive Overview",
-            "UDR Performance",
-            "Program / Degree",
-            "Vendor Performance",
-            "Activity & Follow-Up",
-            "Data QA",
-        ],
-    )
-    if st.sidebar.button("Refresh data", use_container_width=True):
-        st.session_state["use_live_hubspot"] = True
+    refresh_clicked = st.sidebar.button("Refresh data", use_container_width=True)
+    if refresh_clicked:
         st.session_state["hubspot_refresh_key"] += 1
 
     token_present = get_access_token() is not None
-    should_fetch_hubspot = token_present and bool(st.session_state.get("use_live_hubspot"))
-    hubspot = load_live_hubspot(st.session_state["hubspot_refresh_key"]) if should_fetch_hubspot else HubSpotFetchResult(
+    hubspot = load_live_hubspot(st.session_state["hubspot_refresh_key"]) if token_present else HubSpotFetchResult(
         contacts=pd.DataFrame(),
         properties=pd.DataFrame(),
         owners=pd.DataFrame(),
@@ -630,91 +574,87 @@ def main() -> None:
         missing_properties=[],
         fetched_at=None,
         error=None,
-        token_present=token_present,
+        token_present=False,
     )
 
     if not hubspot.contacts.empty:
-        raw_leads = hubspot.contacts.copy()
-        data_mode = "Live HubSpot contacts are active. Enrollment totals come from the enrollment tracker."
+        analysis_leads = hubspot.contacts.copy()
+        data_mode = "Live HubSpot contacts are active. Uploaded files remain baseline/reference sources."
     else:
-        raw_leads = uploaded.udr_leads.copy()
+        analysis_leads = uploaded.udr_leads.copy()
         if hubspot.error:
             data_mode = f"HubSpot fetch failed; static uploaded baseline is active. Error: {hubspot.error}"
             st.warning(data_mode)
         elif not token_present:
             data_mode = "No HubSpot token found; static uploaded baseline is active."
             st.info(data_mode)
-        elif not should_fetch_hubspot:
-            data_mode = "Static uploaded baseline is active. Click Refresh data to load live HubSpot contacts."
         else:
             data_mode = "HubSpot returned no contacts; static uploaded baseline is active."
 
-    last_refresh = hubspot.fetched_at.astimezone(timezone.utc).strftime("%b %d, %H:%M UTC") if hubspot.fetched_at else "Not refreshed"
+    last_refresh = hubspot.fetched_at.astimezone(timezone.utc).strftime("%Y-%m-%d %H:%M UTC") if hubspot.fetched_at else "Not refreshed"
     st.sidebar.caption(f"Last HubSpot refresh: {last_refresh}")
 
-    leads, enrollments = normalize_cached(raw_leads, tracker.enrollments)
-    known_udrs = _budget_udr_names(
-        budget.allocations,
-        budget.term_allocations,
-        tracker.roundup_allocations,
-        leads,
-        enrollments,
-    )
-    leads, enrollments = canonicalize_udr_columns(leads, enrollments, known_udrs)
-    render_masthead(data_mode)
-    filters = build_filter_bar(leads, enrollments)
-    filtered_leads, filtered_enrollments = apply_global_filters(leads, enrollments, filters)
+    filters = build_filters(analysis_leads, uploaded.paid_leads, tracker.enrollments)
+    filtered_leads = apply_lead_filters(analysis_leads, filters)
+    filtered_paid = apply_lead_filters(uploaded.paid_leads, filters)
+    filtered_enrollments = apply_enrollment_filters(tracker.enrollments, filters)
 
-    selected_terms = filters.get("term") or []
-    if selected_terms:
-        raw_udr_goals = (
-            goals_by_udr(budget.term_allocations, selected_terms)
-            or goals_by_udr(tracker.roundup_allocations, selected_terms)
-        )
-    else:
-        raw_udr_goals = (
-            goals_by_udr(budget.allocations)
-            or goals_by_udr(tracker.roundup_allocations)
-        )
-    known_udrs = _budget_udr_names(budget.allocations, budget.term_allocations, tracker.roundup_allocations, filtered_leads, filtered_enrollments)
-    udr_goals = canonicalize_udr_goals(raw_udr_goals, known_udrs)
-    selected_udrs = set(filters.get("udr") or [])
-    if selected_udrs:
-        udr_goals = {udr: goal for udr, goal in udr_goals.items() if udr in selected_udrs}
-    enrollment_goal = (
-        sum(udr_goals.values())
-        if (selected_terms or selected_udrs) and udr_goals
-        else (total_goal(budget.summary) or total_goal(tracker.roundup_summary))
+    pivot_diffs = pivot_reconciliation(uploaded)
+    hubspot_state = {
+        "token_present": token_present,
+        "error": hubspot.error,
+        "fetched_at": hubspot.fetched_at,
+    }
+    qa = run_qa_checks(filtered_leads, filtered_paid, uploaded.udr_leads, filtered_enrollments, budget.allocations, pivot_diffs, hubspot_state)
+
+    st.markdown(
+        """
+        <div class="calmu-masthead">
+            <div class="calmu-kicker">California Miramar University</div>
+            <h1>Enrollment, Lead, UDR, Source, and Budget Performance</h1>
+            <p>Confirmed uploaded tracker/workbook data, live HubSpot contacts when available, and clearly separated calculated interpretations.</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
-    expected_pct = expected_goal_pct(filters.get("start_date"), filters.get("end_date"))
-    scorecard = cached_udr_scorecard(
-        filtered_leads,
-        filtered_enrollments,
-        udr_goals,
-        expected_pct,
-        filters["no_recent_days"],
-    )
+
+    pages = [
+        "Executive Overview",
+        "Enrollment Tracker",
+        "Source Performance",
+        "UDR Performance",
+        "Program Mix",
+        "Budget Performance",
+        "Lead Status & Lifecycle Funnel",
+        "Trends",
+        "QA Checks",
+        "Assumptions / Data Notes",
+        "Raw Audit Data",
+    ]
+    page = st.sidebar.radio("Dashboard section", pages)
 
     if page == "Executive Overview":
-        page_executive(filtered_leads, filtered_enrollments, enrollment_goal, filters)
+        page_executive(filtered_leads, filtered_paid, filtered_enrollments, budget, tracker, data_mode)
+    elif page == "Enrollment Tracker":
+        page_enrollment_tracker(filtered_enrollments, tracker)
+    elif page == "Source Performance":
+        page_source_performance(filtered_leads, filtered_paid, filtered_enrollments, budget)
     elif page == "UDR Performance":
-        page_udr_performance(filtered_leads, filtered_enrollments, udr_goals, expected_pct, filters["no_recent_days"])
-    elif page == "Program / Degree":
-        page_program_degree(filtered_leads, filtered_enrollments)
-    elif page == "Vendor Performance":
-        page_vendor(filtered_leads, filtered_enrollments, filters["no_recent_days"])
-    elif page == "Activity & Follow-Up":
-        page_activity(filtered_leads, filtered_enrollments, scorecard, filters["no_recent_days"])
+        page_udr_performance(filtered_leads, filtered_enrollments)
+    elif page == "Program Mix":
+        page_program_mix(filtered_enrollments)
+    elif page == "Budget Performance":
+        page_budget_performance(filtered_leads, filtered_enrollments, budget)
+    elif page == "Lead Status & Lifecycle Funnel":
+        page_funnel(filtered_leads, filtered_enrollments)
+    elif page == "Trends":
+        page_trends(filtered_leads, filtered_enrollments)
+    elif page == "QA Checks":
+        page_qa(qa, pivot_diffs)
+    elif page == "Assumptions / Data Notes":
+        page_notes(uploaded, tracker, budget, hubspot, data_mode)
     else:
-        page_data_qa(filtered_leads, filtered_enrollments, uploaded, last_refresh)
-
-    with st.sidebar.expander("Metric formulas", expanded=False):
-        st.write("Lead-to-Applicant % = Applicants / Leads")
-        st.write("Lead-to-Enrolled % = Enrollments / Leads")
-        st.write("Applicant-to-Enrolled % = Enrollments / Applicants")
-        st.write("No Recent Activity % = No Recent Activity Count / Leads Assigned")
-        st.write("UDR categories use the configured benchmark formulas only.")
-        st.json(BENCHMARKS)
+        page_raw_audit(uploaded, filtered_leads, filtered_enrollments)
 
 
 if __name__ == "__main__":
