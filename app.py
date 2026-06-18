@@ -23,6 +23,7 @@ from modules.charts import (
 from modules.data_loader import UploadedLeadData, load_uploaded_lead_data, redact_pii
 from modules.enrollment_tracker import EnrollmentTrackerData, load_enrollment_tracker
 from modules.hubspot_client import HubSpotFetchResult, fetch_hubspot_contacts, get_access_token
+from modules.label_overrides import apply_udr_label_overrides
 from modules.metrics import (
     compare_pivot_totals,
     enrollment_by,
@@ -831,6 +832,7 @@ def main() -> None:
     apply_brand_theme()
 
     uploaded, tracker, budget = load_static_inputs()
+    uploaded, tracker, budget, udr_names_visible = apply_udr_label_overrides(uploaded, tracker, budget)
 
     if "hubspot_refresh_key" not in st.session_state:
         st.session_state["hubspot_refresh_key"] = 0
@@ -868,6 +870,8 @@ def main() -> None:
 
     last_refresh = hubspot.fetched_at.astimezone(timezone.utc).strftime("%Y-%m-%d %H:%M UTC") if hubspot.fetched_at else "Not refreshed"
     st.sidebar.caption(f"Last HubSpot refresh: {last_refresh}")
+    if udr_names_visible:
+        st.sidebar.caption("UDR names: Streamlit secrets")
 
     filters = build_filters(analysis_leads, uploaded.paid_leads, tracker.enrollments)
     filtered_leads = apply_lead_filters(analysis_leads, filters)

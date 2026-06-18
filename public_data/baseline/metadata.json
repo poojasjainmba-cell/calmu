@@ -1,5 +1,5 @@
 {
-  "privacy": "Names, emails, phone numbers, raw Record IDs, notes, UDR/contact-owner labels, and source/list labels are excluded or pseudonymized.",
+  "privacy": "Names, emails, phone numbers, raw Record IDs, notes, and UDR/contact-owner labels are excluded or pseudonymized. Vendor/source labels are retained as business labels.",
   "paid_rows": 1297,
   "udr_rows": 25193,
   "enrollment_rows": 107,

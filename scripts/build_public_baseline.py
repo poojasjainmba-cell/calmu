@@ -71,8 +71,8 @@ def _pseudonymize(value: object, *mappings: dict[str, str]) -> object:
 def _sanitize_frame(
     df: pd.DataFrame,
     owner_mapping: dict[str, str],
-    source_mapping: dict[str, str],
     add_student_placeholder: bool = False,
+    row_label_mapping: dict[str, str] | None = None,
 ) -> pd.DataFrame:
     out = df.copy()
     if add_student_placeholder:
@@ -82,10 +82,12 @@ def _sanitize_frame(
     out = out.drop(columns=[column for column in PII_COLUMNS if column in out.columns and column != "student"], errors="ignore")
     for column in OWNER_COLUMNS | {"budget_name", "normalized_budget_name"}:
         if column in out.columns:
-            out[column] = out[column].map(lambda value: _pseudonymize(value, owner_mapping, source_mapping))
-    for column in SOURCE_COLUMNS | {"row_label"}:
+            out[column] = out[column].map(lambda value: _pseudonymize(value, owner_mapping))
+    for column in SOURCE_COLUMNS:
         if column in out.columns:
-            out[column] = out[column].map(lambda value: _pseudonymize(value, owner_mapping, source_mapping))
+            out[column] = out[column].map(lambda value: _pseudonymize(value, owner_mapping))
+    if row_label_mapping and "row_label" in out.columns:
+        out["row_label"] = out["row_label"].map(lambda value: _pseudonymize(value, row_label_mapping))
     return out
 
 
@@ -108,36 +110,26 @@ def main() -> None:
         budget.allocations,
         budget.term_allocations,
     )
-    source_mapping = _label_map(
-        SOURCE_COLUMNS | {"row_label"},
-        "Source",
-        uploaded.paid_leads,
-        uploaded.udr_leads,
-        tracker.enrollments,
-        tracker.roundup_allocations,
-        budget.allocations,
-        budget.term_allocations,
-    )
-
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    _write_csv(_sanitize_frame(uploaded.paid_leads, owner_mapping, source_mapping), "paid_leads.csv")
-    _write_csv(_sanitize_frame(uploaded.udr_leads, owner_mapping, source_mapping), "udr_leads.csv")
+    _write_csv(_sanitize_frame(uploaded.paid_leads, owner_mapping), "paid_leads.csv")
+    _write_csv(_sanitize_frame(uploaded.udr_leads, owner_mapping), "udr_leads.csv")
     _write_csv(
-        _sanitize_frame(tracker.enrollments, owner_mapping, source_mapping, add_student_placeholder=True),
+        _sanitize_frame(tracker.enrollments, owner_mapping, add_student_placeholder=True),
         "enrollments.csv",
     )
-    _write_csv(_sanitize_frame(tracker.roundup_summary, owner_mapping, source_mapping), "tracker_roundup_summary.csv")
-    _write_csv(_sanitize_frame(tracker.roundup_allocations, owner_mapping, source_mapping), "tracker_roundup_allocations.csv")
-    _write_csv(_sanitize_frame(budget.summary, owner_mapping, source_mapping), "budget_summary.csv")
-    _write_csv(_sanitize_frame(budget.allocations, owner_mapping, source_mapping), "budget_allocations.csv")
-    _write_csv(_sanitize_frame(budget.term_allocations, owner_mapping, source_mapping), "budget_term_allocations.csv")
+    _write_csv(_sanitize_frame(tracker.roundup_summary, owner_mapping), "tracker_roundup_summary.csv")
+    _write_csv(_sanitize_frame(tracker.roundup_allocations, owner_mapping), "tracker_roundup_allocations.csv")
+    _write_csv(_sanitize_frame(budget.summary, owner_mapping), "budget_summary.csv")
+    _write_csv(_sanitize_frame(budget.allocations, owner_mapping), "budget_allocations.csv")
+    _write_csv(_sanitize_frame(budget.term_allocations, owner_mapping), "budget_term_allocations.csv")
 
     for prefix, pivots in [("paid", uploaded.paid_pivots), ("udr", uploaded.udr_pivots)]:
         for name, frame in pivots.items():
-            _write_csv(_sanitize_frame(frame, owner_mapping, source_mapping), f"{prefix}_pivot_{name}.csv")
+            row_label_mapping = owner_mapping if prefix == "udr" and name in {"L2C", "L2A"} else None
+            _write_csv(_sanitize_frame(frame, owner_mapping, row_label_mapping=row_label_mapping), f"{prefix}_pivot_{name}.csv")
 
     metadata = {
-        "privacy": "Names, emails, phone numbers, raw Record IDs, notes, UDR/contact-owner labels, and source/list labels are excluded or pseudonymized.",
+        "privacy": "Names, emails, phone numbers, raw Record IDs, notes, and UDR/contact-owner labels are excluded or pseudonymized. Vendor/source labels are retained as business labels.",
         "paid_rows": len(uploaded.paid_leads),
         "udr_rows": len(uploaded.udr_leads),
         "enrollment_rows": len(tracker.enrollments),

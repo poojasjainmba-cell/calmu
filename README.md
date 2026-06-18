@@ -42,7 +42,7 @@ Place these files in `user_files/`:
 
 The dashboard loads all workbook sheets, recalculates raw lead/enrollment metrics where possible, and uses pivot sheets only as reconciliation references.
 
-`user_files/` is intentionally ignored by Git because the source files can contain names, emails, phone numbers, and other private fields. For GitHub and Streamlit Cloud, use the sanitized `public_data/baseline/` files instead. They preserve dashboard-level calculations but remove or pseudonymize private labels.
+`user_files/` is intentionally ignored by Git because the source files can contain names, emails, phone numbers, and other private fields. For GitHub and Streamlit Cloud, use the sanitized `public_data/baseline/` files instead. They preserve dashboard-level calculations, retain vendor/source business labels, and remove or pseudonymize private person labels.
 
 To rebuild the sanitized baseline locally after source files change:
 
@@ -73,6 +73,16 @@ HUBSPOT_CONTACT_PROPERTIES = "exact_custom_property_1,exact_custom_property_2"
 ```
 
 Use this only for confirmed HubSpot fields.
+
+Optional Streamlit-only UDR display labels:
+
+```toml
+[udr_label_map]
+"UDR 01" = "Admissions Owner 1"
+"UDR 02" = "Admissions Owner 2"
+```
+
+Use this when the public baseline should keep UDR names out of GitHub, but the private Streamlit app should show the real UDR names.
 
 ## Streamlit Community Cloud Deployment
 
@@ -114,7 +124,9 @@ Use this only for confirmed HubSpot fields.
 
 - `.env`, `.streamlit/secrets.toml`, Streamlit credentials, generated exports, and PII export folders are ignored.
 - `user_files/` source workbooks/emails are ignored and must stay private.
-- `public_data/baseline/` is safe for GitHub because names, emails, phone numbers, raw Record IDs, notes, UDR/contact-owner labels, and source/list labels are removed or pseudonymized.
+- `public_data/baseline/` is safe for GitHub because names, emails, phone numbers, raw Record IDs, notes, and UDR/contact-owner labels are removed or pseudonymized.
+- Vendor/source/list labels are retained as business labels.
+- Real UDR display names can be restored in Streamlit only through `[udr_label_map]` secrets.
 - Executive pages do not show names, emails, phone numbers, or tracker notes.
 - Raw rows are available only on the clearly separated Raw Audit Data page. Set `RAW_AUDIT_PASSWORD` to require a password.
 
