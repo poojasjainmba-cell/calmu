@@ -1,248 +1,116 @@
-sheet,budget_name,source,term,term_budget,planned_budget
-Sheet1,UDR 16,UDR 16,SP-1 A,9.0,107.0
-Sheet1,UDR 16,UDR 16,SP1-G,16.0,107.0
-Sheet1,UDR 16,UDR 16,SP2-A,14.0,107.0
-Sheet1,UDR 16,UDR 16,SP2-G,15.0,107.0
-Sheet1,UDR 16,UDR 16,SU1-A,17.0,107.0
-Sheet1,UDR 16,UDR 16,SU1-G,16.0,107.0
-Sheet1,UDR 16,UDR 16,SU2 -A,14.0,107.0
-Sheet1,UDR 16,UDR 16,SU2- G,20.0,107.0
-Sheet1,UDR 16,UDR 16,FA1- A,1.0,107.0
-Sheet1,UDR 16,UDR 16,FA1 -G,20.0,107.0
-Sheet1,UDR 16,UDR 16,FA2 -G,24.0,107.0
-Sheet1,UDR 14,UDR 14,SP-1 A,16.0,107.0
-Sheet1,UDR 14,UDR 14,SP1-G,16.0,107.0
-Sheet1,UDR 14,UDR 14,SP2-A,15.0,107.0
-Sheet1,UDR 14,UDR 14,SP2-G,15.0,107.0
-Sheet1,UDR 14,UDR 14,SU1-A,0.0,107.0
-Sheet1,UDR 14,UDR 14,SU1-G,16.0,107.0
-Sheet1,UDR 08,UDR 08,SP-1 A,9.0,107.0
-Sheet1,UDR 08,UDR 08,SP1-G,16.0,107.0
-Sheet1,UDR 08,UDR 08,SP2-A,16.0,107.0
-Sheet1,UDR 08,UDR 08,SP2-G,15.0,107.0
-Sheet1,UDR 08,UDR 08,SU1-A,20.0,107.0
-Sheet1,UDR 08,UDR 08,SU1-G,16.0,107.0
-Sheet1,UDR 08,UDR 08,SU2 -A,9.0,107.0
-Sheet1,UDR 08,UDR 08,SU2- G,20.0,107.0
-Sheet1,UDR 08,UDR 08,FA1 -G,20.0,107.0
-Sheet1,UDR 08,UDR 08,FA2 -G,24.0,107.0
-Sheet1,UDR 37,UDR 37,SP-1 A,20.0,107.0
-Sheet1,UDR 37,UDR 37,SP1-G,16.0,107.0
-Sheet1,UDR 37,UDR 37,SP2-A,18.0,107.0
-Sheet1,UDR 37,UDR 37,SP2-G,15.0,107.0
-Sheet1,UDR 37,UDR 37,SU1-A,20.0,107.0
-Sheet1,UDR 37,UDR 37,SU1-G,16.0,107.0
-Sheet1,UDR 37,UDR 37,SU2 -A,23.0,107.0
-Sheet1,UDR 37,UDR 37,SU2- G,20.0,107.0
-Sheet1,UDR 37,UDR 37,FA1- A,5.0,107.0
-Sheet1,UDR 37,UDR 37,FA1 -G,20.0,107.0
-Sheet1,UDR 37,UDR 37,FA2 -G,18.0,107.0
-Sheet1,UDR 30,UDR 30,SP-1 A,16.0,107.0
-Sheet1,UDR 30,UDR 30,SP1-G,10.0,107.0
-Sheet1,UDR 30,UDR 30,SP2-A,16.0,107.0
-Sheet1,UDR 30,UDR 30,SP2-G,15.0,107.0
-Sheet1,UDR 30,UDR 30,SU1-A,20.0,107.0
-Sheet1,UDR 30,UDR 30,SU1-G,16.0,107.0
-Sheet1,UDR 30,UDR 30,SU2 -A,17.0,107.0
-Sheet1,UDR 30,UDR 30,SU2- G,20.0,107.0
-Sheet1,UDR 30,UDR 30,FA1- A,2.0,107.0
-Sheet1,UDR 30,UDR 30,FA1 -G,20.0,107.0
-Sheet1,UDR 30,UDR 30,FA2 -G,21.0,107.0
-Sheet1,UDR 10,UDR 10,SP-1 A,17.0,107.0
-Sheet1,UDR 10,UDR 10,SP1-G,10.0,107.0
-Sheet1,UDR 10,UDR 10,SP2-A,14.0,107.0
-Sheet1,UDR 10,UDR 10,SP2-G,15.0,107.0
-Sheet1,UDR 10,UDR 10,SU1-A,19.0,107.0
-Sheet1,UDR 10,UDR 10,SU1-G,16.0,107.0
-Sheet1,UDR 10,UDR 10,SU2 -A,21.0,107.0
-Sheet1,UDR 10,UDR 10,SU2- G,20.0,107.0
-Sheet1,UDR 10,UDR 10,FA1 -G,20.0,107.0
-Sheet1,UDR 10,UDR 10,FA2 -G,22.0,107.0
-Sheet1,UDR 33,UDR 33,SU1-A,6.0,48.0
-Sheet1,UDR 33,UDR 33,SU1-G,5.0,48.0
-Sheet1,UDR 33,UDR 33,SU2 -A,9.0,48.0
-Sheet1,UDR 33,UDR 33,SU2- G,12.0,48.0
-Sheet1,UDR 33,UDR 33,FA1- A,1.0,48.0
-Sheet1,UDR 33,UDR 33,FA1 -G,15.0,48.0
-Sheet1,UDR 33,UDR 33,FA2 -G,18.0,48.0
-Sheet1,UDR 24,UDR 24,SU1-A,9.0,48.0
-Sheet1,UDR 24,UDR 24,SU1-G,5.0,48.0
-Sheet1,UDR 24,UDR 24,SU2 -A,13.0,48.0
-Sheet1,UDR 24,UDR 24,SU2- G,12.0,48.0
-Sheet1,UDR 24,UDR 24,FA1- A,3.0,48.0
-Sheet1,UDR 24,UDR 24,FA1 -G,15.0,48.0
-Sheet1,UDR 24,UDR 24,FA2 -G,18.0,48.0
-Sheet1,UDR 18,UDR 18,SU2 -A,1.0,30.0
-Sheet1,UDR 18,UDR 18,SU2- G,6.0,30.0
-Sheet1,UDR 18,UDR 18,FA1 -G,12.0,30.0
-Sheet1,UDR 18,UDR 18,FA2 -G,12.0,30.0
-Sheet1,UDR 25,UDR 25,SU2- G,6.0,30.0
-Sheet1,UDR 25,UDR 25,FA1 -G,12.0,30.0
-Sheet1,UDR 25,UDR 25,FA2 -G,12.0,30.0
-Sheet1,UDR 02,UDR 02,SU2 -A,1.0,30.0
-Sheet1,UDR 02,UDR 02,SU2- G,5.0,30.0
-Sheet1,UDR 02,UDR 02,FA1 -G,12.0,30.0
-Sheet1,UDR 02,UDR 02,FA2 -G,12.0,30.0
-Sheet1,UDR 03,UDR 03,SU2- G,5.0,30.0
-Sheet1,UDR 03,UDR 03,FA1 -G,10.0,30.0
-Sheet1,UDR 35,UDR 35,SP-1 A,87.0,858.0
-Sheet1,UDR 35,UDR 35,SP1-G,84.0,858.0
-Sheet1,UDR 35,UDR 35,SP2-A,93.0,858.0
-Sheet1,UDR 35,UDR 35,SP2-G,90.0,858.0
-Sheet1,UDR 35,UDR 35,SU1-A,111.0,858.0
-Sheet1,UDR 35,UDR 35,SU1-G,106.0,858.0
-Sheet1,UDR 35,UDR 35,SU2 -A,108.0,858.0
-Sheet1,UDR 35,UDR 35,SU2- G,161.0,858.0
-Sheet1,UDR 35,UDR 35,FA1- A,12.0,858.0
-Sheet1,UDR 35,UDR 35,FA1 -G,208.0,858.0
-Sheet1,UDR 35,UDR 35,FA2 -A,0.0,858.0
-Sheet1,UDR 35,UDR 35,FA2 -G,193.0,858.0
-Sheet1,UDR 35,UDR 35,SP-1 A,1688.0,0.0
-Sheet1,UDR 35,UDR 35,SP1-G,0.0,0.0
-Sheet1,UDR 35,UDR 35,SP2-A,1707.0,0.0
-Sheet1,UDR 35,UDR 35,SP2-G,0.0,0.0
-Sheet1,UDR 35,UDR 35,SU1-A,3423.0,0.0
-Sheet1,UDR 35,UDR 35,SU1-G,3300.0,0.0
-Sheet1,UDR 35,UDR 35,SU2 -A,2942.0,0.0
-Sheet1,UDR 35,UDR 35,SU2- G,3400.0,0.0
-Sheet1,UDR 35,UDR 35,FA1- A,0.0,0.0
-Sheet1,UDR 35,UDR 35,FA1 -G,0.0,0.0
-Sheet1,UDR 06,UDR 06,SP-1 A,17.0,100.0
-Sheet1,UDR 06,UDR 06,SP1-G,12.0,100.0
-Sheet1,UDR 06,UDR 06,SP2-A,12.0,100.0
-Sheet1,UDR 06,UDR 06,SP2-G,17.0,100.0
-Sheet1,UDR 06,UDR 06,SU1-A,13.0,100.0
-Sheet1,UDR 06,UDR 06,SU1-G,17.0,100.0
-Sheet1,UDR 06,UDR 06,SU2 -A,4.0,100.0
-Sheet1,UDR 06,UDR 06,SU2- G,17.0,100.0
-Sheet1,UDR 06,UDR 06,FA1 -G,20.0,100.0
-Sheet1,UDR 06,UDR 06,FA2 -G,17.0,100.0
-Sheet1,UDR 20,UDR 20,SP-1 A,13.0,91.0
-Sheet1,UDR 20,UDR 20,SP1-G,12.0,91.0
-Sheet1,UDR 20,UDR 20,SP2-A,15.0,91.0
-Sheet1,UDR 20,UDR 20,SP2-G,15.0,91.0
-Sheet1,UDR 20,UDR 20,SU1-A,26.0,91.0
-Sheet1,UDR 20,UDR 20,SU1-G,15.0,91.0
-Sheet1,UDR 20,UDR 20,SU2 -A,21.0,91.0
-Sheet1,UDR 20,UDR 20,SU2- G,15.0,91.0
-Sheet1,UDR 20,UDR 20,FA1 -G,18.0,91.0
-Sheet1,UDR 20,UDR 20,FA2 -G,16.0,91.0
-Sheet1,UDR 21,UDR 21,SP-1 A,4.0,32.0
-Sheet1,UDR 21,UDR 21,SP1-G,7.0,32.0
-Sheet1,UDR 21,UDR 21,SP2-A,2.0,32.0
-Sheet1,UDR 21,UDR 21,SP2-G,5.0,32.0
-Sheet1,UDR 21,UDR 21,SU1-A,4.0,32.0
-Sheet1,UDR 21,UDR 21,SU1-G,5.0,32.0
-Sheet1,UDR 21,UDR 21,SU2 -A,10.0,32.0
-Sheet1,UDR 21,UDR 21,SU2- G,5.0,32.0
-Sheet1,UDR 21,UDR 21,FA1 -G,6.0,32.0
-Sheet1,UDR 21,UDR 21,FA2 -G,5.0,32.0
-Sheet1,UDR 34,UDR 34,SP-1 A,7.0,38.0
-Sheet1,UDR 34,UDR 34,SP2-A,1.0,38.0
-Sheet1,UDR 34,UDR 34,SP2-G,1.0,38.0
-Sheet1,UDR 34,UDR 34,SU1-A,3.0,38.0
-Sheet1,UDR 34,UDR 34,SU1-G,1.0,38.0
-Sheet1,UDR 34,UDR 34,SU2 -A,2.0,38.0
-Sheet1,UDR 34,UDR 34,SU2- G,1.0,38.0
-Sheet1,UDR 34,UDR 34,FA1- A,2.0,38.0
-Sheet1,UDR 34,UDR 34,FA1 -G,25.0,38.0
-Sheet1,UDR 34,UDR 34,FA2 -G,10.0,38.0
-Sheet1,UDR 28,UDR 28,SP-1 A,11.0,109.0
-Sheet1,UDR 28,UDR 28,SP2-A,16.0,109.0
-Sheet1,UDR 28,UDR 28,SP2-G,15.0,109.0
-Sheet1,UDR 28,UDR 28,SU1-A,14.0,109.0
-Sheet1,UDR 28,UDR 28,SU1-G,18.0,109.0
-Sheet1,UDR 28,UDR 28,SU2 -A,19.0,109.0
-Sheet1,UDR 28,UDR 28,SU2- G,22.0,109.0
-Sheet1,UDR 28,UDR 28,FA1- A,3.0,109.0
-Sheet1,UDR 28,UDR 28,FA1 -G,30.0,109.0
-Sheet1,UDR 28,UDR 28,FA2 -G,24.0,109.0
-Sheet1,UDR 19,UDR 19,SP-1 A,3.0,7.0
-Sheet1,UDR 19,UDR 19,SP2-A,3.0,7.0
-Sheet1,UDR 19,UDR 19,SP2-G,3.0,7.0
-Sheet1,UDR 19,UDR 19,SU1-A,1.0,7.0
-Sheet1,UDR 19,UDR 19,SU1-G,2.0,7.0
-Sheet1,UDR 19,UDR 19,SU2 -A,2.0,7.0
-Sheet1,UDR 19,UDR 19,SU2- G,2.0,7.0
-Sheet1,UDR 19,UDR 19,FA1 -G,0.0,7.0
-Sheet1,UDR 19,UDR 19,FA2 -G,0.0,7.0
-Sheet1,UDR 39,UDR 39,SP-1 A,4.0,8.0
-Sheet1,UDR 39,UDR 39,SP2-A,7.0,8.0
-Sheet1,UDR 39,UDR 39,SP2-G,4.0,8.0
-Sheet1,UDR 39,UDR 39,SU1-A,5.0,8.0
-Sheet1,UDR 39,UDR 39,SU1-G,2.0,8.0
-Sheet1,UDR 39,UDR 39,SU2- G,2.0,8.0
-Sheet1,UDR 39,UDR 39,FA1 -G,0.0,8.0
-Sheet1,UDR 39,UDR 39,FA2 -G,0.0,8.0
-Sheet1,UDR 11,UDR 27,SP-1 A,5.0,56.0
-Sheet1,UDR 11,UDR 27,SP2-A,14.0,56.0
-Sheet1,UDR 11,UDR 27,SP2-G,9.0,56.0
-Sheet1,UDR 11,UDR 27,SU1-A,18.0,56.0
-Sheet1,UDR 11,UDR 27,SU1-G,10.0,56.0
-Sheet1,UDR 11,UDR 27,SU2 -A,15.0,56.0
-Sheet1,UDR 11,UDR 27,SU2- G,10.0,56.0
-Sheet1,UDR 11,UDR 27,FA1- A,2.0,56.0
-Sheet1,UDR 11,UDR 27,FA1 -G,15.0,56.0
-Sheet1,UDR 11,UDR 27,FA2 -G,12.0,56.0
-Sheet1,UDR 31,UDR 31,SP-1 A,1.0,39.0
-Sheet1,UDR 31,UDR 31,SP2-A,2.0,39.0
-Sheet1,UDR 31,UDR 31,SP2-G,4.0,39.0
-Sheet1,UDR 31,UDR 31,SU1-G,5.0,39.0
-Sheet1,UDR 31,UDR 31,SU2 -A,2.0,39.0
-Sheet1,UDR 31,UDR 31,SU2- G,10.0,39.0
-Sheet1,UDR 31,UDR 31,FA1 -G,12.0,39.0
-Sheet1,UDR 31,UDR 31,FA2 -G,8.0,39.0
-Sheet1,UDR 04,UDR 04,SP-1 A,3.0,57.0
-Sheet1,UDR 04,UDR 04,SP2-A,3.0,57.0
-Sheet1,UDR 04,UDR 04,SP2-G,6.0,57.0
-Sheet1,UDR 04,UDR 04,SU1-A,11.0,57.0
-Sheet1,UDR 04,UDR 04,SU1-G,8.0,57.0
-Sheet1,UDR 04,UDR 04,SU2 -A,11.0,57.0
-Sheet1,UDR 04,UDR 04,SU2- G,12.0,57.0
-Sheet1,UDR 04,UDR 04,FA1- A,1.0,57.0
-Sheet1,UDR 04,UDR 04,FA1 -G,15.0,57.0
-Sheet1,UDR 04,UDR 04,FA2 -G,16.0,57.0
-Sheet1,UDR 40,UDR 40,SP-1 A,12.0,75.0
-Sheet1,UDR 40,UDR 40,SP2-A,7.0,75.0
-Sheet1,UDR 40,UDR 40,SP2-G,10.0,75.0
-Sheet1,UDR 40,UDR 40,SU1-A,8.0,75.0
-Sheet1,UDR 40,UDR 40,SU1-G,12.0,75.0
-Sheet1,UDR 40,UDR 40,SU2 -A,14.0,75.0
-Sheet1,UDR 40,UDR 40,SU2- G,12.0,75.0
-Sheet1,UDR 40,UDR 40,FA1- A,3.0,75.0
-Sheet1,UDR 40,UDR 40,FA1 -G,15.0,75.0
-Sheet1,UDR 40,UDR 40,FA2 -G,14.0,75.0
-Sheet1,UDR 38,UDR 38,SP-1 A,4.0,35.0
-Sheet1,UDR 38,UDR 38,SP2-A,2.0,35.0
-Sheet1,UDR 38,UDR 38,SP2-G,5.0,35.0
-Sheet1,UDR 38,UDR 38,SU1-G,5.0,35.0
-Sheet1,UDR 38,UDR 38,SU2- G,5.0,35.0
-Sheet1,UDR 38,UDR 38,FA1 -G,8.0,35.0
-Sheet1,UDR 38,UDR 38,FA2 -G,8.0,35.0
-Sheet1,UDR 22,UDR 22,SU1-G,3.0,15.0
-Sheet1,UDR 22,UDR 22,SU2- G,3.0,15.0
-Sheet1,UDR 22,UDR 22,FA1 -G,5.0,15.0
-Sheet1,UDR 22,UDR 22,FA2 -G,4.0,15.0
-Sheet1,UDR 13,UDR 12,SP-1 A,3.0,87.0
-Sheet1,UDR 13,UDR 12,SP1-G,12.0,87.0
-Sheet1,UDR 13,UDR 12,SP2-A,9.0,87.0
-Sheet1,UDR 13,UDR 12,SP2-G,5.0,87.0
-Sheet1,UDR 13,UDR 12,SU1-A,5.0,87.0
-Sheet1,UDR 13,UDR 12,SU1-G,10.0,87.0
-Sheet1,UDR 13,UDR 12,SU2 -A,6.0,87.0
-Sheet1,UDR 13,UDR 12,SU2- G,15.0,87.0
-Sheet1,UDR 13,UDR 12,FA1- A,1.0,87.0
-Sheet1,UDR 13,UDR 12,FA1 -G,20.0,87.0
-Sheet1,UDR 13,UDR 12,FA2 -G,25.0,87.0
-Sheet1,UDR 35,UDR 35,SP-1 A,87.0,749.0
-Sheet1,UDR 35,UDR 35,SP1-G,43.0,749.0
-Sheet1,UDR 35,UDR 35,SP2-A,93.0,749.0
-Sheet1,UDR 35,UDR 35,SP2-G,99.0,749.0
-Sheet1,UDR 35,UDR 35,SU1-A,111.0,749.0
-Sheet1,UDR 35,UDR 35,SU1-G,113.0,749.0
-Sheet1,UDR 35,UDR 35,SU2 -A,108.0,749.0
-Sheet1,UDR 35,UDR 35,SU2- G,141.0,749.0
-Sheet1,UDR 35,UDR 35,FA1- A,12.0,749.0
-Sheet1,UDR 35,UDR 35,FA1 -G,189.0,749.0
-Sheet1,UDR 35,UDR 35,FA2 -A,0.0,749.0
-Sheet1,UDR 35,UDR 35,FA2 -G,159.0,749.0
+sheet,budget_dimension,budget_name,source,raw_term,term,term_label,term_metric,term_value,term_budget,planned_budget
+Sheet1,UDR allocation,UDR 12,UDR 12,SP-1 A,SP1,Spring 1,actual,9.0,9.0,107.0
+Sheet1,UDR allocation,UDR 12,UDR 12,SP1-G,SP1,Spring 1,goal,16.0,16.0,107.0
+Sheet1,UDR allocation,UDR 12,UDR 12,SP2-A,SP2,Spring 2,actual,14.0,14.0,107.0
+Sheet1,UDR allocation,UDR 12,UDR 12,SP2-G,SP2,Spring 2,goal,15.0,15.0,107.0
+Sheet1,UDR allocation,UDR 12,UDR 12,SU1-A,SU1,Summer 1,actual,17.0,17.0,107.0
+Sheet1,UDR allocation,UDR 12,UDR 12,SU1-G,SU1,Summer 1,goal,16.0,16.0,107.0
+Sheet1,UDR allocation,UDR 12,UDR 12,SU2 -A,SU2,Summer 2,actual,14.0,14.0,107.0
+Sheet1,UDR allocation,UDR 12,UDR 12,SU2- G,SU2,Summer 2,goal,20.0,20.0,107.0
+Sheet1,UDR allocation,UDR 12,UDR 12,FA1- A,FA1,Fall 1,actual,1.0,1.0,107.0
+Sheet1,UDR allocation,UDR 12,UDR 12,FA1 -G,FA1,Fall 1,goal,20.0,20.0,107.0
+Sheet1,UDR allocation,UDR 12,UDR 12,FA2 -G,FA2,Fall 2,goal,24.0,24.0,107.0
+Sheet1,UDR allocation,UDR 09,UDR 09,SP-1 A,SP1,Spring 1,actual,16.0,16.0,107.0
+Sheet1,UDR allocation,UDR 09,UDR 09,SP1-G,SP1,Spring 1,goal,16.0,16.0,107.0
+Sheet1,UDR allocation,UDR 09,UDR 09,SP2-A,SP2,Spring 2,actual,15.0,15.0,107.0
+Sheet1,UDR allocation,UDR 09,UDR 09,SP2-G,SP2,Spring 2,goal,15.0,15.0,107.0
+Sheet1,UDR allocation,UDR 09,UDR 09,SU1-A,SU1,Summer 1,actual,0.0,0.0,107.0
+Sheet1,UDR allocation,UDR 09,UDR 09,SU1-G,SU1,Summer 1,goal,16.0,16.0,107.0
+Sheet1,UDR allocation,UDR 06,UDR 06,SP-1 A,SP1,Spring 1,actual,9.0,9.0,107.0
+Sheet1,UDR allocation,UDR 06,UDR 06,SP1-G,SP1,Spring 1,goal,16.0,16.0,107.0
+Sheet1,UDR allocation,UDR 06,UDR 06,SP2-A,SP2,Spring 2,actual,16.0,16.0,107.0
+Sheet1,UDR allocation,UDR 06,UDR 06,SP2-G,SP2,Spring 2,goal,15.0,15.0,107.0
+Sheet1,UDR allocation,UDR 06,UDR 06,SU1-A,SU1,Summer 1,actual,20.0,20.0,107.0
+Sheet1,UDR allocation,UDR 06,UDR 06,SU1-G,SU1,Summer 1,goal,16.0,16.0,107.0
+Sheet1,UDR allocation,UDR 06,UDR 06,SU2 -A,SU2,Summer 2,actual,9.0,9.0,107.0
+Sheet1,UDR allocation,UDR 06,UDR 06,SU2- G,SU2,Summer 2,goal,20.0,20.0,107.0
+Sheet1,UDR allocation,UDR 06,UDR 06,FA1 -G,FA1,Fall 1,goal,20.0,20.0,107.0
+Sheet1,UDR allocation,UDR 06,UDR 06,FA2 -G,FA2,Fall 2,goal,24.0,24.0,107.0
+Sheet1,UDR allocation,UDR 25,UDR 25,SP-1 A,SP1,Spring 1,actual,20.0,20.0,107.0
+Sheet1,UDR allocation,UDR 25,UDR 25,SP1-G,SP1,Spring 1,goal,16.0,16.0,107.0
+Sheet1,UDR allocation,UDR 25,UDR 25,SP2-A,SP2,Spring 2,actual,18.0,18.0,107.0
+Sheet1,UDR allocation,UDR 25,UDR 25,SP2-G,SP2,Spring 2,goal,15.0,15.0,107.0
+Sheet1,UDR allocation,UDR 25,UDR 25,SU1-A,SU1,Summer 1,actual,20.0,20.0,107.0
+Sheet1,UDR allocation,UDR 25,UDR 25,SU1-G,SU1,Summer 1,goal,16.0,16.0,107.0
+Sheet1,UDR allocation,UDR 25,UDR 25,SU2 -A,SU2,Summer 2,actual,23.0,23.0,107.0
+Sheet1,UDR allocation,UDR 25,UDR 25,SU2- G,SU2,Summer 2,goal,20.0,20.0,107.0
+Sheet1,UDR allocation,UDR 25,UDR 25,FA1- A,FA1,Fall 1,actual,5.0,5.0,107.0
+Sheet1,UDR allocation,UDR 25,UDR 25,FA1 -G,FA1,Fall 1,goal,20.0,20.0,107.0
+Sheet1,UDR allocation,UDR 25,UDR 25,FA2 -G,FA2,Fall 2,goal,18.0,18.0,107.0
+Sheet1,UDR allocation,UDR 21,UDR 21,SP-1 A,SP1,Spring 1,actual,16.0,16.0,107.0
+Sheet1,UDR allocation,UDR 21,UDR 21,SP1-G,SP1,Spring 1,goal,10.0,10.0,107.0
+Sheet1,UDR allocation,UDR 21,UDR 21,SP2-A,SP2,Spring 2,actual,16.0,16.0,107.0
+Sheet1,UDR allocation,UDR 21,UDR 21,SP2-G,SP2,Spring 2,goal,15.0,15.0,107.0
+Sheet1,UDR allocation,UDR 21,UDR 21,SU1-A,SU1,Summer 1,actual,20.0,20.0,107.0
+Sheet1,UDR allocation,UDR 21,UDR 21,SU1-G,SU1,Summer 1,goal,16.0,16.0,107.0
+Sheet1,UDR allocation,UDR 21,UDR 21,SU2 -A,SU2,Summer 2,actual,17.0,17.0,107.0
+Sheet1,UDR allocation,UDR 21,UDR 21,SU2- G,SU2,Summer 2,goal,20.0,20.0,107.0
+Sheet1,UDR allocation,UDR 21,UDR 21,FA1- A,FA1,Fall 1,actual,2.0,2.0,107.0
+Sheet1,UDR allocation,UDR 21,UDR 21,FA1 -G,FA1,Fall 1,goal,20.0,20.0,107.0
+Sheet1,UDR allocation,UDR 21,UDR 21,FA2 -G,FA2,Fall 2,goal,21.0,21.0,107.0
+Sheet1,UDR allocation,UDR 08,UDR 08,SP-1 A,SP1,Spring 1,actual,17.0,17.0,107.0
+Sheet1,UDR allocation,UDR 08,UDR 08,SP1-G,SP1,Spring 1,goal,10.0,10.0,107.0
+Sheet1,UDR allocation,UDR 08,UDR 08,SP2-A,SP2,Spring 2,actual,14.0,14.0,107.0
+Sheet1,UDR allocation,UDR 08,UDR 08,SP2-G,SP2,Spring 2,goal,15.0,15.0,107.0
+Sheet1,UDR allocation,UDR 08,UDR 08,SU1-A,SU1,Summer 1,actual,19.0,19.0,107.0
+Sheet1,UDR allocation,UDR 08,UDR 08,SU1-G,SU1,Summer 1,goal,16.0,16.0,107.0
+Sheet1,UDR allocation,UDR 08,UDR 08,SU2 -A,SU2,Summer 2,actual,21.0,21.0,107.0
+Sheet1,UDR allocation,UDR 08,UDR 08,SU2- G,SU2,Summer 2,goal,20.0,20.0,107.0
+Sheet1,UDR allocation,UDR 08,UDR 08,FA1 -G,FA1,Fall 1,goal,20.0,20.0,107.0
+Sheet1,UDR allocation,UDR 08,UDR 08,FA2 -G,FA2,Fall 2,goal,22.0,22.0,107.0
+Sheet1,UDR allocation,UDR 23,UDR 23,SU1-A,SU1,Summer 1,actual,6.0,6.0,48.0
+Sheet1,UDR allocation,UDR 23,UDR 23,SU1-G,SU1,Summer 1,goal,5.0,5.0,48.0
+Sheet1,UDR allocation,UDR 23,UDR 23,SU2 -A,SU2,Summer 2,actual,9.0,9.0,48.0
+Sheet1,UDR allocation,UDR 23,UDR 23,SU2- G,SU2,Summer 2,goal,12.0,12.0,48.0
+Sheet1,UDR allocation,UDR 23,UDR 23,FA1- A,FA1,Fall 1,actual,1.0,1.0,48.0
+Sheet1,UDR allocation,UDR 23,UDR 23,FA1 -G,FA1,Fall 1,goal,15.0,15.0,48.0
+Sheet1,UDR allocation,UDR 23,UDR 23,FA2 -G,FA2,Fall 2,goal,18.0,18.0,48.0
+Sheet1,UDR allocation,UDR 17,UDR 17,SU1-A,SU1,Summer 1,actual,9.0,9.0,48.0
+Sheet1,UDR allocation,UDR 17,UDR 17,SU1-G,SU1,Summer 1,goal,5.0,5.0,48.0
+Sheet1,UDR allocation,UDR 17,UDR 17,SU2 -A,SU2,Summer 2,actual,13.0,13.0,48.0
+Sheet1,UDR allocation,UDR 17,UDR 17,SU2- G,SU2,Summer 2,goal,12.0,12.0,48.0
+Sheet1,UDR allocation,UDR 17,UDR 17,FA1- A,FA1,Fall 1,actual,3.0,3.0,48.0
+Sheet1,UDR allocation,UDR 17,UDR 17,FA1 -G,FA1,Fall 1,goal,15.0,15.0,48.0
+Sheet1,UDR allocation,UDR 17,UDR 17,FA2 -G,FA2,Fall 2,goal,18.0,18.0,48.0
+Sheet1,UDR allocation,UDR 14,UDR 14,SU2 -A,SU2,Summer 2,actual,1.0,1.0,30.0
+Sheet1,UDR allocation,UDR 14,UDR 14,SU2- G,SU2,Summer 2,goal,6.0,6.0,30.0
+Sheet1,UDR allocation,UDR 14,UDR 14,FA1 -G,FA1,Fall 1,goal,12.0,12.0,30.0
+Sheet1,UDR allocation,UDR 14,UDR 14,FA2 -G,FA2,Fall 2,goal,12.0,12.0,30.0
+Sheet1,UDR allocation,UDR 18,UDR 18,SU2- G,SU2,Summer 2,goal,6.0,6.0,30.0
+Sheet1,UDR allocation,UDR 18,UDR 18,FA1 -G,FA1,Fall 1,goal,12.0,12.0,30.0
+Sheet1,UDR allocation,UDR 18,UDR 18,FA2 -G,FA2,Fall 2,goal,12.0,12.0,30.0
+Sheet1,UDR allocation,UDR 02,UDR 02,SU2 -A,SU2,Summer 2,actual,1.0,1.0,30.0
+Sheet1,UDR allocation,UDR 02,UDR 02,SU2- G,SU2,Summer 2,goal,5.0,5.0,30.0
+Sheet1,UDR allocation,UDR 02,UDR 02,FA1 -G,FA1,Fall 1,goal,12.0,12.0,30.0
+Sheet1,UDR allocation,UDR 02,UDR 02,FA2 -G,FA2,Fall 2,goal,12.0,12.0,30.0
+Sheet1,UDR allocation,UDR 03,UDR 03,SU2- G,SU2,Summer 2,goal,5.0,5.0,30.0
+Sheet1,UDR allocation,UDR 03,UDR 03,FA1 -G,FA1,Fall 1,goal,10.0,10.0,30.0
+Sheet1,UDR allocation,UDR 04,UDR 04,SU2- G,SU2,Summer 2,goal,5.0,5.0,15.0
+Sheet1,UDR allocation,UDR 04,UDR 04,FA1 -G,FA1,Fall 1,goal,10.0,10.0,15.0
+Sheet1,UDR allocation,UDR 26,UDR 26,SU2- G,SU2,Summer 2,goal,5.0,5.0,15.0
+Sheet1,UDR allocation,UDR 26,UDR 26,FA1 -G,FA1,Fall 1,goal,10.0,10.0,15.0
+Sheet1,UDR allocation,UDR 10,UDR 10,SU2- G,SU2,Summer 2,goal,5.0,5.0,29.0
+Sheet1,UDR allocation,UDR 10,UDR 10,FA1 -G,FA1,Fall 1,goal,12.0,12.0,29.0
+Sheet1,UDR allocation,UDR 10,UDR 10,FA2 -G,FA2,Fall 2,goal,12.0,12.0,29.0
+Sheet1,roundup_metric,Total,Total,SP-1 A,SP1,Spring 1,actual,87.0,87.0,858.0
+Sheet1,roundup_metric,Total,Total,SP1-G,SP1,Spring 1,goal,84.0,84.0,858.0
+Sheet1,roundup_metric,Total,Total,SP2-A,SP2,Spring 2,actual,93.0,93.0,858.0
+Sheet1,roundup_metric,Total,Total,SP2-G,SP2,Spring 2,goal,90.0,90.0,858.0
+Sheet1,roundup_metric,Total,Total,SU1-A,SU1,Summer 1,actual,111.0,111.0,858.0
+Sheet1,roundup_metric,Total,Total,SU1-G,SU1,Summer 1,goal,106.0,106.0,858.0
+Sheet1,roundup_metric,Total,Total,SU2 -A,SU2,Summer 2,actual,108.0,108.0,858.0
+Sheet1,roundup_metric,Total,Total,SU2- G,SU2,Summer 2,goal,161.0,161.0,858.0
+Sheet1,roundup_metric,Total,Total,FA1- A,FA1,Fall 1,actual,12.0,12.0,858.0
+Sheet1,roundup_metric,Total,Total,FA1 -G,FA1,Fall 1,goal,208.0,208.0,858.0
+Sheet1,roundup_metric,Total,Total,FA2 -A,FA2,Fall 2,actual,0.0,0.0,858.0
+Sheet1,roundup_metric,Total,Total,FA2 -G,FA2,Fall 2,goal,193.0,193.0,858.0
+Sheet1,roundup_metric,Starts,Starts,SP-1 A,SP1,Spring 1,starts,66.0,66.0,0.0
+Sheet1,roundup_metric,Starts,Starts,SP2-A,SP2,Spring 2,starts,63.0,63.0,0.0
+Sheet1,roundup_metric,Starts,Starts,SU1-A,SU1,Summer 1,starts,71.0,71.0,0.0
+Sheet1,roundup_metric,Starts,Starts,SU2 -A,SU2,Summer 2,starts,106.0,106.0,0.0
+Sheet1,roundup_metric,Starts,Starts,FA1- A,FA1,Fall 1,starts,12.0,12.0,0.0
+Sheet1,roundup_metric,Start%,Start%,SP-1 A,SP1,Spring 1,start_rate,0.7586206896551724,0.7586206896551724,0.0
+Sheet1,roundup_metric,Start%,Start%,SP2-A,SP2,Spring 2,start_rate,0.6774193548387096,0.6774193548387096,0.0
+Sheet1,roundup_metric,Start%,Start%,SU1-A,SU1,Summer 1,start_rate,0.6396396396396397,0.6396396396396397,0.0
+Sheet1,roundup_metric,Start%,Start%,SU2 -A,SU2,Summer 2,start_rate,0.9814814814814815,0.9814814814814815,0.0
+Sheet1,roundup_metric,Start%,Start%,FA1- A,FA1,Fall 1,start_rate,1.0,1.0,0.0

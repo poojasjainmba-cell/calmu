@@ -1,108 +1,108 @@
-row_number,student,udr,program,modality,enrolled_date,student_type,payment_funding,new_roll,term,source,days_to_enroll,revenue,unnamed_14,term_label,workbook_term,data_origin,normalized_source,lead_type
-1,Student 0001,UDR 09,ASBT-CY,SD-Hybrid,2026-04-09,Military,VA/VRE,New,2026-06-29,Source 33,28,35100,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 33,Paid
-2,Student 0002,UDR 36,ASBT-CY,SJ-Hybrid,2026-04-10,Military,VA/FAFSA/VRE,New,2026-06-29,UDR 28,1,35100,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 28,Organic
-3,Student 0003,UDR 32,BSBT-CY,SD-Hybrid,2026-04-13,Military,VRE,New,2026-06-29,UDR 28,5,70200,VRE approval,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 28,Organic
-4,Student 0004,UDR 23,BSBT-AI,SD-Hybrid,2026-04-13,Military,VRE,New,2026-06-29,UDR 40,3,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 40,Organic
-5,Student 0005,UDR 15,BSBT-AI,SJ-Hybrid,2026-04-14,Military,VA,New,2026-06-29,UDR 28,5,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 28,Organic
-6,Student 0006,UDR 09,CAI,SD-Hybrid,2026-07-14,Military,VA,Repeat,2026-06-29,UDR 04,349,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 04,Organic
-7,Student 0007,UDR 36,CAI,SD-Hybrid,2026-04-15,Military,VRE,New,2026-06-29,UDR 11,11,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 27,Paid
-8,Student 0008,UDR 09,CCY,Online,2026-04-24,Military,VRE,New,2026-06-29,Source 56,38,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 56,Paid
-9,Student 0009,UDR 29,BSBT-AI,SD-Hybrid,2026-04-24,Military,VRE,New,2026-06-29,UDR 40,1,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 40,Organic
-10,Student 0010,UDR 32,CAI,SD-Hybrid,2026-04-24,Military,VA/VRE,New,2026-06-29,UDR 11,183,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 27,Paid
-11,Student 0011,UDR 23,BSBT-CY,Online,2026-04-27,Military,TA-ActiveDuty,New,2026-06-29,Source 56,7,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 56,Paid
-12,Student 0012,UDR 23,BSBA-IT,Online,2026-04-30,Domestic,FAFSA,New,2026-06-29,Source 59,6,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 59,Paid
-13,Student 0013,UDR 36,ASBT-CY,SJ-Hybrid,2026-05-01,Military,VA/FAFSA,New,2026-06-29,UDR 13,72,35100,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 12,Paid
-14,Student 0014,UDR 36,MBA-BA,Online,2026-05-01,Domestic,FAFSA,New,2026-06-29,UDR 40,1,32799,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 40,Organic
-15,Student 0015,UDR 23,BSBA-BA,Online,2026-05-01,Athletics,FAFSA,New,2026-06-29,UDR 34,7,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 34,Unknown
-16,Student 0016,UDR 36,CCY,Online,2026-05-04,Military,VA,Repeat,2026-06-29,UDR 04,187,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 04,Organic
-17,Student 0017,UDR 32,CAI,SD-Hybrid,2026-05-06,Military,VA,New,2026-06-29,UDR 28,15,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 28,Organic
-18,Student 0018,UDR 23,CAI,Online,2026-05-06,Military,Active Duty,New,2026-06-29,UDR 13,14,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 12,Paid
-19,Student 0019,UDR 36,BSBT-AI,SD-Hybrid,2026-05-06,Military,VA,Repeat,2026-06-29,UDR 04,196,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 04,Organic
-20,Student 0020,UDR 29,MSCIS,SD-Hybrid,2026-05-06,Military,VA,New,2026-06-29,Source 11,3,32799,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 11,Unknown
-21,Student 0021,UDR 15,BSBT-AI,SD-Hybrid,2026-05-07,Military,VA,Repeat,2026-06-29,UDR 04,324,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 04,Organic
-22,Student 0022,UDR 15,MSCIS,SD-Hybrid,2026-05-07,Military,VA,New,2026-06-29,Source 59,13,32799,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 59,Paid
-23,Student 0023,UDR 15,BSBT-AI,SJ-Hybrid,2026-05-08,Military,VA,New,2026-06-29,UDR 28,8,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 28,Organic
-24,Student 0024,UDR 09,CAI,SD-Hybrid,2026-05-08,Corporate,Tuition Reimbursement,Roll,2026-06-29,Source 56,66,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 56,Paid
-25,Student 0025,UDR 23,BSBA-BA,SD-Hybrid,2026-05-08,Military,VA,New,2026-06-29,UDR 40,5,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 40,Organic
-26,Student 0026,UDR 29,CAI,SJ-Hybrid,2026-05-08,Military,VA,New,2026-06-29,UDR 13,16,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 12,Paid
-27,Student 0027,UDR 29,BSBT-AI,SD-Hybrid,2026-05-11,Military,VRE,New,2026-06-29,UDR 40,10,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 40,Organic
-28,Student 0028,UDR 09,ASBT-AI,SD-Hybrid,2026-05-11,Military,MYCAA,Roll,2026-06-29,UDR 40,18,35100,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 40,Organic
-29,Student 0029,UDR 09,ASBA-SM,Online,2026-05-13,Athletics,FAFSA,Roll,2026-06-29,UDR 34,44,35100,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 34,Unknown
-30,Student 0030,UDR 36,MBA-F,SD-Hybrid,2026-05-13,Military,VA/VRE,New,2026-06-29,UDR 40,5,32799,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 40,Organic
-31,Student 0031,UDR 15,BSBT-AI,SJ-Hybrid,2026-05-13,Military,VA/FAFSA,New,2026-06-29,UDR 40,29,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 40,Organic
-32,Student 0032,UDR 15,BSBA-BA,SD-Hybrid,2026-05-13,Military,VA,New,2026-06-29,UDR 40,29,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 40,Organic
-33,Student 0033,UDR 36,MBA-HCM,SJ-Hybrid,2026-05-14,Military,VA/VRE,New,2026-06-29,UDR 31,4,32799,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 31,Unknown
-34,Student 0034,UDR 29,ASBT-CY,Online,2026-05-14,Domestic,FAFSA,New,2026-06-29,Source 59,6,35100,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 59,Paid
-35,Student 0035,UDR 36,CCY,Online,2026-05-14,Military,VA,New,2026-06-29,UDR 11,11,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 27,Paid
-36,Student 0036,UDR 36,MSCIS,SD-Hybrid,2026-05-14,Military,VA,New,2026-06-29,Source 54,469,32799,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 54,Unknown
-37,Student 0037,UDR 07,CAI,Online,2026-05-15,Corporate,Tuition Reimbursement,New,2026-06-29,Source 56,53,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 56,Paid
-38,Student 0038,UDR 23,ASBT-AI,SD-Hybrid,2026-05-15,Military,VA/FAFSA,New,2026-06-29,Source 59,13,35100,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 59,Paid
-39,Student 0039,UDR 23,ASBT-CY,Online,2026-05-18,Military,Reservs/FA,New,2026-06-29,UDR 11,46,35100,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 27,Paid
-40,Student 0040,UDR 09,CCY,SJ-Hybrid,2026-05-18,Military,VA,New,2026-06-29,UDR 11,28,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 27,Paid
-41,Student 0041,UDR 23,BSBT-AI,Online,2026-05-19,Domestic,FAFSA,Roll,2026-06-29,UDR 11,50,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 27,Paid
-42,Student 0042,UDR 09,CCY,SJ-Hybrid,2026-05-19,Military,VA/VRE,New,2026-06-29,UDR 28,46,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 28,Organic
-43,Student 0043,UDR 15,CCY,Online,2026-05-19,Corporate,Tuition Reimbursement/FAFSA,New,2026-06-29,Source 56,12,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 56,Paid
-44,Student 0044,UDR 29,CAI,SD-Hybrid,2026-05-19,Military,VRE,New,2026-06-29,UDR 11,127,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 27,Paid
-45,Student 0045,UDR 15,CCY,Online,2026-05-19,Corporate,Tuition Reimbursement,New,2026-06-29,Source 56,7,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 56,Paid
-46,Student 0046,UDR 09,CCY,SJ-Hybrid,2026-05-20,Military,VA,New,2026-06-29,UDR 28,2,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 28,Organic
-47,Student 0047,UDR 36,MBA-AI,Online,2026-05-21,Corporate,Tuition Reimbursement,New,2026-06-29,Source 56,99,32799,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 56,Paid
-48,Student 0048,UDR 36,BSBT-CY,SJ-Hybrid,2026-05-21,Military,VA,Repeat,2026-06-29,UDR 04,195,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 04,Organic
-49,Student 0049,UDR 32,CCY,Online,2026-05-21,Corporate,Tuition Reimbursement/FAFSA,New,2026-06-29,Source 56,2,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 56,Paid
-50,Student 0050,UDR 36,CAI,SD-Hybrid,2026-05-21,Military,VA/VRE,New,2026-06-29,UDR 40,1,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 40,Organic
-51,Student 0051,UDR 36,BSBT-AI,SJ-Hybrid,2026-05-22,Military,VA/VRE,New,2026-06-29,UDR 28,4,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 28,Organic
-52,Student 0052,UDR 29,CCY,SJ-Hybrid,2026-05-22,Military,VA,Repeat,2026-06-29,UDR 04,156,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 04,Organic
-53,Student 0053,UDR 23,BSBT-CY,SD-Hybrid,2026-05-22,Military,VA,New,2026-06-29,UDR 40,38,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 40,Organic
-54,Student 0054,UDR 07,ASBA-BA,Online,2026-05-23,Domestic,FAFSA,New,2026-06-29,UDR 28,13,35100,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 28,Organic
-55,Student 0055,UDR 15,ASBT-AI,SJ-Hybrid,2026-05-23,Military,VRE,New,2026-06-29,UDR 28,102,35100,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 28,Organic
-56,Student 0056,UDR 15,BSBT-BA,SD-Hybrid,2026-05-25,Military,VA,New,2026-06-29,UDR 40,9,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 40,Organic
-57,Student 0057,UDR 32,ASBT-CY,Online,2026-05-26,Corporate,Tuition Reimbursment,New,2026-06-29,Source 56,7,35100,Red,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 56,Paid
-58,Student 0058,UDR 32,CAI,SJ-Hybrid,2026-05-27,Military,VA,New,2026-06-29,UDR 28,5,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 28,Organic
-59,Student 0059,UDR 07,MBA-AI,SD-Hybrid,2026-05-27,Military,VA/FAFSA,New,2026-06-29,Source 54,482,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 54,Unknown
-60,Student 0060,UDR 23,ASBT-CY,Online,2026-05-27,Corporate,Tuition Reimbursement/FAFSA,New,2026-06-29,Source 56,29,35100,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 56,Paid
-61,Student 0061,UDR 17,CAI,SD-Hybrid,2026-05-27,Military,VA,New,2026-06-29,UDR 11,10,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 27,Paid
-62,Student 0062,UDR 07,CCY,SJ-Hybrid,2026-05-28,Military,VA,New,2026-06-29,UDR 28,15,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 28,Organic
-63,Student 0063,UDR 09,BSBT-AI,Online,2026-05-28,Corporate,Tuition Reimbursement/Fafsa,New,2026-06-29,Source 56,206,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 56,Paid
-64,Student 0064,UDR 29,ASBT-CY,SD-Hybrid,2026-05-28,Military,VRE,New,2026-06-29,Source 59,6,35100,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 59,Paid
-65,Student 0065,UDR 32,BSBA-BA,Online,2026-05-28,Corporate,Tuition Reimbursemnt,New,2026-06-29,Source 56,9,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 56,Paid
-66,Student 0066,UDR 07,BSBA-BA,Online,2026-05-29,Domestic,FAFSA,New,2026-06-29,UDR 40,2,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 40,Organic
-67,Student 0067,UDR 29,CAI,SD-Hybrid,2026-05-29,Military,VA,New,2026-06-29,UDR 28,11,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 28,Organic
-68,Student 0068,UDR 09,BSBT-AI,SD-Hybrid,2026-05-29,Military,VA,New,2026-06-29,UDR 11,7,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 27,Paid
-69,Student 0069,UDR 36,BSBA-AI,SJ-Hybrid,2026-05-29,Military,VRE,New,2026-06-29,UDR 28,11,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 28,Organic
-70,Student 0070,UDR 09,BSBT-CY,SD-Hybrid,2026-05-29,Military,VA,New,2026-06-29,Source 56,8,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 56,Paid
-71,Student 0071,UDR 09,BSBA-BA,SJ-Hybrid,2026-05-29,Military,VA,New,2026-06-29,UDR 13,3,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 12,Paid
-72,Student 0072,UDR 36,BSBT-AI,SJ-Hybrid,2026-06-01,Military,VA,New,2026-06-29,UDR 11,10,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 27,Paid
-73,Student 0073,UDR 15,BSBA-SM,SD-Hybrid,2026-06-01,Military,VA,New,2026-06-29,UDR 28,11,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 28,Organic
-74,Student 0074,UDR 29,CAI,SD-Hybrid,2026-06-01,Military,VA,New,2026-06-29,Source 59,11,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 59,Paid
-75,Student 0075,UDR 09,MBA-F,Online,2026-06-02,Corporate,VA,New,2026-06-29,Source 56,6,32799,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 56,Paid
-76,Student 0076,UDR 29,BSBT-CY,Online,2026-06-02,Domestic,FAFSA,New,2026-06-29,Source 56,18,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 56,Paid
-77,Student 0077,UDR 23,BSBT-CY,Online,2026-06-02,Corporate,Tuition Reimbursement,Roll,2026-06-29,Source 56,53,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 56,Paid
-78,Student 0078,UDR 36,BSBT-AI,Online,2026-06-02,Domestic,FAFSA,Repeat,2026-06-29,UDR 04,223,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 04,Organic
-79,Student 0079,UDR 32,BSBT-CY,SJ-Hybrid,2026-06-03,Military,VA/FAFSA,New,2026-06-29,UDR 11,8,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 27,Paid
-80,Student 0080,UDR 09,MSCIS,SJ-Hybrid,2026-06-03,Military,VA,Repeat,2026-06-29,UDR 04,764,32799,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 04,Organic
-81,Student 0081,UDR 23,ASBT-AI,SJ-Hybrid,2026-06-04,Military,VA,New,2026-06-29,Source 59,7,35100,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 59,Paid
-82,Student 0082,UDR 09,CAI,Online,2026-06-04,Military,VA,New,2026-06-29,UDR 11,32,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 27,Paid
-83,Student 0083,UDR 29,BSBT-AI,Online,2026-06-04,Corporate,VA,Roll,2026-06-29,Source 56,93,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 56,Paid
-84,Student 0084,UDR 36,CAI,SD-Hybrid,2026-06-04,Military,VA,New,2026-06-29,UDR 40,7,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 40,Organic
-85,Student 0085,UDR 07,MBA-AI,SD-Hybrid,2026-06-04,Military,VA,New,2026-06-29,UDR 28,6,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 28,Organic
-86,Student 0086,UDR 15,CCY,SD-Hybrid,2026-06-04,Military,VA,New,2026-06-29,UDR 28,6,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 28,Organic
-87,Student 0087,UDR 29,MBA-AI,SD-Hybrid,2026-06-04,Military,VA/VRE,Repeat,2026-06-29,UDR 04,195,32799,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 04,Organic
-88,Student 0088,UDR 15,BSBA-AI,SJ-Hybrid,2026-06-05,Military,VA/VRE,Roll,2026-06-29,UDR 28,395,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 28,Organic
-89,Student 0089,UDR 15,BSBA-AI,SD-Hybrid,2026-06-05,Military,VRE,New,2026-06-29,UDR 31,1,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 31,Unknown
-90,Student 0090,UDR 07,CAI,SD-Hybrid,2026-06-08,Military,VA,Repeat,2026-06-29,UDR 04,300,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 04,Organic
-91,Student 0091,UDR 29,CAI,SJ-Hybrid,2026-06-08,Military,VA,New,2026-06-29,UDR 11,3,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 27,Paid
-92,Student 0092,UDR 29,CAI,SJ-Hybrid,2026-06-08,Military,VA,New,2026-06-29,Source 59,73,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 59,Paid
-93,Student 0093,UDR 09,CAI,SJ-Hybrid,2026-06-09,Military,VA,New,2026-06-29,Source 33,20,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 33,Paid
-94,Student 0094,UDR 01,CAI,SD-Hybrid,2026-06-09,Military,VA,New,2026-06-29,Source 59,92,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 59,Paid
-95,Student 0095,UDR 07,CAI,SD-Hybrid,2026-06-10,Military,VA,New,2026-06-29,UDR 11,4,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 27,Paid
-96,Student 0096,UDR 36,CCY,SJ-Hybrid,2026-06-10,Military,VA,New,2026-06-29,UDR 40,1,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 40,Organic
-97,Student 0097,UDR 09,MSCIS,SJ-Hybrid,2026-06-10,Military,VA,New,2026-06-29,UDR 28,23,32799,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 28,Organic
-98,Student 0098,UDR 29,CAI,SD-Hybrid,2026-06-11,Military,VA,New,2026-06-29,UDR 13,18,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 12,Paid
-99,Student 0099,UDR 36,CAI,SD-Hybrid,2026-06-11,Military,VA,New,2026-06-29,Source 33,170,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 33,Paid
-100,Student 0100,UDR 07,ASBT-AI,SJ-Hybrid,2026-06-11,Domestic,FAFSA,New,2026-06-29,Source 70,4,35100,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 70,Paid
-101,Student 0101,UDR 36,CAI,Online,2026-06-12,Corporate,Tuition Reimbursment,New,2026-06-29,Source 56,12,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 56,Paid
-102,Student 0102,UDR 09,CCY,SJ-Hybrid,2026-06-12,Military,VA,New,2026-06-29,UDR 11,3,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 27,Paid
-103,Student 0103,UDR 09,MBA-AI,SD-Hybrid,2026-06-12,Military,VA,Repeat,2026-06-29,UDR 04,190,32799,,2026-06-29,Summer 2,Uploaded enrollment tracker,UDR 04,Organic
-104,Student 0104,UDR 36,CAI,SJ-Hybrid,2026-06-12,Military,VA,New,2026-06-29,Source 56,22,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 56,Paid
-105,Student 0105,UDR 32,CCY,Online,2026-06-12,Corporate,TuitionReimbursement,New,2026-06-29,Source 56,3,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 56,Paid
-106,Student 0106,UDR 09,CAI,Online,2026-06-16,Military,VA,New,2026-06-29,Source 56,188,10530,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 56,Paid
-107,Student 0107,UDR 36,BSBT-AI,SJ-Hybrid,2026-06-16,Military,VA,New,2026-06-29,Source 33,46,70200,,2026-06-29,Summer 2,Uploaded enrollment tracker,Source 33,Paid
+row_number,student,udr,program,modality,enrolled_date,student_type,payment_funding,new_roll,term,source,days_to_enroll,revenue,workbook_term,term_label,data_origin,normalized_source,lead_type
+1,Student 0001,UDR 07,ASBT-CY,SD-Hybrid,2026-04-09,Military,VA/VRE,New,2026-06-29,Source 34,28,35100,Summer 2,Summer 2,Uploaded enrollment tracker,Source 34,Paid
+2,Student 0002,UDR 24,ASBT-CY,SJ-Hybrid,2026-04-10,Military,VA/FAFSA/VRE,New,2026-06-29,Source 109,1,35100,Summer 2,Summer 2,Uploaded enrollment tracker,Source 109,Organic
+3,Student 0003,UDR 22,BSBT-CY,SD-Hybrid,2026-04-13,Military,VRE,New,2026-06-29,Source 109,5,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 109,Organic
+4,Student 0004,UDR 16,BSBT-AI,SD-Hybrid,2026-04-13,Military,VRE,New,2026-06-29,Source 142,3,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 142,Organic
+5,Student 0005,UDR 11,BSBT-AI,SJ-Hybrid,2026-04-14,Military,VA,New,2026-06-29,Source 109,5,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 109,Organic
+6,Student 0006,UDR 07,CAI,SD-Hybrid,2026-07-14,Military,VA,Repeat,2026-06-29,Source 07,349,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 07,Organic
+7,Student 0007,UDR 24,CAI,SD-Hybrid,2026-04-15,Military,VRE,New,2026-06-29,Source 40,11,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 80,Paid
+8,Student 0008,UDR 07,CCY,Online,2026-04-24,Military,VRE,New,2026-06-29,Source 57,38,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 57,Paid
+9,Student 0009,UDR 20,BSBT-AI,SD-Hybrid,2026-04-24,Military,VRE,New,2026-06-29,Source 142,1,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 142,Organic
+10,Student 0010,UDR 22,CAI,SD-Hybrid,2026-04-24,Military,VA/VRE,New,2026-06-29,Source 40,183,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 80,Paid
+11,Student 0011,UDR 16,BSBT-CY,Online,2026-04-27,Military,TA-ActiveDuty,New,2026-06-29,Source 57,7,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 57,Paid
+12,Student 0012,UDR 16,BSBA-IT,Online,2026-04-30,Domestic,FAFSA,New,2026-06-29,Source 59,6,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 59,Paid
+13,Student 0013,UDR 24,ASBT-CY,SJ-Hybrid,2026-05-01,Military,VA/FAFSA,New,2026-06-29,Source 48,72,35100,Summer 2,Summer 2,Uploaded enrollment tracker,Source 46,Paid
+14,Student 0014,UDR 24,MBA-BA,Online,2026-05-01,Domestic,FAFSA,New,2026-06-29,Source 142,1,32799,Summer 2,Summer 2,Uploaded enrollment tracker,Source 142,Organic
+15,Student 0015,UDR 16,BSBA-BA,Online,2026-05-01,Athletics,FAFSA,New,2026-06-29,Source 123,7,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 123,Unknown
+16,Student 0016,UDR 24,CCY,Online,2026-05-04,Military,VA,Repeat,2026-06-29,Source 07,187,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 07,Organic
+17,Student 0017,UDR 22,CAI,SD-Hybrid,2026-05-06,Military,VA,New,2026-06-29,Source 109,15,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 109,Organic
+18,Student 0018,UDR 16,CAI,Online,2026-05-06,Military,Active Duty,New,2026-06-29,Source 48,14,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 46,Paid
+19,Student 0019,UDR 24,BSBT-AI,SD-Hybrid,2026-05-06,Military,VA,Repeat,2026-06-29,Source 07,196,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 07,Organic
+20,Student 0020,UDR 20,MSCIS,SD-Hybrid,2026-05-06,Military,VA,New,2026-06-29,Source 11,3,32799,Summer 2,Summer 2,Uploaded enrollment tracker,Source 11,Unknown
+21,Student 0021,UDR 11,BSBT-AI,SD-Hybrid,2026-05-07,Military,VA,Repeat,2026-06-29,Source 07,324,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 07,Organic
+22,Student 0022,UDR 11,MSCIS,SD-Hybrid,2026-05-07,Military,VA,New,2026-06-29,Source 59,13,32799,Summer 2,Summer 2,Uploaded enrollment tracker,Source 59,Paid
+23,Student 0023,UDR 11,BSBT-AI,SJ-Hybrid,2026-05-08,Military,VA,New,2026-06-29,Source 109,8,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 109,Organic
+24,Student 0024,UDR 07,CAI,SD-Hybrid,2026-05-08,Corporate,Tuition Reimbursement,Roll,2026-06-29,Source 57,66,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 57,Paid
+25,Student 0025,UDR 16,BSBA-BA,SD-Hybrid,2026-05-08,Military,VA,New,2026-06-29,Source 142,5,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 142,Organic
+26,Student 0026,UDR 20,CAI,SJ-Hybrid,2026-05-08,Military,VA,New,2026-06-29,Source 48,16,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 46,Paid
+27,Student 0027,UDR 20,BSBT-AI,SD-Hybrid,2026-05-11,Military,VRE,New,2026-06-29,Source 142,10,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 142,Organic
+28,Student 0028,UDR 07,ASBT-AI,SD-Hybrid,2026-05-11,Military,MYCAA,Roll,2026-06-29,Source 142,18,35100,Summer 2,Summer 2,Uploaded enrollment tracker,Source 142,Organic
+29,Student 0029,UDR 07,ASBA-SM,Online,2026-05-13,Athletics,FAFSA,Roll,2026-06-29,Source 123,44,35100,Summer 2,Summer 2,Uploaded enrollment tracker,Source 123,Unknown
+30,Student 0030,UDR 24,MBA-F,SD-Hybrid,2026-05-13,Military,VA/VRE,New,2026-06-29,Source 142,5,32799,Summer 2,Summer 2,Uploaded enrollment tracker,Source 142,Organic
+31,Student 0031,UDR 11,BSBT-AI,SJ-Hybrid,2026-05-13,Military,VA/FAFSA,New,2026-06-29,Source 142,29,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 142,Organic
+32,Student 0032,UDR 11,BSBA-BA,SD-Hybrid,2026-05-13,Military,VA,New,2026-06-29,Source 142,29,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 142,Organic
+33,Student 0033,UDR 24,MBA-HCM,SJ-Hybrid,2026-05-14,Military,VA/VRE,New,2026-06-29,Source 119,4,32799,Summer 2,Summer 2,Uploaded enrollment tracker,Source 119,Unknown
+34,Student 0034,UDR 20,ASBT-CY,Online,2026-05-14,Domestic,FAFSA,New,2026-06-29,Source 59,6,35100,Summer 2,Summer 2,Uploaded enrollment tracker,Source 59,Paid
+35,Student 0035,UDR 24,CCY,Online,2026-05-14,Military,VA,New,2026-06-29,Source 40,11,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 80,Paid
+36,Student 0036,UDR 24,MSCIS,SD-Hybrid,2026-05-14,Military,VA,New,2026-06-29,Source 55,469,32799,Summer 2,Summer 2,Uploaded enrollment tracker,Source 55,Unknown
+37,Student 0037,UDR 05,CAI,Online,2026-05-15,Corporate,Tuition Reimbursement,New,2026-06-29,Source 57,53,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 57,Paid
+38,Student 0038,UDR 16,ASBT-AI,SD-Hybrid,2026-05-15,Military,VA/FAFSA,New,2026-06-29,Source 59,13,35100,Summer 2,Summer 2,Uploaded enrollment tracker,Source 59,Paid
+39,Student 0039,UDR 16,ASBT-CY,Online,2026-05-18,Military,Reservs/FA,New,2026-06-29,Source 40,46,35100,Summer 2,Summer 2,Uploaded enrollment tracker,Source 80,Paid
+40,Student 0040,UDR 07,CCY,SJ-Hybrid,2026-05-18,Military,VA,New,2026-06-29,Source 40,28,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 80,Paid
+41,Student 0041,UDR 16,BSBT-AI,Online,2026-05-19,Domestic,FAFSA,Roll,2026-06-29,Source 40,50,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 80,Paid
+42,Student 0042,UDR 07,CCY,SJ-Hybrid,2026-05-19,Military,VA/VRE,New,2026-06-29,Source 109,46,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 109,Organic
+43,Student 0043,UDR 11,CCY,Online,2026-05-19,Corporate,Tuition Reimbursement/FAFSA,New,2026-06-29,Source 57,12,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 57,Paid
+44,Student 0044,UDR 20,CAI,SD-Hybrid,2026-05-19,Military,VRE,New,2026-06-29,Source 40,127,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 80,Paid
+45,Student 0045,UDR 11,CCY,Online,2026-05-19,Corporate,Tuition Reimbursement,New,2026-06-29,Source 57,7,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 57,Paid
+46,Student 0046,UDR 07,CCY,SJ-Hybrid,2026-05-20,Military,VA,New,2026-06-29,Source 109,2,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 109,Organic
+47,Student 0047,UDR 24,MBA-AI,Online,2026-05-21,Corporate,Tuition Reimbursement,New,2026-06-29,Source 57,99,32799,Summer 2,Summer 2,Uploaded enrollment tracker,Source 57,Paid
+48,Student 0048,UDR 24,BSBT-CY,SJ-Hybrid,2026-05-21,Military,VA,Repeat,2026-06-29,Source 07,195,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 07,Organic
+49,Student 0049,UDR 22,CCY,Online,2026-05-21,Corporate,Tuition Reimbursement/FAFSA,New,2026-06-29,Source 57,2,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 57,Paid
+50,Student 0050,UDR 24,CAI,SD-Hybrid,2026-05-21,Military,VA/VRE,New,2026-06-29,Source 142,1,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 142,Organic
+51,Student 0051,UDR 24,BSBT-AI,SJ-Hybrid,2026-05-22,Military,VA/VRE,New,2026-06-29,Source 109,4,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 109,Organic
+52,Student 0052,UDR 20,CCY,SJ-Hybrid,2026-05-22,Military,VA,Repeat,2026-06-29,Source 07,156,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 07,Organic
+53,Student 0053,UDR 16,BSBT-CY,SD-Hybrid,2026-05-22,Military,VA,New,2026-06-29,Source 142,38,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 142,Organic
+54,Student 0054,UDR 05,ASBA-BA,Online,2026-05-23,Domestic,FAFSA,New,2026-06-29,Source 109,13,35100,Summer 2,Summer 2,Uploaded enrollment tracker,Source 109,Organic
+55,Student 0055,UDR 11,ASBT-AI,SJ-Hybrid,2026-05-23,Military,VRE,New,2026-06-29,Source 109,102,35100,Summer 2,Summer 2,Uploaded enrollment tracker,Source 109,Organic
+56,Student 0056,UDR 11,BSBT-BA,SD-Hybrid,2026-05-25,Military,VA,New,2026-06-29,Source 142,9,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 142,Organic
+57,Student 0057,UDR 22,ASBT-CY,Online,2026-05-26,Corporate,Tuition Reimbursment,New,2026-06-29,Source 57,7,35100,Summer 2,Summer 2,Uploaded enrollment tracker,Source 57,Paid
+58,Student 0058,UDR 22,CAI,SJ-Hybrid,2026-05-27,Military,VA,New,2026-06-29,Source 109,5,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 109,Organic
+59,Student 0059,UDR 05,MBA-AI,SD-Hybrid,2026-05-27,Military,VA/FAFSA,New,2026-06-29,Source 55,482,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 55,Unknown
+60,Student 0060,UDR 16,ASBT-CY,Online,2026-05-27,Corporate,Tuition Reimbursement/FAFSA,New,2026-06-29,Source 57,29,35100,Summer 2,Summer 2,Uploaded enrollment tracker,Source 57,Paid
+61,Student 0061,UDR 13,CAI,SD-Hybrid,2026-05-27,Military,VA,New,2026-06-29,Source 40,10,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 80,Paid
+62,Student 0062,UDR 05,CCY,SJ-Hybrid,2026-05-28,Military,VA,New,2026-06-29,Source 109,15,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 109,Organic
+63,Student 0063,UDR 07,BSBT-AI,Online,2026-05-28,Corporate,Tuition Reimbursement/Fafsa,New,2026-06-29,Source 57,206,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 57,Paid
+64,Student 0064,UDR 20,ASBT-CY,SD-Hybrid,2026-05-28,Military,VRE,New,2026-06-29,Source 59,6,35100,Summer 2,Summer 2,Uploaded enrollment tracker,Source 59,Paid
+65,Student 0065,UDR 22,BSBA-BA,Online,2026-05-28,Corporate,Tuition Reimbursemnt,New,2026-06-29,Source 57,9,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 57,Paid
+66,Student 0066,UDR 05,BSBA-BA,Online,2026-05-29,Domestic,FAFSA,New,2026-06-29,Source 142,2,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 142,Organic
+67,Student 0067,UDR 20,CAI,SD-Hybrid,2026-05-29,Military,VA,New,2026-06-29,Source 109,11,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 109,Organic
+68,Student 0068,UDR 07,BSBT-AI,SD-Hybrid,2026-05-29,Military,VA,New,2026-06-29,Source 40,7,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 80,Paid
+69,Student 0069,UDR 24,BSBA-AI,SJ-Hybrid,2026-05-29,Military,VRE,New,2026-06-29,Source 109,11,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 109,Organic
+70,Student 0070,UDR 07,BSBT-CY,SD-Hybrid,2026-05-29,Military,VA,New,2026-06-29,Source 57,8,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 57,Paid
+71,Student 0071,UDR 07,BSBA-BA,SJ-Hybrid,2026-05-29,Military,VA,New,2026-06-29,Source 48,3,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 46,Paid
+72,Student 0072,UDR 24,BSBT-AI,SJ-Hybrid,2026-06-01,Military,VA,New,2026-06-29,Source 40,10,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 80,Paid
+73,Student 0073,UDR 11,BSBA-SM,SD-Hybrid,2026-06-01,Military,VA,New,2026-06-29,Source 109,11,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 109,Organic
+74,Student 0074,UDR 20,CAI,SD-Hybrid,2026-06-01,Military,VA,New,2026-06-29,Source 59,11,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 59,Paid
+75,Student 0075,UDR 07,MBA-F,Online,2026-06-02,Corporate,VA,New,2026-06-29,Source 57,6,32799,Summer 2,Summer 2,Uploaded enrollment tracker,Source 57,Paid
+76,Student 0076,UDR 20,BSBT-CY,Online,2026-06-02,Domestic,FAFSA,New,2026-06-29,Source 57,18,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 57,Paid
+77,Student 0077,UDR 16,BSBT-CY,Online,2026-06-02,Corporate,Tuition Reimbursement,Roll,2026-06-29,Source 57,53,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 57,Paid
+78,Student 0078,UDR 24,BSBT-AI,Online,2026-06-02,Domestic,FAFSA,Repeat,2026-06-29,Source 07,223,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 07,Organic
+79,Student 0079,UDR 22,BSBT-CY,SJ-Hybrid,2026-06-03,Military,VA/FAFSA,New,2026-06-29,Source 40,8,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 80,Paid
+80,Student 0080,UDR 07,MSCIS,SJ-Hybrid,2026-06-03,Military,VA,Repeat,2026-06-29,Source 07,764,32799,Summer 2,Summer 2,Uploaded enrollment tracker,Source 07,Organic
+81,Student 0081,UDR 16,ASBT-AI,SJ-Hybrid,2026-06-04,Military,VA,New,2026-06-29,Source 59,7,35100,Summer 2,Summer 2,Uploaded enrollment tracker,Source 59,Paid
+82,Student 0082,UDR 07,CAI,Online,2026-06-04,Military,VA,New,2026-06-29,Source 40,32,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 80,Paid
+83,Student 0083,UDR 20,BSBT-AI,Online,2026-06-04,Corporate,VA,Roll,2026-06-29,Source 57,93,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 57,Paid
+84,Student 0084,UDR 24,CAI,SD-Hybrid,2026-06-04,Military,VA,New,2026-06-29,Source 142,7,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 142,Organic
+85,Student 0085,UDR 05,MBA-AI,SD-Hybrid,2026-06-04,Military,VA,New,2026-06-29,Source 109,6,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 109,Organic
+86,Student 0086,UDR 11,CCY,SD-Hybrid,2026-06-04,Military,VA,New,2026-06-29,Source 109,6,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 109,Organic
+87,Student 0087,UDR 20,MBA-AI,SD-Hybrid,2026-06-04,Military,VA/VRE,Repeat,2026-06-29,Source 07,195,32799,Summer 2,Summer 2,Uploaded enrollment tracker,Source 07,Organic
+88,Student 0088,UDR 11,BSBA-AI,SJ-Hybrid,2026-06-05,Military,VA/VRE,Roll,2026-06-29,Source 109,395,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 109,Organic
+89,Student 0089,UDR 11,BSBA-AI,SD-Hybrid,2026-06-05,Military,VRE,New,2026-06-29,Source 119,1,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 119,Unknown
+90,Student 0090,UDR 05,CAI,SD-Hybrid,2026-06-08,Military,VA,Repeat,2026-06-29,Source 07,300,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 07,Organic
+91,Student 0091,UDR 20,CAI,SJ-Hybrid,2026-06-08,Military,VA,New,2026-06-29,Source 40,3,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 80,Paid
+92,Student 0092,UDR 20,CAI,SJ-Hybrid,2026-06-08,Military,VA,New,2026-06-29,Source 59,73,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 59,Paid
+93,Student 0093,UDR 07,CAI,SJ-Hybrid,2026-06-09,Military,VA,New,2026-06-29,Source 34,20,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 34,Paid
+94,Student 0094,UDR 01,CAI,SD-Hybrid,2026-06-09,Military,VA,New,2026-06-29,Source 59,92,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 59,Paid
+95,Student 0095,UDR 05,CAI,SD-Hybrid,2026-06-10,Military,VA,New,2026-06-29,Source 40,4,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 80,Paid
+96,Student 0096,UDR 24,CCY,SJ-Hybrid,2026-06-10,Military,VA,New,2026-06-29,Source 142,1,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 142,Organic
+97,Student 0097,UDR 07,MSCIS,SJ-Hybrid,2026-06-10,Military,VA,New,2026-06-29,Source 109,23,32799,Summer 2,Summer 2,Uploaded enrollment tracker,Source 109,Organic
+98,Student 0098,UDR 20,CAI,SD-Hybrid,2026-06-11,Military,VA,New,2026-06-29,Source 48,18,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 46,Paid
+99,Student 0099,UDR 24,CAI,SD-Hybrid,2026-06-11,Military,VA,New,2026-06-29,Source 34,170,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 34,Paid
+100,Student 0100,UDR 05,ASBT-AI,SJ-Hybrid,2026-06-11,Domestic,FAFSA,New,2026-06-29,Source 68,4,35100,Summer 2,Summer 2,Uploaded enrollment tracker,Source 68,Paid
+101,Student 0101,UDR 24,CAI,Online,2026-06-12,Corporate,Tuition Reimbursment,New,2026-06-29,Source 57,12,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 57,Paid
+102,Student 0102,UDR 07,CCY,SJ-Hybrid,2026-06-12,Military,VA,New,2026-06-29,Source 40,3,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 80,Paid
+103,Student 0103,UDR 07,MBA-AI,SD-Hybrid,2026-06-12,Military,VA,Repeat,2026-06-29,Source 07,190,32799,Summer 2,Summer 2,Uploaded enrollment tracker,Source 07,Organic
+104,Student 0104,UDR 24,CAI,SJ-Hybrid,2026-06-12,Military,VA,New,2026-06-29,Source 57,22,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 57,Paid
+105,Student 0105,UDR 22,CCY,Online,2026-06-12,Corporate,TuitionReimbursement,New,2026-06-29,Source 57,3,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 57,Paid
+106,Student 0106,UDR 07,CAI,Online,2026-06-16,Military,VA,New,2026-06-29,Source 57,188,10530,Summer 2,Summer 2,Uploaded enrollment tracker,Source 57,Paid
+107,Student 0107,UDR 24,BSBT-AI,SJ-Hybrid,2026-06-16,Military,VA,New,2026-06-29,Source 34,46,70200,Summer 2,Summer 2,Uploaded enrollment tracker,Source 34,Paid

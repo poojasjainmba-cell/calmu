@@ -41,7 +41,7 @@ SOURCE_COLUMNS = {
     "utm_campaign",
     "utm_medium",
 }
-PUBLIC_KEEP_VALUES = {"", "unmapped", "unknown", "missing", "nan", "none", "(blank)"}
+PUBLIC_KEEP_VALUES = {"", "unmapped", "unknown", "missing", "nan", "none", "(blank)", "total", "starts", "start%"}
 
 
 def _clean_label(value: object) -> str:
@@ -77,6 +77,8 @@ def _sanitize_frame(
     out = df.copy()
     if add_student_placeholder:
         out["student"] = [f"Student {idx:04d}" for idx in range(1, len(out) + 1)]
+    unnamed_columns = [column for column in out.columns if str(column).lower().startswith("unnamed")]
+    out = out.drop(columns=unnamed_columns, errors="ignore")
     out = out.drop(columns=[column for column in PII_COLUMNS if column in out.columns and column != "student"], errors="ignore")
     for column in OWNER_COLUMNS | {"budget_name", "normalized_budget_name"}:
         if column in out.columns:

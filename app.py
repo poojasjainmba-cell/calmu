@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import re
 from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -35,6 +36,7 @@ from modules.metrics import (
     weekly_counts,
 )
 from modules.qa_checks import run_qa_checks
+from modules.term_utils import normalize_term_token
 
 
 APP_DIR = Path(__file__).resolve().parent
@@ -291,6 +293,179 @@ def pivot_reconciliation(uploaded: UploadedLeadData) -> pd.DataFrame:
     return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
 
 
+def _udr_key(value: Any) -> str:
+    if pd.isna(value):
+        return ""
+    text = re.sub(r"\s+", " ", str(value).strip())
+    if not text:
+        return ""
+    if re.match(r"^UDR\s+\d+$", text, flags=re.I):
+        return text.lower()
+    return re.split(r"\s+", text.lower())[0]
+
+
+def _with_udr_key(df: pd.DataFrame, source_col: str, display_col: str = "udr") -> pd.DataFrame:
+    out = df.copy()
+    if source_col not in out.columns:
+        out[source_col] = ""
+    out[display_col] = out[source_col].fillna("").astype(str).str.strip()
+    out["_udr_key"] = out[display_col].map(_udr_key)
+    return out
+
+
+def _coalesce_columns(df: pd.DataFrame, output_col: str, columns: list[str]) -> pd.Series:
+    values = pd.Series([""] * len(df), index=df.index, dtype=object)
+    for column in columns:
+        if column in df.columns:
+            candidate = df[column].fillna("").astype(str).str.strip()
+            values = values.where(values.astype(str).str.strip().ne(""), candidate)
+    return values.replace("", "Unassigned")
+
+
+def udr_budget_summary(
+    term_allocations: pd.DataFrame,
+    allocations: pd.DataFrame,
+    selected_terms: list[str] | None = None,
+) -> pd.DataFrame:
+    selected_tokens = {
+        normalize_term_token(term)
+        for term in (selected_terms or [])
+        if normalize_term_token(term)
+    }
+
+    pieces: list[pd.DataFrame] = []
+    if not allocations.empty and {"budget_name", "planned_budget"}.issubset(allocations.columns) and not selected_tokens:
+        annual = allocations[["budget_name", "planned_budget"]].copy()
+        annual["budget_goal"] = pd.to_numeric(annual["planned_budget"], errors="coerce").fillna(0)
+        annual = annual[["budget_name", "budget_goal"]]
+        pieces.append(annual)
+
+    if not term_allocations.empty and "budget_name" in term_allocations.columns:
+        terms = term_allocations.copy()
+        names = terms["budget_name"].fillna("").astype(str).str.strip().str.lower()
+        terms = terms[~names.isin({"total", "starts", "start%"})].copy()
+        if "term" in terms.columns:
+            terms["_term_token"] = terms["term"].map(normalize_term_token)
+        else:
+            terms["_term_token"] = ""
+        if selected_tokens:
+            terms = terms[terms["_term_token"].isin(selected_tokens)].copy()
+
+        value_col = "term_value" if "term_value" in terms.columns else "term_budget"
+        if value_col in terms.columns and "term_metric" in terms.columns:
+            terms[value_col] = pd.to_numeric(terms[value_col], errors="coerce").fillna(0)
+            by_metric = (
+                terms[terms["term_metric"].fillna("").astype(str).str.lower().isin(["actual", "goal"])]
+                .pivot_table(
+                    index="budget_name",
+                    columns=terms["term_metric"].fillna("").astype(str).str.lower(),
+                    values=value_col,
+                    aggfunc="sum",
+                    fill_value=0,
+                )
+                .reset_index()
+            )
+            by_metric = by_metric.rename(columns={"actual": "budget_sheet_actual", "goal": "term_goal"})
+            if selected_tokens:
+                by_metric["budget_goal"] = by_metric.get("term_goal", 0)
+            pieces.append(by_metric)
+
+    if not pieces:
+        return pd.DataFrame(columns=["budget_udr", "budget_goal", "budget_sheet_actual", "budget_pct_goal"])
+
+    summary = pieces[0]
+    for piece in pieces[1:]:
+        summary = summary.merge(piece, on="budget_name", how="outer")
+
+    for column in ["budget_goal", "term_goal", "budget_sheet_actual"]:
+        if column not in summary.columns:
+            summary[column] = 0
+        summary[column] = pd.to_numeric(summary[column], errors="coerce").fillna(0)
+
+    if selected_tokens and "term_goal" in summary.columns:
+        summary["budget_goal"] = summary["term_goal"]
+
+    summary = _with_udr_key(summary, "budget_name", "budget_udr")
+    grouped = (
+        summary.groupby("_udr_key", dropna=False)
+        .agg(
+            budget_udr=("budget_udr", "first"),
+            budget_goal=("budget_goal", "sum"),
+            budget_sheet_actual=("budget_sheet_actual", "sum"),
+        )
+        .reset_index()
+    )
+    grouped["budget_remaining"] = (grouped["budget_goal"] - grouped["budget_sheet_actual"]).clip(lower=0)
+    grouped["budget_pct_goal"] = grouped.apply(
+        lambda row: float(row["budget_sheet_actual"] / row["budget_goal"]) if row["budget_goal"] else 0.0,
+        axis=1,
+    )
+    return grouped
+
+
+def effective_term_filters(selected_terms: list[str] | None, enrollments: pd.DataFrame) -> list[str]:
+    explicit = [term for term in (selected_terms or []) if normalize_term_token(term)]
+    if explicit:
+        return explicit
+    if enrollments.empty or "term_label" not in enrollments.columns:
+        return []
+    labels = sorted(
+        {
+            str(value).strip()
+            for value in enrollments["term_label"].dropna()
+            if str(value).strip() and normalize_term_token(value)
+        }
+    )
+    return labels if len(labels) == 1 else []
+
+
+def roundup_term_stats(term_allocations: pd.DataFrame, selected_terms: list[str] | None) -> dict[str, float]:
+    selected_tokens = {
+        normalize_term_token(term)
+        for term in (selected_terms or [])
+        if normalize_term_token(term)
+    }
+    required = {"budget_name", "term", "term_metric"}
+    if term_allocations.empty or not selected_tokens or not required.issubset(term_allocations.columns):
+        return {}
+
+    terms = term_allocations.copy()
+    terms["_term_token"] = terms["term"].map(normalize_term_token)
+    terms = terms[terms["_term_token"].isin(selected_tokens)].copy()
+    value_col = "term_value" if "term_value" in terms.columns else "term_budget"
+    if terms.empty or value_col not in terms.columns:
+        return {}
+
+    terms[value_col] = pd.to_numeric(terms[value_col], errors="coerce")
+    names = terms["budget_name"].fillna("").astype(str).str.strip().str.lower()
+    metrics = terms["term_metric"].fillna("").astype(str).str.lower()
+
+    def sum_or_none(mask: pd.Series) -> float | None:
+        values = terms.loc[mask, value_col].dropna()
+        if values.empty:
+            return None
+        return float(values.sum())
+
+    stats = {
+        "goal": sum_or_none(names.eq("total") & metrics.eq("goal")),
+        "actual": sum_or_none(names.eq("total") & metrics.eq("actual")),
+        "starts": sum_or_none(metrics.eq("starts")),
+    }
+    if stats["goal"] is None:
+        stats["goal"] = sum_or_none(~names.isin({"total", "starts", "start%"}) & metrics.eq("goal"))
+    if stats["actual"] is None:
+        stats["actual"] = sum_or_none(~names.isin({"total", "starts", "start%"}) & metrics.eq("actual"))
+
+    rate_values = terms.loc[metrics.eq("start_rate"), value_col].dropna()
+    start_rate: float | None = None
+    if stats["starts"] is not None and stats["actual"]:
+        start_rate = float(stats["starts"] / stats["actual"])
+    elif not rate_values.empty:
+        start_rate = float(rate_values.mean())
+    stats["start_rate"] = start_rate
+    return {key: value for key, value in stats.items() if value is not None}
+
+
 def page_executive(
     leads: pd.DataFrame,
     paid_leads: pd.DataFrame,
@@ -298,11 +473,28 @@ def page_executive(
     budget: BudgetData,
     tracker: EnrollmentTrackerData,
     data_mode: str,
+    selected_terms: list[str] | None = None,
 ) -> None:
     lead_summary = summarize_leads(leads)
     paid_summary = summarize_leads(paid_leads)
-    goal = first_metric(tracker.roundup_summary, "Budget") or first_metric(budget.summary, "Budget") or 0
-    starts = first_metric(tracker.roundup_summary, "Starts") or first_metric(budget.summary, "Starts") or 0
+    effective_terms = effective_term_filters(selected_terms, enrollments)
+    budget_term_stats = roundup_term_stats(budget.term_allocations, effective_terms)
+    tracker_term_stats = roundup_term_stats(tracker.roundup_allocations, effective_terms)
+    goal = budget_term_stats.get("goal")
+    if goal is None:
+        goal = tracker_term_stats.get("goal")
+    if goal is None:
+        goal = first_metric(tracker.roundup_summary, "Budget") or first_metric(budget.summary, "Budget") or 0
+    starts = tracker_term_stats.get("starts")
+    if starts is None:
+        starts = first_metric(tracker.roundup_summary, "Starts") or first_metric(budget.summary, "Starts") or 0
+    summary_enrolled = tracker_term_stats.get("actual")
+    if summary_enrolled is None:
+        summary_enrolled = first_metric(tracker.roundup_summary, "Enrolled") or first_metric(budget.summary, "Enrolled") or 0
+    summary_start_pct = tracker_term_stats.get("start_rate")
+    if summary_start_pct is None:
+        summary_start_pct = first_metric(tracker.roundup_summary, "Start%") or first_metric(budget.summary, "Start%")
+    start_rate = float(summary_start_pct) if summary_start_pct is not None else (float(starts) / summary_enrolled if summary_enrolled else 0)
     enroll_summary = enrollment_summary(enrollments, goal=goal, starts=starts)
     remaining = enroll_summary["remaining_enrollments"]
     pace = required_weekly_pace(enrollments, remaining)
@@ -337,7 +529,7 @@ def page_executive(
             ("Percent of goal", fmt_percent(enroll_summary["percent_of_goal"])),
             ("Remaining enrollments needed", fmt_int(remaining)),
             ("Weekly pace required", fmt_float(pace, 1)),
-            ("Start %", fmt_percent(enroll_summary["start_rate"])),
+            ("Start %", fmt_percent(start_rate)),
             ("Revenue per enrollment", fmt_money(enroll_summary["revenue_per_enrollment"])),
             ("Average days to enroll", fmt_float(enroll_summary["average_days_to_enroll"], 1)),
             ("Bad lead rate", fmt_percent(lead_summary.bad_lead_rate)),
@@ -359,14 +551,31 @@ def page_executive(
     st.caption(data_mode)
 
 
-def page_enrollment_tracker(enrollments: pd.DataFrame, tracker: EnrollmentTrackerData) -> None:
+def page_enrollment_tracker(
+    enrollments: pd.DataFrame,
+    tracker: EnrollmentTrackerData,
+    budget: BudgetData,
+    selected_terms: list[str] | None = None,
+) -> None:
     st.subheader("Enrollment Tracker")
-    summary = enrollment_summary(enrollments, goal=first_metric(tracker.roundup_summary, "Budget"), starts=first_metric(tracker.roundup_summary, "Starts"))
+    effective_terms = effective_term_filters(selected_terms, enrollments)
+    tracker_term_stats = roundup_term_stats(tracker.roundup_allocations, effective_terms)
+    budget_term_stats = roundup_term_stats(budget.term_allocations, effective_terms)
+    goal = budget_term_stats.get("goal")
+    if goal is None:
+        goal = first_metric(tracker.roundup_summary, "Budget")
+    starts = tracker_term_stats.get("starts")
+    if starts is None:
+        starts = first_metric(tracker.roundup_summary, "Starts")
+    start_rate = tracker_term_stats.get("start_rate")
+    summary = enrollment_summary(enrollments, goal=goal, starts=starts)
+    if start_rate is None:
+        start_rate = summary["start_rate"]
     metric_grid(
         [
             ("Total actual enrollments", fmt_int(summary["actual_enrollments"])),
             ("Starts", fmt_int(summary["starts"])),
-            ("Start %", fmt_percent(summary["start_rate"])),
+            ("Start %", fmt_percent(start_rate)),
             ("Revenue", fmt_money(summary["revenue"])),
             ("Revenue per enrollment", fmt_money(summary["revenue_per_enrollment"])),
             ("Average days to enroll", fmt_float(summary["average_days_to_enroll"], 1)),
@@ -398,15 +607,81 @@ def page_source_performance(leads: pd.DataFrame, paid_leads: pd.DataFrame, enrol
         st.dataframe(paid_perf, use_container_width=True, hide_index=True)
 
 
-def page_udr_performance(leads: pd.DataFrame, enrollments: pd.DataFrame) -> None:
+def page_udr_performance(
+    leads: pd.DataFrame,
+    enrollments: pd.DataFrame,
+    budget: BudgetData,
+    tracker: EnrollmentTrackerData,
+    selected_terms: list[str] | None = None,
+) -> None:
     st.subheader("UDR Performance")
-    perf = lead_performance_by(leads, "contact_owner")
-    enroll_perf = enrollment_by(enrollments, "udr")
-    if not perf.empty and not enroll_perf.empty:
-        perf = perf.merge(enroll_perf.rename(columns={"udr": "contact_owner"}), on="contact_owner", how="outer")
-    st.plotly_chart(bar_chart(perf, "contact_owner", "leads", "UDR Lead Volume", horizontal=True), use_container_width=True)
-    st.plotly_chart(bar_chart(perf, "contact_owner", "l2c", "UDR Lead-to-Contact %", horizontal=True), use_container_width=True)
-    st.dataframe(perf, use_container_width=True, hide_index=True)
+    effective_terms = effective_term_filters(selected_terms, enrollments)
+    lead_perf = _with_udr_key(lead_performance_by(leads, "contact_owner"), "contact_owner", "lead_udr")
+    enroll_perf = _with_udr_key(enrollment_by(enrollments, "udr"), "udr", "tracker_udr")
+    budget_source = budget.term_allocations if not budget.term_allocations.empty else tracker.roundup_allocations
+    budget_perf = udr_budget_summary(budget_source, budget.allocations, effective_terms)
+
+    perf = lead_perf.merge(enroll_perf, on="_udr_key", how="outer").merge(budget_perf, on="_udr_key", how="outer")
+    if perf.empty:
+        st.info("UDR Performance is not available for the selected filters.")
+        return
+
+    perf["udr"] = _coalesce_columns(perf, "udr", ["budget_udr", "tracker_udr", "lead_udr"])
+    for column in [
+        "leads",
+        "contacted_progressed",
+        "applicants",
+        "crm_enrolled",
+        "bad_leads",
+        "uncontacted_leads",
+        "actual_enrollments",
+        "revenue",
+        "average_days_to_enroll",
+        "budget_goal",
+        "budget_sheet_actual",
+        "budget_remaining",
+    ]:
+        if column not in perf.columns:
+            perf[column] = 0
+        perf[column] = pd.to_numeric(perf[column], errors="coerce").fillna(0)
+    for column in ["l2c", "l2a", "l2e", "bad_lead_rate", "budget_pct_goal"]:
+        if column not in perf.columns:
+            perf[column] = 0
+        perf[column] = pd.to_numeric(perf[column], errors="coerce").fillna(0)
+
+    perf["tracker_vs_budget_goal"] = perf.apply(
+        lambda row: float(row["actual_enrollments"] / row["budget_goal"]) if row["budget_goal"] else 0.0,
+        axis=1,
+    )
+    perf = perf.sort_values(["tracker_vs_budget_goal", "actual_enrollments", "leads"], ascending=[False, False, False])
+
+    st.caption(
+        "Budget goals come from the budget workbook. SP/SU/FA mean Spring/Summer/Fall; "
+        "-A columns are workbook actuals and -G columns are goals. Tracker actual enrollments remain a separate source."
+    )
+    st.plotly_chart(bar_chart(perf, "udr", "leads", "UDR Lead Volume", horizontal=True), use_container_width=True)
+    st.plotly_chart(bar_chart(perf, "udr", "tracker_vs_budget_goal", "Tracker Actuals vs Budget Goal", horizontal=True), use_container_width=True)
+    columns = [
+        "udr",
+        "budget_goal",
+        "budget_sheet_actual",
+        "budget_pct_goal",
+        "actual_enrollments",
+        "tracker_vs_budget_goal",
+        "budget_remaining",
+        "leads",
+        "contacted_progressed",
+        "applicants",
+        "crm_enrolled",
+        "bad_leads",
+        "l2c",
+        "l2a",
+        "l2e",
+        "bad_lead_rate",
+        "revenue",
+        "average_days_to_enroll",
+    ]
+    st.dataframe(perf[[column for column in columns if column in perf.columns]], use_container_width=True, hide_index=True)
 
 
 def page_program_mix(enrollments: pd.DataFrame) -> None:
@@ -634,13 +909,13 @@ def main() -> None:
     page = st.sidebar.radio("Dashboard section", pages)
 
     if page == "Executive Overview":
-        page_executive(filtered_leads, filtered_paid, filtered_enrollments, budget, tracker, data_mode)
+        page_executive(filtered_leads, filtered_paid, filtered_enrollments, budget, tracker, data_mode, filters["term"])
     elif page == "Enrollment Tracker":
-        page_enrollment_tracker(filtered_enrollments, tracker)
+        page_enrollment_tracker(filtered_enrollments, tracker, budget, filters["term"])
     elif page == "Source Performance":
         page_source_performance(filtered_leads, filtered_paid, filtered_enrollments, budget)
     elif page == "UDR Performance":
-        page_udr_performance(filtered_leads, filtered_enrollments)
+        page_udr_performance(filtered_leads, filtered_enrollments, budget, tracker, filters["term"])
     elif page == "Program Mix":
         page_program_mix(filtered_enrollments)
     elif page == "Budget Performance":

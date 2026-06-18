@@ -6,6 +6,7 @@ from pathlib import Path
 import pandas as pd
 
 from .source_mapping import clean_text, normalize_source_value
+from .term_utils import parse_budget_term_header
 
 
 BUDGET_FILE = Path("user_files/01-2026Budget.xlsx")
@@ -52,40 +53,90 @@ def _allocation_rows(raw: pd.DataFrame, sheet: str) -> tuple[pd.DataFrame, pd.Da
 
     name_col = total_col - 1
     headers = raw.iloc[header_idx].to_dict()
-    term_cols = [
-        column
+    term_meta = {
+        column: parse_budget_term_header(value)
         for column, value in headers.items()
         if column > total_col and clean_text(value)
-    ]
+    }
+    term_cols = [column for column, meta in term_meta.items() if meta and meta["term_metric"] in {"actual", "goal"}]
     allocation_rows: list[dict[str, object]] = []
     term_rows: list[dict[str, object]] = []
+    special_labels = {
+        "total": "Total",
+        "starts": "Starts",
+        "start%": "Start%",
+    }
     for idx in range(header_idx + 1, len(raw)):
         label = clean_text(raw.iat[idx, name_col])
+        label_lower = label.lower()
         total = pd.to_numeric(raw.iat[idx, total_col], errors="coerce")
-        if not label or pd.isna(total):
+        term_values = {column: pd.to_numeric(raw.iat[idx, column], errors="coerce") for column in term_cols}
+        numeric_term_values = [float(value) for value in term_values.values() if pd.notna(value)]
+        if label_lower in special_labels:
+            for column in term_cols:
+                term_value = term_values[column]
+                if pd.notna(term_value):
+                    meta = term_meta[column] or {}
+                    metric = {
+                        "total": meta.get("term_metric", "actual"),
+                        "starts": "starts",
+                        "start%": "start_rate",
+                    }[label_lower]
+                    term_rows.append(
+                        {
+                            "sheet": sheet,
+                            "budget_dimension": "roundup_metric",
+                            "budget_name": special_labels[label_lower],
+                            "source": special_labels[label_lower],
+                            "raw_term": meta.get("raw_term", clean_text(headers[column])),
+                            "term": meta.get("term", clean_text(headers[column])),
+                            "term_label": meta.get("term_label", clean_text(headers[column])),
+                            "term_metric": metric,
+                            "term_value": float(term_value),
+                            "term_budget": float(term_value),
+                            "planned_budget": float(total) if pd.notna(total) else 0.0,
+                        }
+                    )
+            if label_lower == "start%":
+                break
+            continue
+        if not label or (pd.isna(total) and not numeric_term_values):
             continue
         normalized = normalize_source_value(label)
-        allocation_rows.append(
-            {
-                "sheet": sheet,
-                "budget_dimension": "UDR allocation",
-                "budget_name": label,
-                "normalized_budget_name": normalized,
-                "source": normalized,
-                "planned_budget": float(total),
-            }
+        planned_budget = float(total) if pd.notna(total) else sum(
+            float(value)
+            for column, value in term_values.items()
+            if pd.notna(value) and (term_meta[column] or {}).get("term_metric") == "goal"
         )
+        if pd.notna(total):
+            allocation_rows.append(
+                {
+                    "sheet": sheet,
+                    "budget_dimension": "UDR allocation",
+                    "budget_name": label,
+                    "normalized_budget_name": normalized,
+                    "source": normalized,
+                    "planned_budget": float(total),
+                    "budget_metric": "goal",
+                }
+            )
         for column in term_cols:
-            term_budget = pd.to_numeric(raw.iat[idx, column], errors="coerce")
-            if pd.notna(term_budget):
+            term_value = term_values[column]
+            if pd.notna(term_value):
+                meta = term_meta[column] or {}
                 term_rows.append(
                     {
                         "sheet": sheet,
+                        "budget_dimension": "UDR allocation",
                         "budget_name": label,
                         "source": normalized,
-                        "term": clean_text(headers[column]),
-                        "term_budget": float(term_budget),
-                        "planned_budget": float(total),
+                        "raw_term": meta.get("raw_term", clean_text(headers[column])),
+                        "term": meta.get("term", clean_text(headers[column])),
+                        "term_label": meta.get("term_label", clean_text(headers[column])),
+                        "term_metric": meta.get("term_metric", "goal"),
+                        "term_value": float(term_value),
+                        "term_budget": float(term_value),
+                        "planned_budget": planned_budget,
                     }
                 )
     return pd.DataFrame(allocation_rows), pd.DataFrame(term_rows)
